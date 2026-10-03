@@ -4,7 +4,7 @@ Daily AI news reports from validated research and engineering sources.
 
 Reports are published as GitHub Releases so each day has a stable, dated entry with clickable links, star ratings, reading-time estimates, and skipped-source notes.
 
-Reports use a ranked article list with source names and UTC publication dates. Ratings are heuristic ranks; reading times estimate feed text rather than the full linked article. Source diagnostics and methodology appear in expandable sections.
+Reports use a ranked article list with source names and UTC publication dates. Ratings are heuristic ranks; reading times estimate explicit RSS/Atom content when at least 100 words are available. Summaries and short/missing content show “Read time unknown.” Feed content is not guaranteed to be the full linked article; estimates round up at 225 words per minute. Source diagnostics and methodology appear in expandable sections.
 
 Latest report: https://github.com/kantarcise/auto-ai-news/releases/latest
 

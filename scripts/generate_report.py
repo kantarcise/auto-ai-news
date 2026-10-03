@@ -8,6 +8,7 @@ import datetime as dt
 import email.utils
 import html
 import json
+import math
 import re
 import sys
 import textwrap
@@ -24,6 +25,7 @@ DEFAULT_SOURCES = ROOT / "config" / "sources.json"
 DEFAULT_OUTPUT = ROOT / "README.md"
 USER_AGENT = "auto-ai-news/0.1 (+https://github.com/kantarcise/auto-ai-news)"
 READING_WPM = 225
+MIN_CONTENT_WORDS = 100
 MAX_ITEMS = 30
 DEFAULT_LOOKBACK_HOURS = 72
 FETCH_TIMEOUT = 20
@@ -103,8 +105,11 @@ class Item:
     published: dt.datetime | None = None
     canonical_url: str = ""
     word_count: int = 0
-    read_minutes: int = 1
+    read_minutes: int | None = None
     stars: int = 1
+    content: str = ""
+    content_format: str = "text"
+    content_provenance: str = "missing"
 
 
 class TextExtractor(HTMLParser):
@@ -114,10 +119,12 @@ class TextExtractor(HTMLParser):
         self.skip_depth = 0
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        tag = tag.rsplit(":", 1)[-1]
         if tag in {"script", "style", "noscript", "svg"}:
             self.skip_depth += 1
 
     def handle_endtag(self, tag: str) -> None:
+        tag = tag.rsplit(":", 1)[-1]
         if tag in {"script", "style", "noscript", "svg"} and self.skip_depth:
             self.skip_depth -= 1
 
@@ -275,12 +282,38 @@ def parse_feed(xml_text: str, source: Source) -> list[Item]:
     return [parse_atom_entry(entry, source) for entry in entries]
 
 
+def content_value(element: ET.Element | None) -> str:
+    if element is None:
+        return ""
+    # Preserve XHTML structure for text extraction rather than flattening tags.
+    if len(element):
+        return (element.text or "") + "".join(
+            ET.tostring(child, encoding="unicode") for child in element
+        )
+    return element.text or ""
+
+
 def parse_rss_item(entry: ET.Element, source: Source) -> Item:
     title = child_text(entry, "title") or "Untitled"
     link = child_text(entry, "link", "guid")
     summary = child_text(entry, "description", "summary")
     published = parse_datetime(child_text(entry, "pubDate", "published", "updated"))
-    return Item(title, link, source.name, source.priority, summary, published)
+    content = content_value(
+        entry.find("{http://purl.org/rss/1.0/modules/content/}encoded")
+    )
+    return Item(
+        title,
+        link,
+        source.name,
+        source.priority,
+        summary,
+        published,
+        content=content,
+        content_format="html",
+        content_provenance="rss_content"
+        if content.strip()
+        else ("summary" if summary else "missing"),
+    )
 
 
 def parse_atom_entry(entry: ET.Element, source: Source) -> Item:
@@ -296,9 +329,31 @@ def parse_atom_entry(entry: ET.Element, source: Source) -> Item:
     if not link:
         link_node = entry.find(f"{ns}link")
         link = link_node.attrib.get("href", "") if link_node is not None else ""
-    summary = child_text(entry, f"{ns}summary", f"{ns}content")
+    summary = child_text(entry, f"{ns}summary")
     published = parse_datetime(child_text(entry, f"{ns}published", f"{ns}updated"))
-    return Item(title, link, source.name, source.priority, summary, published)
+    node = entry.find(f"{ns}content")
+    content_type = node.attrib.get("type", "text") if node is not None else "text"
+    supported = (
+        node is not None
+        and not node.attrib.get("src")
+        and content_type in {"text", "html", "xhtml"}
+    )
+    content = content_value(node) if supported else ""
+    if not summary and supported:
+        summary = child_text(entry, f"{ns}content")
+    return Item(
+        title,
+        link,
+        source.name,
+        source.priority,
+        summary,
+        published,
+        content=content,
+        content_format="html" if content_type in {"html", "xhtml"} else "text",
+        content_provenance="atom_content"
+        if content.strip()
+        else ("summary" if summary else "missing"),
+    )
 
 
 def ai_relevance_score(item: Item) -> int:
@@ -340,16 +395,31 @@ def extract_text_from_html(html_text: str) -> str:
     return parser.text()
 
 
-def estimate_reading_time(item: Item, article_html: str | None = None) -> int:
+def estimate_reading_time(item: Item) -> int | None:
+    """Estimate explicit feed content only; completeness is not established."""
     text = (
-        extract_text_from_html(article_html)
-        if article_html
-        else f"{item.title} {item.summary}"
+        extract_text_from_html(item.content)
+        if item.content_format == "html"
+        else item.content
     )
-    words = re.findall(r"\b[\w'-]+\b", text)
-    item.word_count = len(words)
-    item.read_minutes = max(1, round(item.word_count / READING_WPM))
+    item.word_count = len(re.findall(r"\b[\w'-]+\b", text))
+    item.read_minutes = None
+    if (
+        item.content_provenance in {"rss_content", "atom_content"}
+        and item.word_count >= MIN_CONTENT_WORDS
+    ):
+        item.read_minutes = math.ceil(item.word_count / READING_WPM)
     return item.read_minutes
+
+
+def reading_time_label(item: Item) -> str:
+    if item.read_minutes is not None:
+        return f"~{format_reading_time(item.read_minutes)} (feed content)"
+    if item.content.strip():
+        return "Read time unknown (insufficient feed content)"
+    if item.summary:
+        return "Read time unknown (summary only)"
+    return "Read time unknown (no article text)"
 
 
 def score_item(item: Item, now: dt.datetime) -> int:
@@ -598,7 +668,7 @@ def render_report(
                     f"{index}. **{markdown_link(item.title, item.url)}**  ",
                     (
                         f"{indent}{stars(item.stars)} · {source} · {published} · "
-                        f"~{format_reading_time(item.read_minutes)} (feed text)"
+                        f"{reading_time_label(item)}"
                     ),
                     "",
                 ]
@@ -653,8 +723,8 @@ def render_report(
             "",
             "Ratings range from 1 to 5 stars and indicate heuristic rank, not article quality.",
             (
-                "Reading times estimate the available feed text at 225 words per minute; "
-                "full articles may take longer. Publication dates are shown in UTC."
+                "Reading times estimate explicit RSS/Atom content at 225 words per minute when at least 100 words are available; summaries and short/missing content have unknown estimates. Feed content may be incomplete; "
+                "full articles may take longer. No article bodies are fetched. Publication dates are shown in UTC."
             ),
             "",
             "Articles with missing/invalid or future dates are excluded. Older articles never backfill a short report. Date-only HTML listings use midnight UTC; boundary decisions are conservative. A story may recur across consecutive reports within the window.",
