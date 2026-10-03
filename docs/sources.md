@@ -58,7 +58,7 @@ This first expansion includes one directly collected Chinese lab and two Europea
 
 ## Freshness rollout
 
-Issue #4 should remain a separate PR: make `--lookback-hours` configurable, start with the proposed 48-hour policy, explicitly handle missing/future dates, and group stale-feed diagnostics. Compare 48 and 72 hours on several daily snapshots before deciding the production default. A longer window increases coverage and repetition. Permit short reports and show the actual contributing source count. Do not silently widen the window or backfill old stories to reach 30.
+The freshness PR for issue #4 adds a positive `--lookback-hours` (default 48), excludes missing/invalid and future dates, and groups freshness diagnostics separately from network failures. Compare 48 and 72 hours on several daily snapshots before deciding the production default. A longer window increases coverage and repetition. Permit short reports and show the actual contributing source count. Do not silently widen the window or backfill old stories to reach 30.
 
 ## Global engineering expansion
 
