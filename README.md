@@ -10,7 +10,7 @@ Latest report: https://github.com/kantarcise/auto-ai-news/releases/latest
 
 Quiet-day editions titled “not much happened today” from Latent Space and smol.ai are excluded, with the reason listed in the report's skipped section. These editions can contain substantial recap content; this is a title-based selection preference, not a full-content quality judgment.
 
-Reports cover the last 48 hours by default. Older entries, missing/invalid dates, and future dates are excluded before link checks. Freshness exclusions are grouped separately from network failures. Short or empty reports are allowed; old stories never fill unused slots. A story may recur on consecutive days within this window. Date-only HTML listings use midnight UTC, so boundary decisions are conservative.
+Reports cover the last 72 hours by default. Older entries, missing/invalid dates, and future dates are excluded before link checks. Freshness exclusions are grouped separately from network failures. Short or empty reports are allowed; old stories never fill unused slots. A story may recur on consecutive days within this window. Date-only HTML listings use midnight UTC, so boundary decisions are conservative.
 
 ## Disclosure
 
@@ -23,8 +23,8 @@ auto-ai-news is an aggregator. Original articles, titles, and linked content bel
 ```bash
 python3 -m unittest discover -s tests
 python3 scripts/generate_report.py --output /tmp/daily-ai-news.md
-# Compare a wider window without publishing:
-python3 scripts/generate_report.py --lookback-hours 72 --output /tmp/daily-ai-news-72h.md
+# Compare a shorter window without publishing:
+python3 scripts/generate_report.py --lookback-hours 48 --output /tmp/daily-ai-news-48h.md
 ```
 
 ## Automation

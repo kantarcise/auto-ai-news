@@ -25,7 +25,7 @@ DEFAULT_OUTPUT = ROOT / "README.md"
 USER_AGENT = "auto-ai-news/0.1 (+https://github.com/kantarcise/auto-ai-news)"
 READING_WPM = 225
 MAX_ITEMS = 30
-DEFAULT_LOOKBACK_HOURS = 48
+DEFAULT_LOOKBACK_HOURS = 72
 FETCH_TIMEOUT = 20
 LINK_TIMEOUT = 10
 AI_KEYWORDS = {
@@ -689,7 +689,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         "--lookback-hours",
         type=int,
         default=DEFAULT_LOOKBACK_HOURS,
-        help="Positive coverage window in hours (default: 48).",
+        help="Positive coverage window in hours (default: 72).",
     )
     args = parser.parse_args(argv)
     if args.lookback_hours <= 0:

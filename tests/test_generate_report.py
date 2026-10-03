@@ -72,7 +72,7 @@ class GenerateReportTest(unittest.TestCase):
                 generate_report, "check_url_accessible", return_value=(True, "")
             ) as check,
         ):
-            items, diagnostics = generate_report.collect_items([source], NOW)
+            items, diagnostics = generate_report.collect_items([source], NOW, 48)
         self.assertEqual(len(items), 1)
         check.assert_called_once_with("https://example.com/0")
         self.assertIn(
@@ -98,7 +98,7 @@ class GenerateReportTest(unittest.TestCase):
                 generate_report, "check_url_accessible", return_value=(True, "")
             ),
         ):
-            wider, _ = generate_report.collect_items([source], NOW, 72)
+            wider, _ = generate_report.collect_items([source], NOW)
         self.assertEqual(len(wider), 3)
 
     def test_stale_feed_empty_report_and_separate_diagnostics(self):
@@ -119,7 +119,7 @@ class GenerateReportTest(unittest.TestCase):
         )
         report = render_report(items, diagnostics + [("Broken", "Network error")], NOW)
         self.assertIn("0 articles · 0 sources", report)
-        self.assertIn("Coverage: last 48 hours", report)
+        self.assertIn("Coverage: last 72 hours", report)
         self.assertIn("Freshness exclusions (2 source diagnostics)", report)
         self.assertIn("Skipped sources and links (1)", report)
         self.assertIn(
@@ -128,9 +128,9 @@ class GenerateReportTest(unittest.TestCase):
         )
 
     def test_positive_window_cli_validation(self):
-        self.assertEqual(generate_report.parse_args([]).lookback_hours, 48)
+        self.assertEqual(generate_report.parse_args([]).lookback_hours, 72)
         self.assertEqual(
-            generate_report.parse_args(["--lookback-hours", "72"]).lookback_hours, 72
+            generate_report.parse_args(["--lookback-hours", "48"]).lookback_hours, 48
         )
         import contextlib
         import io
