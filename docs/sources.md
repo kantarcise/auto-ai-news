@@ -1,6 +1,6 @@
 # Source expansion and validation
 
-Ten additional primary sources are enabled, bringing the configured active total from six to sixteen. Existing sources remain configured. New sources use priority 4 so source membership alone does not receive the maximum priority bonus.
+The first expansion added ten primary sources (six to sixteen active inputs). The global engineering expansion adds ten more, bringing the active total to 26. Research/tooling sources use priority 4; broad engineering blogs use priority 3 and still require an AI-related headline.
 
 | New source | Coverage | Collection |
 | --- | --- | --- |
@@ -59,3 +59,36 @@ This first expansion includes one directly collected Chinese lab and two Europea
 ## Freshness rollout
 
 Issue #4 should remain a separate PR: make `--lookback-hours` configurable, start with the proposed 48-hour policy, explicitly handle missing/future dates, and group stale-feed diagnostics. Compare 48 and 72 hours on several daily snapshots before deciding the production default. A longer window increases coverage and repetition. Permit short reports and show the actual contributing source count. Do not silently widen the window or backfill old stories to reach 30.
+
+## Global engineering expansion
+
+| Source | Coverage | Collection |
+| --- | --- | --- |
+| Cloudflare | US; agents, developer infrastructure and AI engineering | Official RSS |
+| AMD ROCm | US; inference, training and accelerator engineering | Official Atom |
+| World Labs | US; spatial intelligence and world models | Official dated HTML cards |
+| NVIDIA Developer | US; AI development and accelerated computing | Official RSS |
+| NAVER D2 | South Korea; engineering, including Korean-language AI posts | Official Atom |
+| Kakao Tech | South Korea; engineering and AI development | Official RSS |
+| LY Corporation Engineering | Japan; engineering (successor to LINE Engineering blog) | Official Atom |
+| GitHub Engineering | US; development tooling and engineering | Official RSS |
+| Vercel | US; developer platform and AI tooling | Official Atom |
+| Databricks | US; data/AI engineering | Official RSS |
+
+Broad engineering feeds are filtered using the existing title policy. Added terms recognize agentic development, software factory/factories, spatial intelligence, and Korean 인공지능. This remains a heuristic: it can miss Korean headlines without a recognized term and can include tangential matches. No source-wide relevance bypass is introduced.
+
+Bending Spoons is recorded as disabled: its verified [Medium publication feed](https://medium.com/feed/bendingspoons) has a newest entry of November 7, 2024. Its main website did not expose a validated current engineering feed. A current dated publication URL is needed before enabling it. StrongDM's software-factory material is a separate publisher and has not been substituted for Bending Spoons.
+
+Chinese coverage remains DeepSeek. The Qwen and MiniMax adapter gaps above remain open; this expansion does not claim additional Chinese research coverage. European coverage from the previous expansion remains available.
+
+World Labs uses the same date-only convention as DeepSeek and Anthropic. The snapshot below validates the current layout; an offline card test protects title/date extraction. No workflow, publication schedule, freshness cutoff, production dependency, or historical release is changed.
+
+[Global validation snapshot](source-validation-global-2026-10-03.json), October 3 at 18:34 Istanbul time:
+
+| Window | First 16 sources: candidates / contributors | All 26 sources: candidates / contributors |
+| --- | --- | --- |
+| 48 hours | 11 / 7 | 17 / 11 |
+| 72 hours | 15 / 8 | 33 / 12 |
+| 7 days | 38 / 11 | 67 / 16 |
+
+All ten new inputs parsed with dates and all ten newest-article samples passed link checks. Across the entire configuration, 25 of 26 inputs parsed: the existing DeepMind endpoint returned a parsing failure in this snapshot. The existing OpenAI sample still returned 403. These are current failures, not guarantees of future availability. Counts are candidates before final link checks and story grouping. World Labs, NAVER, Kakao, LY and GitHub contributed no matching articles within 48 hours in this snapshot. More configured publishers do not guarantee ten or thirty fresh articles every day.

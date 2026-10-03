@@ -30,6 +30,11 @@ LINK_TIMEOUT = 10
 AI_KEYWORDS = {
     "ai",
     "agi",
+    "agentic",
+    "software factory",
+    "software factories",
+    "spatial intelligence",
+    "인공지능",
     "agent",
     "agents",
     "anthropic",
@@ -187,7 +192,7 @@ def parse_datetime(value: str) -> dt.datetime | None:
 
 
 class DatedNewsParser(HTMLParser):
-    """Read dated article cards from the validated DeepSeek/Anthropic listings."""
+    """Read dated article cards from the validated research/news listings."""
 
     def __init__(self, source: Source) -> None:
         super().__init__()

@@ -1,0 +1,486 @@
+{
+  "checked_at": "2026-10-03T15:34:00.505934+00:00",
+  "sources": [
+    {
+      "source": "LessWrong AI",
+      "url": "https://www.lesswrong.com/feed.xml?view=ai",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://www.lesswrong.com/feed.xml?view=ai",
+      "entries": 10,
+      "dated_entries": 10,
+      "relevant_candidates": 1,
+      "newest_date": "2026-10-03T15:02:53+00:00",
+      "windows": {
+        "48": 1,
+        "72": 1,
+        "168": 1
+      },
+      "sample_url": "https://www.lesswrong.com/posts/Azn6WWQb8HRNjxH9A/singular-learning-theory-comprehensive-3",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Latent Space",
+      "url": "https://www.latent.space/feed",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://www.latent.space/feed",
+      "entries": 20,
+      "dated_entries": 20,
+      "relevant_candidates": 19,
+      "newest_date": "2026-10-03T08:45:15+00:00",
+      "windows": {
+        "48": 3,
+        "72": 5,
+        "168": 9
+      },
+      "sample_url": "https://www.latent.space/p/ainews-not-much-happened-today-cee",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/atom/everything/",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://simonwillison.net/atom/everything/",
+      "entries": 30,
+      "dated_entries": 30,
+      "relevant_candidates": 11,
+      "newest_date": "2026-10-01T06:29:01+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 5
+      },
+      "sample_url": "https://simonwillison.net/2026/Oct/1/matthew-green/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "smol.ai",
+      "url": "https://news.smol.ai/rss.xml",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://news.smol.ai/rss.xml",
+      "entries": 716,
+      "dated_entries": 716,
+      "relevant_candidates": 455,
+      "newest_date": "2026-09-09T05:44:39+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 0
+      },
+      "sample_url": "https://news.smol.ai/issues/26-09-09-not-much/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Clever Hack",
+      "url": "https://cleverhack.com/feed.xml",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://cleverhack.com/feed.xml",
+      "entries": 21,
+      "dated_entries": 21,
+      "relevant_candidates": 17,
+      "newest_date": "2026-10-02T02:00:00+00:00",
+      "windows": {
+        "48": 1,
+        "72": 1,
+        "168": 1
+      },
+      "sample_url": "https://cleverhack.com/who-tests-the-frontier-ai-labs-evaluators",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "The Rundown AI",
+      "url": "https://www.therundown.ai/feed",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://www.therundown.ai/feed",
+      "entries": 50,
+      "dated_entries": 50,
+      "relevant_candidates": 26,
+      "newest_date": "2026-10-02T14:34:09+00:00",
+      "windows": {
+        "48": 1,
+        "72": 1,
+        "168": 4
+      },
+      "sample_url": "https://www.therundown.ai/articles/apple-no-video-security-camera",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Google DeepMind",
+      "url": "https://deepmind.google/blog/rss.xml",
+      "format": "feed",
+      "error": "not well-formed (invalid token): line 1, column 0"
+    },
+    {
+      "source": "Hugging Face",
+      "url": "https://huggingface.co/blog/feed.xml",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://huggingface.co/blog/feed.xml",
+      "entries": 872,
+      "dated_entries": 872,
+      "relevant_candidates": 380,
+      "newest_date": "2026-10-02T15:19:50+00:00",
+      "windows": {
+        "48": 2,
+        "72": 2,
+        "168": 4
+      },
+      "sample_url": "https://huggingface.co/blog/allenai/astabrief",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "PyTorch",
+      "url": "https://pytorch.org/feed/",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://pytorch.org/feed/",
+      "entries": 10,
+      "dated_entries": 10,
+      "relevant_candidates": 1,
+      "newest_date": "2026-10-02T19:55:07+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 0
+      },
+      "sample_url": "https://pytorch.org/blog/building-a-high-performance-and-portable-vllm-linear-backend-with-helion/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Mistral AI",
+      "url": "https://mistral.ai/news/rss",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://mistral.ai/news/rss",
+      "entries": 88,
+      "dated_entries": 88,
+      "relevant_candidates": 48,
+      "newest_date": "2026-09-28T15:57:59+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 0
+      },
+      "sample_url": "https://mistral.ai/news/hallo-deutschland/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Google Research",
+      "url": "https://research.google/blog/rss/",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://research.google/blog/rss/",
+      "entries": 100,
+      "dated_entries": 100,
+      "relevant_candidates": 43,
+      "newest_date": "2026-10-02T14:57:41+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 1
+      },
+      "sample_url": "https://research.google/blog/toward-provably-private-learning-from-federated-data/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Microsoft Research",
+      "url": "https://www.microsoft.com/en-us/research/feed/",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://www.microsoft.com/en-us/research/feed/",
+      "entries": 10,
+      "dated_entries": 10,
+      "relevant_candidates": 3,
+      "newest_date": "2026-09-30T16:00:00+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 1
+      },
+      "sample_url": "https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "AI2",
+      "url": "https://allenai.org/rss.xml",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://allenai.org/rss.xml",
+      "entries": 25,
+      "dated_entries": 25,
+      "relevant_candidates": 15,
+      "newest_date": "2026-10-02T08:00:00+00:00",
+      "windows": {
+        "48": 1,
+        "72": 1,
+        "168": 1
+      },
+      "sample_url": "https://allenai.org/blog/astabrief",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "OpenAI",
+      "url": "https://openai.com/news/rss.xml",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://openai.com/news/rss.xml",
+      "entries": 1245,
+      "dated_entries": 1245,
+      "relevant_candidates": 795,
+      "newest_date": "2026-10-02T16:15:00+00:00",
+      "windows": {
+        "48": 2,
+        "72": 3,
+        "168": 9
+      },
+      "sample_url": "https://openai.com/index/practical-guide-building-gpt-6",
+      "sample_accessible": false,
+      "sample_failure": "HTTP 403."
+    },
+    {
+      "source": "DeepSeek Research & News",
+      "url": "https://www.deepseek.com/en/news/",
+      "format": "dated_html",
+      "status": 200,
+      "final_url": "https://www.deepseek.com/en/news/",
+      "entries": 15,
+      "dated_entries": 15,
+      "relevant_candidates": 11,
+      "newest_date": "2026-09-10T00:00:00+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 0
+      },
+      "sample_url": "https://www.deepseek.com/en/news/deepseek-v4-1-flash/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Anthropic Research",
+      "url": "https://www.anthropic.com/research",
+      "format": "dated_html",
+      "status": 200,
+      "final_url": "https://www.anthropic.com/research",
+      "entries": 14,
+      "dated_entries": 14,
+      "relevant_candidates": 8,
+      "newest_date": "2026-10-01T00:00:00+00:00",
+      "windows": {
+        "48": 0,
+        "72": 1,
+        "168": 2
+      },
+      "sample_url": "https://www.anthropic.com/research/claude-shaped-science",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Cloudflare",
+      "url": "https://blog.cloudflare.com/rss/",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://blog.cloudflare.com/rss/",
+      "entries": 20,
+      "dated_entries": 20,
+      "relevant_candidates": 4,
+      "newest_date": "2026-10-02T16:13:45+00:00",
+      "windows": {
+        "48": 1,
+        "72": 4,
+        "168": 4
+      },
+      "sample_url": "https://blog.cloudflare.com/streamline/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "AMD ROCm",
+      "url": "https://rocm.blogs.amd.com/blog/atom.xml",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://rocm.blogs.amd.com/blog/atom.xml",
+      "entries": 10,
+      "dated_entries": 10,
+      "relevant_candidates": 5,
+      "newest_date": "2026-09-30T00:00:00+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 2
+      },
+      "sample_url": "https://rocm.blogs.amd.com/artificial-intelligence/molmoact2-ryzers-strix/README.html",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "World Labs",
+      "url": "https://www.worldlabs.ai/blog",
+      "format": "dated_html",
+      "status": 200,
+      "final_url": "https://www.worldlabs.ai/blog",
+      "entries": 19,
+      "dated_entries": 19,
+      "relevant_candidates": 6,
+      "newest_date": "2026-09-28T00:00:00+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 0
+      },
+      "sample_url": "https://www.worldlabs.ai/blog/amd-announcement",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "NVIDIA Developer",
+      "url": "https://developer.nvidia.com/blog/feed/",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://developer.nvidia.com/blog/feed/",
+      "entries": 100,
+      "dated_entries": 100,
+      "relevant_candidates": 67,
+      "newest_date": "2026-10-01T18:13:29+00:00",
+      "windows": {
+        "48": 2,
+        "72": 5,
+        "168": 10
+      },
+      "sample_url": "https://developer.nvidia.com/blog/build-applications-on-nvidia-bluefield-faster-with-nvidia-doca-agent-skills/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "NAVER D2",
+      "url": "https://d2.naver.com/d2.atom",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://d2.naver.com/d2.atom",
+      "entries": 20,
+      "dated_entries": 20,
+      "relevant_candidates": 8,
+      "newest_date": "2026-10-01T02:40:01+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 0
+      },
+      "sample_url": "https://d2.naver.com/helloworld/8118359",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Kakao Tech",
+      "url": "https://tech.kakao.com/feed/",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://tech.kakao.com/feed",
+      "entries": 10,
+      "dated_entries": 10,
+      "relevant_candidates": 1,
+      "newest_date": "2026-10-01T15:00:00+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 0
+      },
+      "sample_url": "https://tech.kakao.com/posts/838",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "LY Corporation Engineering",
+      "url": "https://techblog.lycorp.co.jp/en/feed/index.xml",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://techblog.lycorp.co.jp/en/feed/index.xml",
+      "entries": 50,
+      "dated_entries": 50,
+      "relevant_candidates": 16,
+      "newest_date": "2026-09-16T06:45:00+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 0
+      },
+      "sample_url": "https://techblog.lycorp.co.jp/en/a-large-scale-ios-configuration-system-implemented-with-an-attributedstring-structure",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "GitHub Engineering",
+      "url": "https://github.blog/engineering/feed/",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://github.blog/engineering/feed/",
+      "entries": 10,
+      "dated_entries": 10,
+      "relevant_candidates": 2,
+      "newest_date": "2026-09-25T15:00:00+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 0
+      },
+      "sample_url": "https://github.blog/engineering/architecture-optimization/improving-site-performance-by-shipping-more-css/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Vercel",
+      "url": "https://vercel.com/atom",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://vercel.com/atom",
+      "entries": 1630,
+      "dated_entries": 1630,
+      "relevant_candidates": 420,
+      "newest_date": "2026-10-02T07:00:00+00:00",
+      "windows": {
+        "48": 1,
+        "72": 5,
+        "168": 9
+      },
+      "sample_url": "https://vercel.com/blog/jev-for-python-engineers",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Databricks",
+      "url": "https://www.databricks.com/feed",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://www.databricks.com/feed",
+      "entries": 10,
+      "dated_entries": 10,
+      "relevant_candidates": 4,
+      "newest_date": "2026-10-02T17:40:26+00:00",
+      "windows": {
+        "48": 2,
+        "72": 4,
+        "168": 4
+      },
+      "sample_url": "https://www.databricks.com/blog/capital-markets-buy-side-runs-nav-finance-protects-fee",
+      "sample_accessible": true,
+      "sample_failure": ""
+    }
+  ]
+}
