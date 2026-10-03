@@ -239,6 +239,17 @@ def is_ai_related(item: Item) -> bool:
     return ai_relevance_score(title_only) > 0
 
 
+def is_quiet_day_roundup(item: Item) -> bool:
+    """Identify the publishers' quiet-day editions, not articles quoting the phrase."""
+    if item.source not in {"Latent Space", "smol.ai"}:
+        return False
+    title = normalize_space(item.title).casefold()
+    return (
+        re.fullmatch(r"(?:\[ainews\]\s*)?not much happened today[.!]?", title)
+        is not None
+    )
+
+
 def extract_text_from_html(html_text: str) -> str:
     parser = TextExtractor()
     parser.feed(html_text)
@@ -317,6 +328,14 @@ def collect_items(
                 continue
             item.url = urllib.parse.urljoin(final_url, item.url)
             item.canonical_url = canonicalize_url(item.url)
+            if is_quiet_day_roundup(item):
+                unavailable.append(
+                    (
+                        f"{item.source}: {item.title}",
+                        "Quiet-day roundup excluded by title policy.",
+                    )
+                )
+                continue
             if is_ai_related(item):
                 estimate_reading_time(item)
                 score_item(item, now)
@@ -495,6 +514,11 @@ def render_report(
                 "based on source priority, recency, and title or summary relevance.",
                 width=100,
                 break_on_hyphens=False,
+            ),
+            "",
+            (
+                "Quiet-day editions titled ‘not much happened today’ from Latent Space and "
+                "smol.ai are excluded by title policy, even when they contain recap content."
             ),
             "",
             "</details>",
