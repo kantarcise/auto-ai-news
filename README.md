@@ -4,6 +4,8 @@ Daily AI news reports from a small set of trusted sources.
 
 Reports are published as GitHub Releases so each day has a stable, dated entry with clickable links, star ratings, reading-time estimates, and skipped-source notes.
 
+Reports use a ranked article list with source names and UTC publication dates. Ratings are heuristic ranks; reading times estimate feed text rather than the full linked article. Source diagnostics and methodology appear in expandable sections.
+
 Latest report: https://github.com/kantarcise/auto-ai-news/releases/latest
 
 ## Disclosure

@@ -19,7 +19,6 @@ from dataclasses import dataclass
 from html.parser import HTMLParser
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCES = ROOT / "config" / "sources.json"
 DEFAULT_OUTPUT = ROOT / "README.md"
@@ -140,7 +139,9 @@ def fetch_url(url: str, timeout: int = FETCH_TIMEOUT) -> tuple[int, str, str]:
 def canonicalize_url(url: str) -> str:
     parsed = urllib.parse.urlsplit(url.strip())
     query = urllib.parse.parse_qsl(parsed.query, keep_blank_values=True)
-    clean_query = [(key, value) for key, value in query if key.lower() not in TRACKING_PARAMS]
+    clean_query = [
+        (key, value) for key, value in query if key.lower() not in TRACKING_PARAMS
+    ]
     path = parsed.path or "/"
     if path != "/" and path.endswith("/"):
         path = path.rstrip("/")
@@ -245,7 +246,11 @@ def extract_text_from_html(html_text: str) -> str:
 
 
 def estimate_reading_time(item: Item, article_html: str | None = None) -> int:
-    text = extract_text_from_html(article_html) if article_html else f"{item.title} {item.summary}"
+    text = (
+        extract_text_from_html(article_html)
+        if article_html
+        else f"{item.title} {item.summary}"
+    )
     words = re.findall(r"\b[\w'-]+\b", text)
     item.word_count = len(words)
     item.read_minutes = max(1, round(item.word_count / READING_WPM))
@@ -276,12 +281,16 @@ def item_sort_key(item: Item) -> tuple[int, dt.datetime]:
     return item.stars, published
 
 
-def collect_items(sources: list[Source], now: dt.datetime) -> tuple[list[Item], list[tuple[str, str]]]:
+def collect_items(
+    sources: list[Source], now: dt.datetime
+) -> tuple[list[Item], list[tuple[str, str]]]:
     items: list[Item] = []
     unavailable: list[tuple[str, str]] = []
     for source in sources:
         if not source.enabled:
-            unavailable.append((source.name, source.disabled_reason or "Source disabled."))
+            unavailable.append(
+                (source.name, source.disabled_reason or "Source disabled.")
+            )
             continue
         if not source.feed_url:
             unavailable.append((source.name, "No feed URL configured."))
@@ -289,10 +298,17 @@ def collect_items(sources: list[Source], now: dt.datetime) -> tuple[list[Item], 
         try:
             status, final_url, feed_text = fetch_url(source.feed_url)
             if status >= 400:
-                unavailable.append((source.name, f"HTTP {status} from {source.feed_url}."))
+                unavailable.append(
+                    (source.name, f"HTTP {status} from {source.feed_url}.")
+                )
                 continue
             parsed_items = parse_feed(feed_text, source)
-        except (ET.ParseError, TimeoutError, urllib.error.URLError, UnicodeDecodeError) as exc:
+        except (
+            ET.ParseError,
+            TimeoutError,
+            urllib.error.URLError,
+            UnicodeDecodeError,
+        ) as exc:
             unavailable.append((source.name, reason_from_error(exc)))
             continue
         for item in parsed_items:
@@ -311,7 +327,9 @@ def collect_items(sources: list[Source], now: dt.datetime) -> tuple[list[Item], 
 
 
 def check_url_accessible(url: str, timeout: int = LINK_TIMEOUT) -> tuple[bool, str]:
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT}, method="HEAD")
+    request = urllib.request.Request(
+        url, headers={"User-Agent": USER_AGENT}, method="HEAD"
+    )
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:
             if response.status < 400:
@@ -341,7 +359,9 @@ def check_url_accessible_with_get(url: str, timeout: int) -> tuple[bool, str]:
         return False, f"Network error: {exc.reason}."
 
 
-def filter_accessible_items(items: list[Item], limit: int) -> tuple[list[Item], list[tuple[str, str]]]:
+def filter_accessible_items(
+    items: list[Item], limit: int
+) -> tuple[list[Item], list[tuple[str, str]]]:
     accessible: list[Item] = []
     failures: list[tuple[str, str]] = []
     for item in items:
@@ -375,7 +395,7 @@ def dedupe_items(items: list[Item]) -> list[Item]:
 
 
 def stars(value: int) -> str:
-    return "*" * value
+    return "★" * value + "☆" * (5 - value)
 
 
 def format_reading_time(minutes: int) -> str:
@@ -383,30 +403,61 @@ def format_reading_time(minutes: int) -> str:
 
 
 def markdown_escape(value: str) -> str:
-    return value.replace("|", "\\|").replace("\n", " ")
+    value = html.escape(normalize_space(value), quote=False)
+    return re.sub(r"([\\`*_{}\[\]()#+.!|~>\-])", r"\\\1", value)
 
 
-def render_report(items: list[Item], unavailable: list[tuple[str, str]], now: dt.datetime) -> str:
-    generated = now.strftime("%Y-%m-%d %H:%M UTC")
+def markdown_link(title: str, url: str) -> str:
+    destination = urllib.parse.quote(url, safe=":/?#@!$&'*+,;=%~._-")
+    return f"[{markdown_escape(title)}]({destination})"
+
+
+def render_report(
+    items: list[Item], unavailable: list[tuple[str, str]], now: dt.datetime
+) -> str:
+    generated = now.astimezone(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    source_count = len({item.source for item in items})
+    article_label = "article" if len(items) == 1 else "articles"
+    source_label = "source" if source_count == 1 else "sources"
     lines = [
         "# Daily AI News",
         "",
-        f"Generated: {generated}",
+        (
+            f"{len(items)} {article_label} · {source_count} {source_label} · "
+            f"Generated {generated}"
+        ),
         "",
-        "| Stars | Read | Source | Link |",
-        "| --- | ---: | --- | --- |",
+        "## Articles",
+        "",
     ]
     if items:
-        for item in items:
-            title = markdown_escape(item.title)
+        for index, item in enumerate(items, start=1):
+            indent = " " * (len(str(index)) + 2)
             source = markdown_escape(item.source)
-            lines.append(
-                f"| {stars(item.stars)} | {format_reading_time(item.read_minutes)} | "
-                f"{source} | [{title}]({item.url}) |"
+            published = (
+                item.published.astimezone(dt.timezone.utc).strftime("%Y-%m-%d")
+                if item.published
+                else "Date unknown"
+            )
+            lines.extend(
+                [
+                    f"{index}. **{markdown_link(item.title, item.url)}**  ",
+                    (
+                        f"{indent}{stars(item.stars)} · {source} · {published} · "
+                        f"~{format_reading_time(item.read_minutes)} (feed text)"
+                    ),
+                    "",
+                ]
             )
     else:
-        lines.append("|  |  |  | No AI-related items found. |")
-    lines.extend(["", "## Inaccessible / skipped sources", ""])
+        lines.extend(["No AI-related items found.", ""])
+    lines.extend(
+        [
+            "<details>",
+            f"<summary>Skipped sources and links ({len(unavailable)})</summary>",
+            "",
+        ]
+    )
     if unavailable:
         for source, reason in unavailable:
             lines.append(f"- **{markdown_escape(source)}**: {markdown_escape(reason)}")
@@ -414,6 +465,11 @@ def render_report(items: list[Item], unavailable: list[tuple[str, str]], now: dt
         lines.append("- None.")
     lines.extend(
         [
+            "",
+            "</details>",
+            "",
+            "<details>",
+            "<summary>About this report</summary>",
             "",
             "## Disclosure",
             "",
@@ -425,6 +481,12 @@ def render_report(items: list[Item], unavailable: list[tuple[str, str]], now: dt
                 break_on_hyphens=False,
             ),
             "",
+            "Ratings range from 1 to 5 stars and indicate heuristic rank, not article quality.",
+            (
+                "Reading times estimate the available feed text at 225 words per minute; "
+                "full articles may take longer. Publication dates are shown in UTC."
+            ),
+            "",
             "## Source policy",
             "",
             textwrap.fill(
@@ -434,6 +496,8 @@ def render_report(items: list[Item], unavailable: list[tuple[str, str]], now: dt
                 width=100,
                 break_on_hyphens=False,
             ),
+            "",
+            "</details>",
             "",
         ]
     )
@@ -453,7 +517,9 @@ def main(argv: list[str] | None = None) -> int:
     sources = load_sources(args.sources)
     items, unavailable = collect_items(sources, now)
     args.output.write_text(render_report(items, unavailable, now), encoding="utf-8")
-    print(f"Wrote {args.output} with {len(items)} links and {len(unavailable)} skipped sources.")
+    print(
+        f"Wrote {args.output} with {len(items)} links and {len(unavailable)} skipped sources."
+    )
     return 0
 
 
