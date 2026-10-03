@@ -105,6 +105,49 @@ class GenerateReportTest(unittest.TestCase):
             with self.subTest(payload=payload), self.assertRaises(ValueError):
                 parse_source(json.dumps(payload), source)
 
+    def test_rss_explicit_content_preserved_and_preferred_to_excerpt(self):
+        source = Source("Test", "https://example.com", "https://example.com/feed", 3)
+        item = parse_feed((FIXTURES / "rss_content.xml").read_text(), source)[0]
+        self.assertEqual(item.summary, "A short excerpt.")
+        self.assertEqual(item.content_provenance, "rss_content")
+        self.assertIn("<p>", item.content)
+        self.assertEqual(estimate_reading_time(item), 2)
+        self.assertEqual(item.word_count, 226)
+        self.assertIn("~2 min (feed content)", render_report([item], [], NOW))
+
+    def test_atom_xhtml_html_external_and_unsupported_content(self):
+        source = Source("Test", "https://example.com", "https://example.com/feed", 3)
+        items = parse_feed((FIXTURES / "atom_content.xml").read_text(), source)
+        self.assertEqual(items[0].summary, "Short excerpt")
+        self.assertEqual(estimate_reading_time(items[0]), 1)
+        self.assertEqual(items[0].word_count, 225)
+        self.assertIsNone(estimate_reading_time(items[1]))
+        self.assertEqual(items[1].word_count, 2)
+        self.assertIn(
+            "insufficient feed content", generate_report.reading_time_label(items[1])
+        )
+        for item in items[2:]:
+            self.assertEqual(item.content, "")
+            self.assertIsNone(estimate_reading_time(item))
+
+    def test_summary_and_missing_content_have_unknown_reading_times(self):
+        for summary in ("", " ".join(["word"] * 1000)):
+            item = Item("AI", "https://example.com", "Test", 3, summary=summary)
+            self.assertIsNone(estimate_reading_time(item))
+            report = render_report([item], [], NOW)
+            self.assertIn("Read time unknown", report)
+            self.assertNotIn("~1 min", report)
+        for count, expected in ((99, None), (100, 1), (225, 1), (226, 2)):
+            item = Item(
+                "AI",
+                "https://example.com",
+                "Test",
+                3,
+                content=" ".join(["word"] * count),
+                content_provenance="atom_content",
+            )
+            self.assertEqual(estimate_reading_time(item), expected)
+
     def test_freshness_boundaries_and_timezone_offsets(self):
         for stamp, expected in (
             ("2026-04-23T12:00:00Z", ""),
@@ -414,8 +457,8 @@ class GenerateReportTest(unittest.TestCase):
         self.assertIn(
             "Artificial intelligence systems", extract_text_from_html(article_html)
         )
-        self.assertEqual(estimate_reading_time(item, article_html), 1)
-        self.assertGreater(item.word_count, 5)
+        self.assertIsNone(estimate_reading_time(item))
+        self.assertEqual(item.word_count, 0)
 
     def test_score_is_bounded_to_five_stars(self):
         source = Source(
@@ -440,7 +483,7 @@ class GenerateReportTest(unittest.TestCase):
         )
         self.assertIn("HTTP 403 from source\\.", report)
         self.assertIn("1 article · 1 source", report)
-        self.assertIn("★★★★☆ · Example · 2026-04-25 · ~2 min (feed text)", report)
+        self.assertIn("★★★★☆ · Example · 2026-04-25 · ~2 min (feed content)", report)
         self.assertIn("<summary>Skipped sources and links (1)</summary>", report)
         self.assertIn("This report was generated automatically by auto-ai-news", report)
         self.assertIn("original articles, titles, and linked content belong", report)
