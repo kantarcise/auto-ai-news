@@ -25,6 +25,126 @@ NOW = dt.datetime(2026, 4, 25, 12, 0, tzinfo=dt.timezone.utc)
 
 
 class GenerateReportTest(unittest.TestCase):
+    def test_freshness_boundaries_and_timezone_offsets(self):
+        for stamp, expected in (
+            ("2026-04-23T12:00:00Z", ""),
+            ("2026-04-23T14:00:00+02:00", ""),
+            ("2026-04-25T12:00:00Z", ""),
+            ("2026-04-23T11:59:59Z", "older than coverage window"),
+            ("2026-04-25T12:00:01Z", "future publication date"),
+            ("invalid", "missing or invalid publication date"),
+            ("", "missing or invalid publication date"),
+        ):
+            with self.subTest(stamp=stamp):
+                item = Item(
+                    "AI news",
+                    "https://example.com",
+                    "Test",
+                    3,
+                    published=generate_report.parse_datetime(stamp),
+                )
+                self.assertEqual(
+                    generate_report.freshness_reason(item, NOW, 48), expected
+                )
+
+    def test_collection_filters_dates_before_link_checks_and_groups_reasons(self):
+        source = Source("Test", "https://example.com", "https://example.com/feed", 3)
+        dates = [
+            "2026-04-23T12:00:00Z",
+            "2026-04-23T11:59:59Z",
+            "2026-04-22T12:00:00Z",
+            "invalid",
+            "2026-04-25T12:00:01Z",
+        ]
+        feed = (
+            "<rss><channel>"
+            + "".join(
+                f"<item><title>AI news {i}</title><link>https://example.com/{i}</link><pubDate>{date}</pubDate></item>"
+                for i, date in enumerate(dates)
+            )
+            + "</channel></rss>"
+        )
+        with (
+            patch.object(
+                generate_report, "fetch_url", return_value=(200, source.feed_url, feed)
+            ),
+            patch.object(
+                generate_report, "check_url_accessible", return_value=(True, "")
+            ) as check,
+        ):
+            items, diagnostics = generate_report.collect_items([source], NOW, 48)
+        self.assertEqual(len(items), 1)
+        check.assert_called_once_with("https://example.com/0")
+        self.assertIn(
+            ("Test", "Freshness: 2 entries excluded: older than coverage window."),
+            diagnostics,
+        )
+        self.assertIn(
+            (
+                "Test",
+                "Freshness: 1 entries excluded: missing or invalid publication date.",
+            ),
+            diagnostics,
+        )
+        self.assertIn(
+            ("Test", "Freshness: 1 entries excluded: future publication date."),
+            diagnostics,
+        )
+        with (
+            patch.object(
+                generate_report, "fetch_url", return_value=(200, source.feed_url, feed)
+            ),
+            patch.object(
+                generate_report, "check_url_accessible", return_value=(True, "")
+            ),
+        ):
+            wider, _ = generate_report.collect_items([source], NOW)
+        self.assertEqual(len(wider), 3)
+
+    def test_stale_feed_empty_report_and_separate_diagnostics(self):
+        source = Source("Old", "https://example.com", "https://example.com/feed", 3)
+        feed = "<rss><channel><item><title>AI news</title><link>https://example.com/old</link><pubDate>2026-04-01T00:00:00Z</pubDate></item></channel></rss>"
+        with (
+            patch.object(
+                generate_report, "fetch_url", return_value=(200, source.feed_url, feed)
+            ),
+            patch.object(generate_report, "check_url_accessible") as check,
+        ):
+            items, diagnostics = generate_report.collect_items([source], NOW)
+        check.assert_not_called()
+        self.assertEqual(items, [])
+        self.assertIn(
+            ("Old", "Freshness: no dated entries within the coverage window."),
+            diagnostics,
+        )
+        report = render_report(items, diagnostics + [("Broken", "Network error")], NOW)
+        self.assertIn("0 articles · 0 sources", report)
+        self.assertIn("Coverage: last 72 hours", report)
+        self.assertIn("Freshness exclusions (2 source diagnostics)", report)
+        self.assertIn("Skipped sources and links (1)", report)
+        self.assertIn(
+            "No accessible AI-related articles found within the coverage window.",
+            report,
+        )
+
+    def test_positive_window_cli_validation(self):
+        self.assertEqual(generate_report.parse_args([]).lookback_hours, 72)
+        self.assertEqual(
+            generate_report.parse_args(["--lookback-hours", "48"]).lookback_hours, 48
+        )
+        import contextlib
+        import io
+
+        for value in ("0", "-1", "abc"):
+            with (
+                self.subTest(value=value),
+                contextlib.redirect_stderr(io.StringIO()),
+                self.assertRaises(SystemExit),
+            ):
+                generate_report.parse_args(["--lookback-hours", value])
+        with self.assertRaises(ValueError):
+            generate_report.collect_items([], NOW, 0)
+
     def test_engineering_and_korean_ai_headlines_are_relevant(self):
         for title in (
             "Building an agentic development platform",
@@ -95,9 +215,9 @@ class GenerateReportTest(unittest.TestCase):
             "Latent Space", "https://example.com", "https://example.com/feed", 5
         )
         feed = """<rss><channel>
-        <item><title>[AINews] not much happened today</title><link>https://example.com/quiet</link>
+        <item><title>[AINews] not much happened today</title><pubDate>Sat, 25 Apr 2026 12:00:00 GMT</pubDate><link>https://example.com/quiet</link>
         <description>A substantial recap about AI models and agents.</description></item>
-        <item><title>New AI model</title><link>https://example.com/model</link></item>
+        <item><title>New AI model</title><pubDate>Sat, 25 Apr 2026 12:00:00 GMT</pubDate><link>https://example.com/model</link></item>
         </channel></rss>"""
         with (
             patch.object(
@@ -265,12 +385,15 @@ class GenerateReportTest(unittest.TestCase):
         report = render_report([], [], NOW)
 
         self.assertIn("0 articles · 0 sources", report)
-        self.assertIn("No AI-related items found.", report)
+        self.assertIn(
+            "No accessible AI-related articles found within the coverage window.",
+            report,
+        )
         self.assertIn(
             "<summary>Skipped sources and links (0)</summary>\n\n- None.", report
         )
-        self.assertEqual(report.count("<details>"), 2)
-        self.assertEqual(report.count("</details>"), 2)
+        self.assertEqual(report.count("<details>"), 3)
+        self.assertEqual(report.count("</details>"), 3)
         self.assertLess(report.index("## Source policy"), report.rindex("</details>"))
 
     def test_render_report_keeps_double_digit_metadata_inside_list(self):

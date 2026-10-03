@@ -25,6 +25,7 @@ DEFAULT_OUTPUT = ROOT / "README.md"
 USER_AGENT = "auto-ai-news/0.1 (+https://github.com/kantarcise/auto-ai-news)"
 READING_WPM = 225
 MAX_ITEMS = 30
+DEFAULT_LOOKBACK_HOURS = 72
 FETCH_TIMEOUT = 20
 LINK_TIMEOUT = 10
 AI_KEYWORDS = {
@@ -375,9 +376,24 @@ def item_sort_key(item: Item) -> tuple[int, dt.datetime]:
     return item.stars, published
 
 
+def freshness_reason(item: Item, now: dt.datetime, lookback_hours: int) -> str:
+    if item.published is None:
+        return "missing or invalid publication date"
+    age = (now - item.published).total_seconds()
+    if age < 0:
+        return "future publication date"
+    if age > lookback_hours * 3600:
+        return "older than coverage window"
+    return ""
+
+
 def collect_items(
-    sources: list[Source], now: dt.datetime
+    sources: list[Source],
+    now: dt.datetime,
+    lookback_hours: int = DEFAULT_LOOKBACK_HOURS,
 ) -> tuple[list[Item], list[tuple[str, str]]]:
+    if lookback_hours <= 0:
+        raise ValueError("lookback_hours must be positive")
     items: list[Item] = []
     unavailable: list[tuple[str, str]] = []
     for source in sources:
@@ -406,7 +422,14 @@ def collect_items(
         ) as exc:
             unavailable.append((source.name, reason_from_error(exc)))
             continue
+        freshness_counts: dict[str, int] = {}
+        fresh_count = 0
         for item in parsed_items:
+            reason = freshness_reason(item, now, lookback_hours)
+            if reason:
+                freshness_counts[reason] = freshness_counts.get(reason, 0) + 1
+                continue
+            fresh_count += 1
             if not item.url:
                 unavailable.append((source.name, "Feed item missing link."))
                 continue
@@ -424,6 +447,14 @@ def collect_items(
                 estimate_reading_time(item)
                 score_item(item, now)
                 items.append(item)
+        if not fresh_count:
+            unavailable.append(
+                (source.name, "Freshness: no dated entries within the coverage window.")
+            )
+        for reason, count in freshness_counts.items():
+            unavailable.append(
+                (source.name, f"Freshness: {count} entries excluded: {reason}.")
+            )
     candidates = dedupe_items(items)
     accessible, link_failures = filter_accessible_items(candidates, MAX_ITEMS)
     return accessible, unavailable + link_failures
@@ -516,9 +547,27 @@ def markdown_link(title: str, url: str) -> str:
 
 
 def render_report(
-    items: list[Item], unavailable: list[tuple[str, str]], now: dt.datetime
+    items: list[Item],
+    unavailable: list[tuple[str, str]],
+    now: dt.datetime,
+    lookback_hours: int = DEFAULT_LOOKBACK_HOURS,
 ) -> str:
     generated = now.astimezone(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    freshness = [
+        (source, reason.removeprefix("Freshness: "))
+        for source, reason in unavailable
+        if reason.startswith("Freshness: ")
+    ]
+    unavailable = [
+        (source, reason)
+        for source, reason in unavailable
+        if not reason.startswith("Freshness: ")
+    ]
+    start = (
+        (now - dt.timedelta(hours=lookback_hours))
+        .astimezone(dt.timezone.utc)
+        .strftime("%Y-%m-%d %H:%M UTC")
+    )
     source_count = len({item.source for item in items})
     article_label = "article" if len(items) == 1 else "articles"
     source_label = "source" if source_count == 1 else "sources"
@@ -529,6 +578,8 @@ def render_report(
             f"{len(items)} {article_label} · {source_count} {source_label} · "
             f"Generated {generated}"
         ),
+        "",
+        f"Coverage: last {lookback_hours} hours ({start} through {generated}, inclusive).",
         "",
         "## Articles",
         "",
@@ -553,7 +604,23 @@ def render_report(
                 ]
             )
     else:
-        lines.extend(["No AI-related items found.", ""])
+        lines.extend(
+            ["No accessible AI-related articles found within the coverage window.", ""]
+        )
+    lines.extend(
+        [
+            "<details>",
+            f"<summary>Freshness exclusions ({len(freshness)} source diagnostics)</summary>",
+            "",
+        ]
+    )
+    lines.extend(
+        f"- **{markdown_escape(source)}**: {markdown_escape(reason)}"
+        for source, reason in freshness
+    )
+    if not freshness:
+        lines.append("- None.")
+    lines.extend(["", "</details>", ""])
     lines.extend(
         [
             "<details>",
@@ -590,6 +657,8 @@ def render_report(
                 "full articles may take longer. Publication dates are shown in UTC."
             ),
             "",
+            "Articles with missing/invalid or future dates are excluded. Older articles never backfill a short report. Date-only HTML listings use midnight UTC; boundary decisions are conservative. A story may recur across consecutive reports within the window.",
+            "",
             "## Source policy",
             "",
             textwrap.fill(
@@ -616,17 +685,28 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sources", type=Path, default=DEFAULT_SOURCES)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
-    return parser.parse_args(argv)
+    parser.add_argument(
+        "--lookback-hours",
+        type=int,
+        default=DEFAULT_LOOKBACK_HOURS,
+        help="Positive coverage window in hours (default: 72).",
+    )
+    args = parser.parse_args(argv)
+    if args.lookback_hours <= 0:
+        parser.error("--lookback-hours must be positive")
+    return args
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
     now = dt.datetime.now(dt.timezone.utc)
     sources = load_sources(args.sources)
-    items, unavailable = collect_items(sources, now)
-    args.output.write_text(render_report(items, unavailable, now), encoding="utf-8")
+    items, unavailable = collect_items(sources, now, args.lookback_hours)
+    args.output.write_text(
+        render_report(items, unavailable, now, args.lookback_hours), encoding="utf-8"
+    )
     print(
-        f"Wrote {args.output} with {len(items)} links and {len(unavailable)} skipped sources."
+        f"Wrote {args.output} with {len(items)} links and {len(unavailable)} diagnostics."
     )
     return 0
 

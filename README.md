@@ -1,6 +1,6 @@
 # auto-ai-news
 
-Daily AI news reports from a small set of trusted sources.
+Daily AI news reports from validated research and engineering sources.
 
 Reports are published as GitHub Releases so each day has a stable, dated entry with clickable links, star ratings, reading-time estimates, and skipped-source notes.
 
@@ -9,6 +9,8 @@ Reports use a ranked article list with source names and UTC publication dates. R
 Latest report: https://github.com/kantarcise/auto-ai-news/releases/latest
 
 Quiet-day editions titled “not much happened today” from Latent Space and smol.ai are excluded, with the reason listed in the report's skipped section. These editions can contain substantial recap content; this is a title-based selection preference, not a full-content quality judgment.
+
+Reports cover the last 72 hours by default. Older entries, missing/invalid dates, and future dates are excluded before link checks. Freshness exclusions are grouped separately from network failures. Short or empty reports are allowed; old stories never fill unused slots. A story may recur on consecutive days within this window. Date-only HTML listings use midnight UTC, so boundary decisions are conservative.
 
 ## Disclosure
 
@@ -20,12 +22,16 @@ auto-ai-news is an aggregator. Original articles, titles, and linked content bel
 
 ```bash
 python3 -m unittest discover -s tests
-python3 scripts/generate_report.py --output daily-ai-news.md
+python3 scripts/generate_report.py --output /tmp/daily-ai-news.md
+# Compare a shorter window without publishing:
+python3 scripts/generate_report.py --lookback-hours 48 --output /tmp/daily-ai-news-48h.md
 ```
 
 ## Automation
 
 The GitHub Actions workflow runs every day at `06:15 UTC` and can also be started manually from the Actions tab. It creates or updates a release named `Daily AI News - YYYY-MM-DD` with the tag `daily-YYYY-MM-DD`.
+
+Merging a freshness change does not rerun a deployment or edit historical releases. The next scheduled or manual run uses the new selection policy; a manual run on the same UTC date updates that day’s release.
 
 Contributor and agent guidance: [AGENTS.md](AGENTS.md).
 
