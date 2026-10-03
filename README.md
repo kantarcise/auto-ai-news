@@ -28,3 +28,5 @@ python3 scripts/generate_report.py --output daily-ai-news.md
 The GitHub Actions workflow runs every day at `06:15 UTC` and can also be started manually from the Actions tab. It creates or updates a release named `Daily AI News - YYYY-MM-DD` with the tag `daily-YYYY-MM-DD`.
 
 Contributor and agent guidance: [AGENTS.md](AGENTS.md).
+
+Source coverage, live-validation results, and collection limitations: [docs/sources.md](docs/sources.md).

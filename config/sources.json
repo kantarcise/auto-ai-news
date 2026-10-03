@@ -48,5 +48,77 @@
     "priority": 2,
     "enabled": false,
     "disabled_reason": "No stable public feed endpoint confirmed for the category page."
+  },
+  {
+    "name": "Google DeepMind",
+    "homepage": "https://deepmind.google/discover/blog/",
+    "feed_url": "https://deepmind.google/blog/rss.xml",
+    "priority": 4,
+    "enabled": true
+  },
+  {
+    "name": "Hugging Face",
+    "homepage": "https://huggingface.co/blog",
+    "feed_url": "https://huggingface.co/blog/feed.xml",
+    "priority": 4,
+    "enabled": true
+  },
+  {
+    "name": "PyTorch",
+    "homepage": "https://pytorch.org/blog/",
+    "feed_url": "https://pytorch.org/feed/",
+    "priority": 4,
+    "enabled": true
+  },
+  {
+    "name": "Mistral AI",
+    "homepage": "https://mistral.ai/news",
+    "feed_url": "https://mistral.ai/news/rss",
+    "priority": 4,
+    "enabled": true
+  },
+  {
+    "name": "Google Research",
+    "homepage": "https://research.google/blog/",
+    "feed_url": "https://research.google/blog/rss/",
+    "priority": 4,
+    "enabled": true
+  },
+  {
+    "name": "Microsoft Research",
+    "homepage": "https://www.microsoft.com/en-us/research/blog/",
+    "feed_url": "https://www.microsoft.com/en-us/research/feed/",
+    "priority": 4,
+    "enabled": true
+  },
+  {
+    "name": "AI2",
+    "homepage": "https://allenai.org/blog",
+    "feed_url": "https://allenai.org/rss.xml",
+    "priority": 4,
+    "enabled": true
+  },
+  {
+    "name": "OpenAI",
+    "homepage": "https://openai.com/news/",
+    "feed_url": "https://openai.com/news/rss.xml",
+    "priority": 4,
+    "enabled": true
+  },
+  {
+    "name": "DeepSeek Research & News",
+    "homepage": "https://www.deepseek.com/en/news/",
+    "feed_url": "https://www.deepseek.com/en/news/",
+    "priority": 4,
+    "enabled": true,
+    "format": "dated_html"
+  },
+  {
+    "name": "Anthropic Research",
+    "homepage": "https://www.anthropic.com/research",
+    "feed_url": "https://www.anthropic.com/research",
+    "priority": 4,
+    "enabled": true,
+    "format": "dated_html"
   }
 ]
