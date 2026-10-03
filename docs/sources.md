@@ -48,8 +48,8 @@ Dates displayed without a time are represented as midnight UTC, an explicit conv
 
 ## Deferred sources
 
-- **Qwen (China):** the old official `https://qwenlm.github.io/blog/index.xml` parses but its newest entry is September 2025. The [official repository](https://github.com/QwenLM/qwenlm.github.io) points readers to `https://qwen.ai/research`; the newer page did not expose dated article cards usable by this adapter. Do not count the legacy feed as current coverage.
-- **MiniMax (China):** the official news page was reachable, but the fetched listing did not expose dated cards; guessed RSS endpoints returned 404. A separately validated adapter is needed.
+- **Qwen (China):** the old RSS was deferred as stale. The frontier-lab expansion now uses the official site’s public `/api/v2/article/retrieval` endpoint with publisher dates and its `/blog?id=...` article route. It does not count the legacy RSS as current coverage.
+- **MiniMax (China):** the initial news/RSS probes failed. The frontier-lab expansion now collects `/blog`, whose cards contain explicit ISO publication dates.
 - **BAAI / Shanghai AI Lab (China):** probed feed endpoints returned HTML or 404. No unverified feed is enabled.
 - **ELLIS / UK AISI / Aleph Alpha (Europe):** probed feed endpoints returned 404. Additional endpoint discovery or a tested adapter is needed.
 - **Inria (France):** the probed RSS parsed but its newest entry was February 2023; unsuitable as evidence of current coverage.
@@ -92,3 +92,32 @@ World Labs uses the same date-only convention as DeepSeek and Anthropic. The sna
 | 7 days | 38 / 11 | 67 / 16 |
 
 All ten new inputs parsed with dates and all ten newest-article samples passed link checks. Across the entire configuration, 25 of 26 inputs parsed: the existing DeepMind endpoint returned a parsing failure in this snapshot. The existing OpenAI sample still returned 403. These are current failures, not guarantees of future availability. Counts are candidates before final link checks and story grouping. World Labs, NAVER, Kakao, LY and GitHub contributed no matching articles within 48 hours in this snapshot. More configured publishers do not guarantee ten or thirty fresh articles every day.
+
+## Frontier-lab content resources
+
+Every lab in the October 3 shortlist is registered in `config/sources.json`. Seven additional inputs are enabled, bringing the active total to 33. Registration is not a ranking bonus and does not guarantee a recent qualifying article. Two labs remain visibly disabled because a reliable dated input is still missing.
+
+| Lab | Collection status |
+| --- | --- |
+| OpenAI | Existing official RSS; sampled article access can return 403 |
+| Anthropic | Existing Research listing plus new News listing |
+| Google DeepMind | Existing official RSS |
+| Mistral | Existing official RSS |
+| DeepSeek | Existing dated news listing |
+| Alibaba Qwen | New official public article API; explicit publisher timestamp, timezone preserved |
+| xAI | New dated News cards |
+| Meta AI | New blog adapter; visible publication date follows title link |
+| Z.ai / GLM | Registered, disabled: client-rendered blog bundle; stable dated listing adapter pending |
+| Moonshot / Kimi | Registered, disabled: fetched listing/article HTML has no verified publication dates |
+| MiniMax | New dated Blog cards with ISO dates |
+| ByteDance Seed | New dated homepage announcement cards |
+| Black Forest Labs | New dated Blog cards |
+| World Labs | Existing dated Blog cards |
+
+Kimi image-file timestamps and evaluation dates in prose are not publication dates. Z.ai’s page bundle is not treated as a dated feed. These two gaps are tracked in issue #17; they are not described as active coverage. No inferred dates, release-history backfill, or unrestricted GitHub commit feeds are used to fill them.
+
+The HTML adapters use displayed publication dates and midnight UTC for date-only values. Qwen uses its explicit timezone-aware date. Its API article body is intentionally not copied into the report or passed to a whole-page reading-time estimator. Layout/schema failures are reported rather than silently inventing entries. Primary publisher titles are preserved; model-brand keywords (FLUX, Grok, MiniMax, Kimi, GLM, Seedance, Seedream, Muse model names) allow branded headlines through the existing title filter. This is still a lexical heuristic, not a frontier-membership relevance bypass.
+
+Frontier-lab ranking preferences, publisher caps and announcement classification remain separate issue #17 work. PR #18 independently preserves explicit RSS/Atom content for reading-time estimates and marks excerpts/insufficient content unknown. This source expansion neither changes the 72-hour policy nor adds production dependencies.
+
+[Frontier-source validation snapshot](source-validation-frontier-2026-10-03.json), October 3 at 19:31 Istanbul: all 33 active inputs parsed; all seven new sample article links passed. Among the new inputs, only Anthropic News had qualifying posts within 72 hours (two candidates). Newest extracted entries for several valid listings were older: BFL September 23, xAI September 28, Qwen September 20, Meta July 27, MiniMax August 13 and Seed August 5. These listings establish operational collection, not guaranteed up-to-date coverage of every lab announcement. Stale listings are exposed by freshness diagnostics and are never backfilled into daily reports. Some listings only expose featured/latest cards, not a complete publisher archive.

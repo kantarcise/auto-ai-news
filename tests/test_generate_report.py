@@ -1,4 +1,5 @@
 import datetime as dt
+import json
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -25,6 +26,85 @@ NOW = dt.datetime(2026, 4, 25, 12, 0, tzinfo=dt.timezone.utc)
 
 
 class GenerateReportTest(unittest.TestCase):
+    def test_iso_dated_cards_and_brand_relevance(self):
+        source = Source(
+            "MiniMax",
+            "https://example.com",
+            "https://example.com",
+            4,
+            format="dated_html",
+        )
+        items = parse_source(
+            '<a href="/blog/music"><span>2026-08-13</span><h3>MiniMax Music 3.0</h3></a><a href="/bad"><h3>Bad</h3><span>2026-99-40</span></a>',
+            source,
+        )
+        self.assertEqual(len(items), 1)
+        self.assertEqual(
+            items[0].published, dt.datetime(2026, 8, 13, tzinfo=dt.timezone.utc)
+        )
+        for title in (
+            "Introducing FLUX 3",
+            "Grok Bot",
+            "Seedance 2.5",
+            "Muse Spark 1.1",
+        ):
+            self.assertTrue(is_ai_related(Item(title, "https://example.com", "Lab", 4)))
+
+    def test_meta_date_outside_title_anchor(self):
+        source = Source(
+            "Meta AI",
+            "https://ai.meta.com/blog/",
+            "https://ai.meta.com/blog/",
+            4,
+            format="meta_html",
+        )
+        items = parse_source(
+            '<a href="https://ai.meta.com/blog/model/">Introducing Muse Spark</a><div></div><div>July 9, 2026</div><a href="https://example.com/other">Other site</a><div>July 10, 2026</div>',
+            source,
+        )
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0].url, "https://ai.meta.com/blog/model/")
+        self.assertEqual(items[0].title, "Introducing Muse Spark")
+        self.assertEqual(
+            items[0].published, dt.datetime(2026, 7, 9, tzinfo=dt.timezone.utc)
+        )
+
+    def test_qwen_api_links_dates_and_schema_failures(self):
+        source = Source(
+            "Alibaba Qwen",
+            "https://qwen.ai/research",
+            "https://qwen.ai/api",
+            4,
+            format="qwen_api",
+        )
+        payload = {
+            "success": True,
+            "data": {
+                "articles": [
+                    {
+                        "title": "Qwen Image",
+                        "path": "image & video",
+                        "extra": {"date": "2026-09-20T20:00:00+08:00"},
+                    },
+                    {"title": "Undated", "path": "undated", "extra": {}},
+                ]
+            },
+        }
+        items = parse_source(json.dumps(payload), source)
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0].url, "https://qwen.ai/blog?id=image+%26+video")
+        self.assertEqual(
+            items[0].published, dt.datetime(2026, 9, 20, 12, tzinfo=dt.timezone.utc)
+        )
+        for payload in (
+            {},
+            {"success": False},
+            {"success": True, "data": None},
+            {"success": True, "data": {"articles": []}},
+        ):
+            with self.subTest(payload=payload), self.assertRaises(ValueError):
+                parse_source(json.dumps(payload), source)
+
     def test_rss_explicit_content_preserved_and_preferred_to_excerpt(self):
         source = Source("Test", "https://example.com", "https://example.com/feed", 3)
         item = parse_feed((FIXTURES / "rss_content.xml").read_text(), source)[0]
