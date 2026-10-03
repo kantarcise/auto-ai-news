@@ -46,6 +46,16 @@ AI_KEYWORDS = {
     "deepseek",
     "mistral",
     "qwen",
+    "grok",
+    "flux",
+    "minimax",
+    "kimi",
+    "glm",
+    "seedance",
+    "seedream",
+    "muse spark",
+    "muse image",
+    "muse video",
     "diffusion",
     "embedding",
     "eval",
@@ -192,6 +202,20 @@ def parse_datetime(value: str) -> dt.datetime | None:
     return parsed.astimezone(dt.timezone.utc)
 
 
+def listing_date(text: str) -> dt.datetime | None:
+    match = re.search(r"\b([A-Z][a-z]+ \d{1,2}, \d{4})\b", text)
+    if match:
+        for date_format in ("%B %d, %Y", "%b %d, %Y"):
+            try:
+                return dt.datetime.strptime(match[1], date_format).replace(
+                    tzinfo=dt.timezone.utc
+                )
+            except ValueError:
+                continue
+    match = re.search(r"\b\d{4}-\d{2}-\d{2}\b", text)
+    return parse_datetime(match[0]) if match else None
+
+
 class DatedNewsParser(HTMLParser):
     """Read dated article cards from the validated research/news listings."""
 
@@ -229,37 +253,117 @@ class DatedNewsParser(HTMLParser):
         if tag != "a" or not self.href:
             return
         text = normalize_space(" ".join(self.parts))
-        match = re.search(r"\b([A-Z][a-z]+ \d{1,2}, \d{4})\b", text)
         title = normalize_space(" ".join(self.title_parts))
-        if match and title:
-            published = None
-            for date_format in ("%B %d, %Y", "%b %d, %Y"):
-                try:
-                    published = dt.datetime.strptime(match[1], date_format).replace(
-                        tzinfo=dt.timezone.utc
-                    )
-                    break
-                except ValueError:
-                    continue
-            if published:
-                self.items.append(
-                    Item(
-                        title,
-                        self.href,
-                        self.source.name,
-                        self.source.priority,
-                        published=published,
-                    )
+        published = listing_date(text)
+        if published and title:
+            self.items.append(
+                Item(
+                    title,
+                    self.href,
+                    self.source.name,
+                    self.source.priority,
+                    published=published,
                 )
+            )
         self.href = ""
+
+
+class MetaNewsParser(HTMLParser):
+    """Meta places a displayed date after the article title link, outside the anchor."""
+
+    def __init__(self, source: Source) -> None:
+        super().__init__()
+        self.source = source
+        self.items: list[Item] = []
+        self.href = ""
+        self.title_parts: list[str] = []
+        self.in_anchor = False
+        self.after_title = ""
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag == "a":
+            href = dict(attrs).get("href") or ""
+            self.href = href if href.startswith("https://ai.meta.com/blog/") else ""
+            self.title_parts = []
+            self.after_title = ""
+            self.in_anchor = bool(self.href)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "a":
+            self.in_anchor = False
+
+    def handle_data(self, data: str) -> None:
+        if not self.href:
+            return
+        if self.in_anchor:
+            self.title_parts.append(data)
+            return
+        self.after_title += data + " "
+        title = normalize_space(" ".join(self.title_parts))
+        published = listing_date(self.after_title)
+        if published and title and title not in {"FEATURED", "Learn More", "Next"}:
+            self.items.append(
+                Item(
+                    title,
+                    self.href,
+                    self.source.name,
+                    self.source.priority,
+                    published=published,
+                )
+            )
+            self.href = ""
+        elif len(self.after_title) > 100:
+            self.href = ""
+
+
+def parse_qwen_api(content: str, source: Source) -> list[Item]:
+    payload = json.loads(content)
+    if not isinstance(payload, dict) or payload.get("success") is not True:
+        raise ValueError("Qwen article API did not return a successful listing.")
+    data = payload.get("data")
+    rows = data.get("articles") if isinstance(data, dict) else None
+    if not isinstance(rows, list):
+        raise ValueError("Qwen article API contained no article list.")  # noqa: TRY004 -- source schema failure
+    items = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        path, title, extra = row.get("path"), row.get("title"), row.get("extra", {})
+        if (
+            not isinstance(path, str)
+            or not isinstance(title, str)
+            or not isinstance(extra, dict)
+        ):
+            continue
+        published = parse_datetime(str(extra.get("date") or ""))
+        if path and title and published:
+            url = "https://qwen.ai/blog?" + urllib.parse.urlencode({"id": path})
+            items.append(
+                Item(
+                    normalize_space(title),
+                    url,
+                    source.name,
+                    source.priority,
+                    published=published,
+                )
+            )
+    if not items:
+        raise ValueError("Qwen article API contained no recognized dated articles.")
+    return items
 
 
 def parse_source(content: str, source: Source) -> list[Item]:
     if source.format == "feed":
         return parse_feed(content, source)
-    if source.format != "dated_html":
+    if source.format == "qwen_api":
+        return parse_qwen_api(content, source)
+    if source.format not in {"dated_html", "meta_html"}:
         raise ValueError(f"Unsupported source format: {source.format}")
-    parser = DatedNewsParser(source)
+    parser = (
+        MetaNewsParser(source)
+        if source.format == "meta_html"
+        else DatedNewsParser(source)
+    )
     parser.feed(content)
     if not parser.items:
         raise ValueError("Dated news listing contained no recognized article cards.")

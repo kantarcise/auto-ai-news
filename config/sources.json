@@ -199,5 +199,78 @@
     "priority": 3,
     "enabled": false,
     "disabled_reason": "Verified publication feed is stale: newest entry November 7, 2024. A current dated engineering/research source is needed."
+  },
+  {
+    "name": "Anthropic News",
+    "homepage": "https://www.anthropic.com/news",
+    "feed_url": "https://www.anthropic.com/news",
+    "priority": 4,
+    "enabled": true,
+    "format": "dated_html"
+  },
+  {
+    "name": "Black Forest Labs",
+    "homepage": "https://bfl.ai/blog",
+    "feed_url": "https://bfl.ai/blog",
+    "priority": 4,
+    "enabled": true,
+    "format": "dated_html"
+  },
+  {
+    "name": "xAI",
+    "homepage": "https://x.ai/news",
+    "feed_url": "https://x.ai/news",
+    "priority": 4,
+    "enabled": true,
+    "format": "dated_html"
+  },
+  {
+    "name": "Meta AI",
+    "homepage": "https://ai.meta.com/blog/",
+    "feed_url": "https://ai.meta.com/blog/",
+    "priority": 4,
+    "enabled": true,
+    "format": "meta_html"
+  },
+  {
+    "name": "Alibaba Qwen",
+    "homepage": "https://qwen.ai/research",
+    "feed_url": "https://qwen.ai/api/v2/article/retrieval?type=qwen_ai&language=en-US",
+    "priority": 4,
+    "enabled": true,
+    "format": "qwen_api"
+  },
+  {
+    "name": "MiniMax",
+    "homepage": "https://www.minimax.io/blog",
+    "feed_url": "https://www.minimax.io/blog",
+    "priority": 4,
+    "enabled": true,
+    "format": "dated_html"
+  },
+  {
+    "name": "ByteDance Seed",
+    "homepage": "https://seed.bytedance.com/en/",
+    "feed_url": "https://seed.bytedance.com/en/",
+    "priority": 4,
+    "enabled": true,
+    "format": "dated_html"
+  },
+  {
+    "name": "Z.ai / GLM",
+    "homepage": "https://z.ai/blog/glm-5.3",
+    "feed_url": "",
+    "priority": 4,
+    "enabled": false,
+    "disabled_reason": "Official blog is a client-rendered bundle; no stable dated listing input validated. Needs a dedicated adapter (issue #17)."
+  },
+  {
+    "name": "Moonshot / Kimi",
+    "homepage": "https://www.kimi.ai/blog/",
+    "feed_url": "https://www.kimi.ai/blog/",
+    "priority": 4,
+    "enabled": false,
+    "format": "dated_html",
+    "disabled_reason": "Official listing/article HTML exposes titles but no verified publication dates; image timestamps and dates in prose are not publication dates. Needs a dated input (issue #17)."
   }
 ]
