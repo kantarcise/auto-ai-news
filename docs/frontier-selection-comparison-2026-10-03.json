@@ -1,0 +1,2024 @@
+{
+  "captured_at": "2026-10-03T16:53:17.216262+00:00",
+  "lookback_hours": 72,
+  "policies": {
+    "baseline": {
+      "selected": [
+        {
+          "title": "What I learnt co-leading an AI Safety bootcamp for legal and governance practitioners",
+          "url": "https://www.lesswrong.com/posts/KtAug62dYRgAS8sqJ/what-i-learnt-co-leading-an-ai-safety-bootcamp-for-legal-and",
+          "source": "LessWrong AI",
+          "publisher": "LessWrong AI",
+          "category": "commentary",
+          "published": "2026-10-03T16:14:23+00:00",
+          "rank_score": null,
+          "stars": 5,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Reviewing my LessWrong post history with Claude",
+          "url": "https://www.lesswrong.com/posts/PAzerqAofFCLoWsgK/reviewing-my-lesswrong-post-history-with-claude",
+          "source": "LessWrong AI",
+          "publisher": "LessWrong AI",
+          "category": "commentary",
+          "published": "2026-10-03T01:42:55+00:00",
+          "rank_score": null,
+          "stars": 5,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Inside-Out AI: Rebuilding Airbnb Behind the Scenes and Across the Guest Experience",
+          "url": "https://www.latent.space/p/airbnb",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-10-02T14:04:49+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Introducing Web Search API via AI Gateway",
+          "url": "https://blog.cloudflare.com/introducing-web-search-api/",
+          "source": "Cloudflare",
+          "publisher": "Cloudflare",
+          "category": "engineering",
+          "published": "2026-10-02T13:28:10+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "[AINews] Pi 1.0, Pi Durable, and AIE NYC",
+          "url": "https://www.latent.space/p/ainews-pi-10-pi-durable-and-aie-nyc",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-10-02T06:40:53+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Who Tests The Frontier AI Labs? What We Know",
+          "url": "https://cleverhack.com/who-tests-the-frontier-ai-labs-evaluators",
+          "source": "Clever Hack",
+          "publisher": "Clever Hack",
+          "category": "commentary",
+          "published": "2026-10-02T02:00:00+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Academia is for Ambition \u2014 Alex Zhang, MIT",
+          "url": "https://www.latent.space/p/rlm",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-10-02T00:28:04+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Build Applications on NVIDIA BlueField Faster with NVIDIA DOCA Agent Skills",
+          "url": "https://developer.nvidia.com/blog/build-applications-on-nvidia-bluefield-faster-with-nvidia-doca-agent-skills/",
+          "source": "NVIDIA Developer",
+          "publisher": "NVIDIA Developer",
+          "category": "engineering",
+          "published": "2026-10-01T18:13:29+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Build Local AI Apps with C++ and NVIDIA TensorRT RTX Samples",
+          "url": "https://developer.nvidia.com/blog/build-local-ai-apps-with-c-and-nvidia-tensorrt-rtx-samples/",
+          "source": "NVIDIA Developer",
+          "publisher": "NVIDIA Developer",
+          "category": "engineering",
+          "published": "2026-10-01T17:59:27+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "[AINews] Gemini 4 Argon: GDM\u2019s answer to Astra/Fable, with 1M output",
+          "url": "https://www.latent.space/p/ainews-gemini-4-argon-gdms-answer",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-10-01T06:45:05+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Why Dwarkesh is Wrong about Computer Use + How OpenAI shipped its Jev competitor in 1 Week",
+          "url": "https://www.latent.space/p/devday-2026",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-09-30T22:23:40+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "How to choose your first Genie Agents for maximum impact",
+          "url": "https://www.databricks.com/blog/how-choose-your-first-genie-agents-maximum-impact",
+          "source": "Databricks",
+          "publisher": "Databricks",
+          "category": "engineering",
+          "published": "2026-10-02T16:15:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Open-sourcing AstaBrief, the fast report-generation model in Asta",
+          "url": "https://huggingface.co/blog/allenai/astabrief",
+          "source": "Hugging Face",
+          "publisher": "Hugging Face",
+          "category": "engineering",
+          "published": "2026-10-02T15:19:50+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Real-Time Retail Intelligence: Building E-Commerce Recommendations with Lakebase and AI Search on Databricks",
+          "url": "https://www.databricks.com/blog/real-time-retail-intelligence-building-e-commerce-recommendations-lakebase-and-ai-search",
+          "source": "Databricks",
+          "publisher": "Databricks",
+          "category": "engineering",
+          "published": "2026-10-02T11:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Tavus' AI looks, listens, and talks back live",
+          "url": "https://www.therundown.ai/articles/tavus-ai-looks-listens-and-talks-back-live",
+          "source": "The Rundown AI",
+          "publisher": "The Rundown AI",
+          "category": "commentary",
+          "published": "2026-10-02T09:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Open-sourcing AstaBrief, the fast report-generation model in Asta",
+          "url": "https://allenai.org/blog/astabrief",
+          "source": "AI2",
+          "publisher": "AI2",
+          "category": "research",
+          "published": "2026-10-02T08:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "AutoSynthData: Generating Training Data for Enterprise Agents",
+          "url": "https://huggingface.co/blog/ServiceNow-AI/autosynthdata",
+          "source": "Hugging Face",
+          "publisher": "Hugging Face",
+          "category": "engineering",
+          "published": "2026-10-02T04:01:31+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "How Rogo ships agent-written code to production in 5 minutes on Vercel",
+          "url": "https://vercel.com/blog/how-rogo-ships-agent-written-code-to-production-in-5-minutes-on-vercel",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-10-02T04:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Anthropic invests $100 million to train 10,000 engineers and tackle the enterprise AI talent gap",
+          "url": "https://www.anthropic.com/news/claude-frontier-academy",
+          "source": "Anthropic News",
+          "publisher": "Anthropic",
+          "category": "frontier_lab",
+          "published": "2026-10-02T00:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "One year later: Sovereign AI and the fight for choice",
+          "url": "https://blog.cloudflare.com/sovereign-ai-choice-one-year-later/",
+          "source": "Cloudflare",
+          "publisher": "Cloudflare",
+          "category": "engineering",
+          "published": "2026-10-01T13:04:19+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Cloudflare OS: your company\u2019s agent workspace, managed for you",
+          "url": "https://blog.cloudflare.com/managed-cloudflare-os/",
+          "source": "Cloudflare",
+          "publisher": "Cloudflare",
+          "category": "engineering",
+          "published": "2026-10-01T13:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "AI Search is now generally available",
+          "url": "https://blog.cloudflare.com/ai-search-ga/",
+          "source": "Cloudflare",
+          "publisher": "Cloudflare",
+          "category": "engineering",
+          "published": "2026-10-01T13:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Connecting customer context to measurable ROI with agentic marketing",
+          "url": "https://www.databricks.com/blog/connecting-customer-context-measurable-roi-agentic-marketing",
+          "source": "Databricks",
+          "publisher": "Databricks",
+          "category": "engineering",
+          "published": "2026-10-01T12:11:31+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Claude-shaped science",
+          "url": "https://www.anthropic.com/research/claude-shaped-science",
+          "source": "Anthropic Research",
+          "publisher": "Anthropic",
+          "category": "frontier_lab",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Laya decision model now available on AI Gateway, free through October 31",
+          "url": "https://vercel.com/changelog/laya-decision-model-now-available-on-ai-gateway-free-through-october-31",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Microsoft AI models are now available on AI Gateway",
+          "url": "https://vercel.com/changelog/microsoft-ai-models-are-now-available-on-ai-gateway",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Barclays scales Claude to upgrade operations and improve client experience",
+          "url": "https://www.anthropic.com/news/barclays-scales-claude",
+          "source": "Anthropic News",
+          "publisher": "Anthropic",
+          "category": "frontier_lab",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Vercel Agent now installs private packages from npm and custom registries",
+          "url": "https://vercel.com/changelog/vercel-agent-now-installs-private-packages-from-npm-and-custom-registries",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-09-30T23:22:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "AI Gateway adds Browserbase Search and Fetch tools",
+          "url": "https://vercel.com/changelog/ai-gateway-adds-browserbase-search-and-fetch-tools",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-09-30T21:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Deploying an HSTU Generative Recommender with NVIDIA Dynamo-Triton",
+          "url": "https://developer.nvidia.com/blog/deploying-an-hstu-generative-recommender-with-nvidia-dynamo-triton/",
+          "source": "NVIDIA Developer",
+          "publisher": "NVIDIA Developer",
+          "category": "engineering",
+          "published": "2026-09-30T20:54:59+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        }
+      ],
+      "candidates": [
+        {
+          "title": "What I learnt co-leading an AI Safety bootcamp for legal and governance practitioners",
+          "url": "https://www.lesswrong.com/posts/KtAug62dYRgAS8sqJ/what-i-learnt-co-leading-an-ai-safety-bootcamp-for-legal-and",
+          "source": "LessWrong AI",
+          "publisher": "LessWrong AI",
+          "category": "commentary",
+          "published": "2026-10-03T16:14:23+00:00",
+          "rank_score": null,
+          "stars": 5,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Reviewing my LessWrong post history with Claude",
+          "url": "https://www.lesswrong.com/posts/PAzerqAofFCLoWsgK/reviewing-my-lesswrong-post-history-with-claude",
+          "source": "LessWrong AI",
+          "publisher": "LessWrong AI",
+          "category": "commentary",
+          "published": "2026-10-03T01:42:55+00:00",
+          "rank_score": null,
+          "stars": 5,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Inside-Out AI: Rebuilding Airbnb Behind the Scenes and Across the Guest Experience",
+          "url": "https://www.latent.space/p/airbnb",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-10-02T14:04:49+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Introducing Web Search API via AI Gateway",
+          "url": "https://blog.cloudflare.com/introducing-web-search-api/",
+          "source": "Cloudflare",
+          "publisher": "Cloudflare",
+          "category": "engineering",
+          "published": "2026-10-02T13:28:10+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "[AINews] Pi 1.0, Pi Durable, and AIE NYC",
+          "url": "https://www.latent.space/p/ainews-pi-10-pi-durable-and-aie-nyc",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-10-02T06:40:53+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Who Tests The Frontier AI Labs? What We Know",
+          "url": "https://cleverhack.com/who-tests-the-frontier-ai-labs-evaluators",
+          "source": "Clever Hack",
+          "publisher": "Clever Hack",
+          "category": "commentary",
+          "published": "2026-10-02T02:00:00+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Academia is for Ambition \u2014 Alex Zhang, MIT",
+          "url": "https://www.latent.space/p/rlm",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-10-02T00:28:04+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Build Applications on NVIDIA BlueField Faster with NVIDIA DOCA Agent Skills",
+          "url": "https://developer.nvidia.com/blog/build-applications-on-nvidia-bluefield-faster-with-nvidia-doca-agent-skills/",
+          "source": "NVIDIA Developer",
+          "publisher": "NVIDIA Developer",
+          "category": "engineering",
+          "published": "2026-10-01T18:13:29+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Build Local AI Apps with C++ and NVIDIA TensorRT RTX Samples",
+          "url": "https://developer.nvidia.com/blog/build-local-ai-apps-with-c-and-nvidia-tensorrt-rtx-samples/",
+          "source": "NVIDIA Developer",
+          "publisher": "NVIDIA Developer",
+          "category": "engineering",
+          "published": "2026-10-01T17:59:27+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "[AINews] Gemini 4 Argon: GDM\u2019s answer to Astra/Fable, with 1M output",
+          "url": "https://www.latent.space/p/ainews-gemini-4-argon-gdms-answer",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-10-01T06:45:05+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Why Dwarkesh is Wrong about Computer Use + How OpenAI shipped its Jev competitor in 1 Week",
+          "url": "https://www.latent.space/p/devday-2026",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-09-30T22:23:40+00:00",
+          "rank_score": null,
+          "stars": 3,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "A model guide for the GPT-6 family",
+          "url": "https://openai.com/index/practical-guide-building-gpt-6",
+          "source": "OpenAI",
+          "publisher": "OpenAI",
+          "category": "frontier_lab",
+          "published": "2026-10-02T16:15:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "How to choose your first Genie Agents for maximum impact",
+          "url": "https://www.databricks.com/blog/how-choose-your-first-genie-agents-maximum-impact",
+          "source": "Databricks",
+          "publisher": "Databricks",
+          "category": "engineering",
+          "published": "2026-10-02T16:15:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Open-sourcing AstaBrief, the fast report-generation model in Asta",
+          "url": "https://huggingface.co/blog/allenai/astabrief",
+          "source": "Hugging Face",
+          "publisher": "Hugging Face",
+          "category": "engineering",
+          "published": "2026-10-02T15:19:50+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Real-Time Retail Intelligence: Building E-Commerce Recommendations with Lakebase and AI Search on Databricks",
+          "url": "https://www.databricks.com/blog/real-time-retail-intelligence-building-e-commerce-recommendations-lakebase-and-ai-search",
+          "source": "Databricks",
+          "publisher": "Databricks",
+          "category": "engineering",
+          "published": "2026-10-02T11:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Tavus' AI looks, listens, and talks back live",
+          "url": "https://www.therundown.ai/articles/tavus-ai-looks-listens-and-talks-back-live",
+          "source": "The Rundown AI",
+          "publisher": "The Rundown AI",
+          "category": "commentary",
+          "published": "2026-10-02T09:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Open-sourcing AstaBrief, the fast report-generation model in Asta",
+          "url": "https://allenai.org/blog/astabrief",
+          "source": "AI2",
+          "publisher": "AI2",
+          "category": "research",
+          "published": "2026-10-02T08:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "AutoSynthData: Generating Training Data for Enterprise Agents",
+          "url": "https://huggingface.co/blog/ServiceNow-AI/autosynthdata",
+          "source": "Hugging Face",
+          "publisher": "Hugging Face",
+          "category": "engineering",
+          "published": "2026-10-02T04:01:31+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "How Rogo ships agent-written code to production in 5 minutes on Vercel",
+          "url": "https://vercel.com/blog/how-rogo-ships-agent-written-code-to-production-in-5-minutes-on-vercel",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-10-02T04:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Chatham scales its capital markets expertise with OpenAI",
+          "url": "https://openai.com/index/chatham-financial",
+          "source": "OpenAI",
+          "publisher": "OpenAI",
+          "category": "frontier_lab",
+          "published": "2026-10-02T00:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Anthropic invests $100 million to train 10,000 engineers and tackle the enterprise AI talent gap",
+          "url": "https://www.anthropic.com/news/claude-frontier-academy",
+          "source": "Anthropic News",
+          "publisher": "Anthropic",
+          "category": "frontier_lab",
+          "published": "2026-10-02T00:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "One year later: Sovereign AI and the fight for choice",
+          "url": "https://blog.cloudflare.com/sovereign-ai-choice-one-year-later/",
+          "source": "Cloudflare",
+          "publisher": "Cloudflare",
+          "category": "engineering",
+          "published": "2026-10-01T13:04:19+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Cloudflare OS: your company\u2019s agent workspace, managed for you",
+          "url": "https://blog.cloudflare.com/managed-cloudflare-os/",
+          "source": "Cloudflare",
+          "publisher": "Cloudflare",
+          "category": "engineering",
+          "published": "2026-10-01T13:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "AI Search is now generally available",
+          "url": "https://blog.cloudflare.com/ai-search-ga/",
+          "source": "Cloudflare",
+          "publisher": "Cloudflare",
+          "category": "engineering",
+          "published": "2026-10-01T13:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Connecting customer context to measurable ROI with agentic marketing",
+          "url": "https://www.databricks.com/blog/connecting-customer-context-measurable-roi-agentic-marketing",
+          "source": "Databricks",
+          "publisher": "Databricks",
+          "category": "engineering",
+          "published": "2026-10-01T12:11:31+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "The Den frees up 10-15 hours a week to grow with ChatGPT Work",
+          "url": "https://openai.com/index/the-den-family-social",
+          "source": "OpenAI",
+          "publisher": "OpenAI",
+          "category": "frontier_lab",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Claude-shaped science",
+          "url": "https://www.anthropic.com/research/claude-shaped-science",
+          "source": "Anthropic Research",
+          "publisher": "Anthropic",
+          "category": "frontier_lab",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Laya decision model now available on AI Gateway, free through October 31",
+          "url": "https://vercel.com/changelog/laya-decision-model-now-available-on-ai-gateway-free-through-october-31",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Microsoft AI models are now available on AI Gateway",
+          "url": "https://vercel.com/changelog/microsoft-ai-models-are-now-available-on-ai-gateway",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Barclays scales Claude to upgrade operations and improve client experience",
+          "url": "https://www.anthropic.com/news/barclays-scales-claude",
+          "source": "Anthropic News",
+          "publisher": "Anthropic",
+          "category": "frontier_lab",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Vercel Agent now installs private packages from npm and custom registries",
+          "url": "https://vercel.com/changelog/vercel-agent-now-installs-private-packages-from-npm-and-custom-registries",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-09-30T23:22:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "AI Gateway adds Browserbase Search and Fetch tools",
+          "url": "https://vercel.com/changelog/ai-gateway-adds-browserbase-search-and-fetch-tools",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-09-30T21:00:00+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Deploying an HSTU Generative Recommender with NVIDIA Dynamo-Triton",
+          "url": "https://developer.nvidia.com/blog/deploying-an-hstu-generative-recommender-with-nvidia-dynamo-triton/",
+          "source": "NVIDIA Developer",
+          "publisher": "NVIDIA Developer",
+          "category": "engineering",
+          "published": "2026-09-30T20:54:59+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        },
+        {
+          "title": "Expanding AI Storage Access with NVIDIA cuObject and the NVIDIA SCADA Server SDK",
+          "url": "https://developer.nvidia.com/blog/expanding-ai-storage-access-with-nvidia-cuobject-and-the-nvidia-scada-server-sdk/",
+          "source": "NVIDIA Developer",
+          "publisher": "NVIDIA Developer",
+          "category": "engineering",
+          "published": "2026-09-30T19:13:02+00:00",
+          "rank_score": null,
+          "stars": 2,
+          "story_kind": "baseline_unclassified"
+        }
+      ],
+      "publisher_counts": {
+        "LessWrong AI": 2,
+        "Latent Space": 5,
+        "Cloudflare": 4,
+        "Clever Hack": 1,
+        "NVIDIA Developer": 3,
+        "Databricks": 3,
+        "Hugging Face": 2,
+        "The Rundown AI": 1,
+        "AI2": 1,
+        "Vercel": 5,
+        "Anthropic": 3
+      },
+      "diagnostics": [
+        [
+          "Latent Space: [AINews] not much happened today",
+          "Quiet-day roundup excluded by title policy."
+        ],
+        [
+          "Latent Space",
+          "Freshness: 14 entries excluded: older than coverage window."
+        ],
+        [
+          "Simon Willison",
+          "Freshness: 28 entries excluded: older than coverage window."
+        ],
+        [
+          "smol.ai",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "smol.ai",
+          "Freshness: 716 entries excluded: older than coverage window."
+        ],
+        [
+          "Clever Hack",
+          "Freshness: 20 entries excluded: older than coverage window."
+        ],
+        [
+          "The Rundown AI",
+          "Freshness: 46 entries excluded: older than coverage window."
+        ],
+        [
+          "Substack Technology",
+          "No stable public feed endpoint confirmed for the category page."
+        ],
+        [
+          "Google DeepMind",
+          "Freshness: 99 entries excluded: older than coverage window."
+        ],
+        [
+          "Hugging Face",
+          "Freshness: 870 entries excluded: older than coverage window."
+        ],
+        [
+          "PyTorch",
+          "Freshness: 7 entries excluded: older than coverage window."
+        ],
+        [
+          "Mistral AI",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "Mistral AI",
+          "Freshness: 88 entries excluded: older than coverage window."
+        ],
+        [
+          "Google Research",
+          "Freshness: 99 entries excluded: older than coverage window."
+        ],
+        [
+          "Microsoft Research",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "Microsoft Research",
+          "Freshness: 10 entries excluded: older than coverage window."
+        ],
+        [
+          "AI2",
+          "Freshness: 23 entries excluded: older than coverage window."
+        ],
+        [
+          "OpenAI",
+          "Freshness: 1240 entries excluded: older than coverage window."
+        ],
+        [
+          "DeepSeek Research & News",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "DeepSeek Research & News",
+          "Freshness: 15 entries excluded: older than coverage window."
+        ],
+        [
+          "Anthropic Research",
+          "Freshness: 13 entries excluded: older than coverage window."
+        ],
+        [
+          "Cloudflare",
+          "Freshness: 1 entries excluded: older than coverage window."
+        ],
+        [
+          "AMD ROCm",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "AMD ROCm",
+          "Freshness: 10 entries excluded: older than coverage window."
+        ],
+        [
+          "World Labs",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "World Labs",
+          "Freshness: 19 entries excluded: older than coverage window."
+        ],
+        [
+          "NVIDIA Developer",
+          "Freshness: 95 entries excluded: older than coverage window."
+        ],
+        [
+          "NAVER D2",
+          "Freshness: 19 entries excluded: older than coverage window."
+        ],
+        [
+          "Kakao Tech",
+          "Freshness: 9 entries excluded: older than coverage window."
+        ],
+        [
+          "LY Corporation Engineering",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "LY Corporation Engineering",
+          "Freshness: 50 entries excluded: older than coverage window."
+        ],
+        [
+          "GitHub Engineering",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "GitHub Engineering",
+          "Freshness: 10 entries excluded: older than coverage window."
+        ],
+        [
+          "Vercel",
+          "Freshness: 1622 entries excluded: older than coverage window."
+        ],
+        [
+          "Databricks",
+          "Freshness: 2 entries excluded: older than coverage window."
+        ],
+        [
+          "Bending Spoons",
+          "Verified publication feed is stale: newest entry November 7, 2024. A current dated engineering/research source is needed."
+        ],
+        [
+          "Anthropic News",
+          "Freshness: 13 entries excluded: older than coverage window."
+        ],
+        [
+          "Black Forest Labs",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "Black Forest Labs",
+          "Freshness: 10 entries excluded: older than coverage window."
+        ],
+        [
+          "xAI",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "xAI",
+          "Freshness: 84 entries excluded: older than coverage window."
+        ],
+        [
+          "Meta AI",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "Meta AI",
+          "Freshness: 5 entries excluded: older than coverage window."
+        ],
+        [
+          "Alibaba Qwen",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "Alibaba Qwen",
+          "Freshness: 40 entries excluded: older than coverage window."
+        ],
+        [
+          "MiniMax",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "MiniMax",
+          "Freshness: 12 entries excluded: older than coverage window."
+        ],
+        [
+          "ByteDance Seed",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "ByteDance Seed",
+          "Freshness: 18 entries excluded: older than coverage window."
+        ],
+        [
+          "Z.ai / GLM",
+          "Official blog is a client-rendered bundle; no stable dated listing input validated. Needs a dedicated adapter (issue #17)."
+        ],
+        [
+          "Moonshot / Kimi",
+          "Official listing/article HTML exposes titles but no verified publication dates; image timestamps and dates in prose are not publication dates. Needs a dated input (issue #17)."
+        ],
+        [
+          "OpenAI: [A model guide for the GPT-6 family](https://openai.com/index/practical-guide-building-gpt-6)",
+          "HTTP 403."
+        ],
+        [
+          "OpenAI: [Chatham scales its capital markets expertise with OpenAI](https://openai.com/index/chatham-financial)",
+          "HTTP 403."
+        ],
+        [
+          "OpenAI: [The Den frees up 10-15 hours a week to grow with ChatGPT Work](https://openai.com/index/the-den-family-social)",
+          "HTTP 403."
+        ]
+      ]
+    },
+    "frontier": {
+      "selected": [
+        {
+          "title": "What I learnt co-leading an AI Safety bootcamp for legal and governance practitioners",
+          "url": "https://www.lesswrong.com/posts/KtAug62dYRgAS8sqJ/what-i-learnt-co-leading-an-ai-safety-bootcamp-for-legal-and",
+          "source": "LessWrong AI",
+          "publisher": "LessWrong AI",
+          "category": "commentary",
+          "published": "2026-10-03T16:14:23+00:00",
+          "rank_score": 4.25,
+          "stars": 5,
+          "story_kind": "other"
+        },
+        {
+          "title": "Reviewing my LessWrong post history with Claude",
+          "url": "https://www.lesswrong.com/posts/PAzerqAofFCLoWsgK/reviewing-my-lesswrong-post-history-with-claude",
+          "source": "LessWrong AI",
+          "publisher": "LessWrong AI",
+          "category": "commentary",
+          "published": "2026-10-03T01:42:55+00:00",
+          "rank_score": 4.25,
+          "stars": 5,
+          "story_kind": "other"
+        },
+        {
+          "title": "Introducing Web Search API via AI Gateway",
+          "url": "https://blog.cloudflare.com/introducing-web-search-api/",
+          "source": "Cloudflare",
+          "publisher": "Cloudflare",
+          "category": "engineering",
+          "published": "2026-10-02T13:28:10+00:00",
+          "rank_score": 3.0,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "Who Tests The Frontier AI Labs? What We Know",
+          "url": "https://cleverhack.com/who-tests-the-frontier-ai-labs-evaluators",
+          "source": "Clever Hack",
+          "publisher": "Clever Hack",
+          "category": "commentary",
+          "published": "2026-10-02T02:00:00+00:00",
+          "rank_score": 3.0,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "Build Applications on NVIDIA BlueField Faster with NVIDIA DOCA Agent Skills",
+          "url": "https://developer.nvidia.com/blog/build-applications-on-nvidia-bluefield-faster-with-nvidia-doca-agent-skills/",
+          "source": "NVIDIA Developer",
+          "publisher": "NVIDIA Developer",
+          "category": "engineering",
+          "published": "2026-10-01T18:13:29+00:00",
+          "rank_score": 3.0,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "Build Local AI Apps with C++ and NVIDIA TensorRT RTX Samples",
+          "url": "https://developer.nvidia.com/blog/build-local-ai-apps-with-c-and-nvidia-tensorrt-rtx-samples/",
+          "source": "NVIDIA Developer",
+          "publisher": "NVIDIA Developer",
+          "category": "engineering",
+          "published": "2026-10-01T17:59:27+00:00",
+          "rank_score": 3.0,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "Claude-shaped science",
+          "url": "https://www.anthropic.com/research/claude-shaped-science",
+          "source": "Anthropic Research",
+          "publisher": "Anthropic",
+          "category": "frontier_lab",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": 2.75,
+          "stars": 3,
+          "story_kind": "lab_research"
+        },
+        {
+          "title": "Inside-Out AI: Rebuilding Airbnb Behind the Scenes and Across the Guest Experience",
+          "url": "https://www.latent.space/p/airbnb",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-10-02T14:04:49+00:00",
+          "rank_score": 2.25,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "[AINews] Pi 1.0, Pi Durable, and AIE NYC",
+          "url": "https://www.latent.space/p/ainews-pi-10-pi-durable-and-aie-nyc",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-10-02T06:40:53+00:00",
+          "rank_score": 2.25,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "Academia is for Ambition \u2014 Alex Zhang, MIT",
+          "url": "https://www.latent.space/p/rlm",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-10-02T00:28:04+00:00",
+          "rank_score": 2.25,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "[AINews] Gemini 4 Argon: GDM\u2019s answer to Astra/Fable, with 1M output",
+          "url": "https://www.latent.space/p/ainews-gemini-4-argon-gdms-answer",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-10-01T06:45:05+00:00",
+          "rank_score": 2.25,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "How to choose your first Genie Agents for maximum impact",
+          "url": "https://www.databricks.com/blog/how-choose-your-first-genie-agents-maximum-impact",
+          "source": "Databricks",
+          "publisher": "Databricks",
+          "category": "engineering",
+          "published": "2026-10-02T16:15:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Open-sourcing AstaBrief, the fast report-generation model in Asta",
+          "url": "https://huggingface.co/blog/allenai/astabrief",
+          "source": "Hugging Face",
+          "publisher": "Hugging Face",
+          "category": "engineering",
+          "published": "2026-10-02T15:19:50+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Real-Time Retail Intelligence: Building E-Commerce Recommendations with Lakebase and AI Search on Databricks",
+          "url": "https://www.databricks.com/blog/real-time-retail-intelligence-building-e-commerce-recommendations-lakebase-and-ai-search",
+          "source": "Databricks",
+          "publisher": "Databricks",
+          "category": "engineering",
+          "published": "2026-10-02T11:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Tavus' AI looks, listens, and talks back live",
+          "url": "https://www.therundown.ai/articles/tavus-ai-looks-listens-and-talks-back-live",
+          "source": "The Rundown AI",
+          "publisher": "The Rundown AI",
+          "category": "commentary",
+          "published": "2026-10-02T09:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Open-sourcing AstaBrief, the fast report-generation model in Asta",
+          "url": "https://allenai.org/blog/astabrief",
+          "source": "AI2",
+          "publisher": "AI2",
+          "category": "research",
+          "published": "2026-10-02T08:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "AutoSynthData: Generating Training Data for Enterprise Agents",
+          "url": "https://huggingface.co/blog/ServiceNow-AI/autosynthdata",
+          "source": "Hugging Face",
+          "publisher": "Hugging Face",
+          "category": "engineering",
+          "published": "2026-10-02T04:01:31+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "How Rogo ships agent-written code to production in 5 minutes on Vercel",
+          "url": "https://vercel.com/blog/how-rogo-ships-agent-written-code-to-production-in-5-minutes-on-vercel",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-10-02T04:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Anthropic invests $100 million to train 10,000 engineers and tackle the enterprise AI talent gap",
+          "url": "https://www.anthropic.com/news/claude-frontier-academy",
+          "source": "Anthropic News",
+          "publisher": "Anthropic",
+          "category": "frontier_lab",
+          "published": "2026-10-02T00:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "One year later: Sovereign AI and the fight for choice",
+          "url": "https://blog.cloudflare.com/sovereign-ai-choice-one-year-later/",
+          "source": "Cloudflare",
+          "publisher": "Cloudflare",
+          "category": "engineering",
+          "published": "2026-10-01T13:04:19+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Cloudflare OS: your company\u2019s agent workspace, managed for you",
+          "url": "https://blog.cloudflare.com/managed-cloudflare-os/",
+          "source": "Cloudflare",
+          "publisher": "Cloudflare",
+          "category": "engineering",
+          "published": "2026-10-01T13:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "AI Search is now generally available",
+          "url": "https://blog.cloudflare.com/ai-search-ga/",
+          "source": "Cloudflare",
+          "publisher": "Cloudflare",
+          "category": "engineering",
+          "published": "2026-10-01T13:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Connecting customer context to measurable ROI with agentic marketing",
+          "url": "https://www.databricks.com/blog/connecting-customer-context-measurable-roi-agentic-marketing",
+          "source": "Databricks",
+          "publisher": "Databricks",
+          "category": "engineering",
+          "published": "2026-10-01T12:11:31+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Laya decision model now available on AI Gateway, free through October 31",
+          "url": "https://vercel.com/changelog/laya-decision-model-now-available-on-ai-gateway-free-through-october-31",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Microsoft AI models are now available on AI Gateway",
+          "url": "https://vercel.com/changelog/microsoft-ai-models-are-now-available-on-ai-gateway",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Barclays scales Claude to upgrade operations and improve client experience",
+          "url": "https://www.anthropic.com/news/barclays-scales-claude",
+          "source": "Anthropic News",
+          "publisher": "Anthropic",
+          "category": "frontier_lab",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Vercel Agent now installs private packages from npm and custom registries",
+          "url": "https://vercel.com/changelog/vercel-agent-now-installs-private-packages-from-npm-and-custom-registries",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-09-30T23:22:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Deploying an HSTU Generative Recommender with NVIDIA Dynamo-Triton",
+          "url": "https://developer.nvidia.com/blog/deploying-an-hstu-generative-recommender-with-nvidia-dynamo-triton/",
+          "source": "NVIDIA Developer",
+          "publisher": "NVIDIA Developer",
+          "category": "engineering",
+          "published": "2026-09-30T20:54:59+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Expanding AI Storage Access with NVIDIA cuObject and the NVIDIA SCADA Server SDK",
+          "url": "https://developer.nvidia.com/blog/expanding-ai-storage-access-with-nvidia-cuobject-and-the-nvidia-scada-server-sdk/",
+          "source": "NVIDIA Developer",
+          "publisher": "NVIDIA Developer",
+          "category": "engineering",
+          "published": "2026-09-30T19:13:02+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        }
+      ],
+      "candidates": [
+        {
+          "title": "What I learnt co-leading an AI Safety bootcamp for legal and governance practitioners",
+          "url": "https://www.lesswrong.com/posts/KtAug62dYRgAS8sqJ/what-i-learnt-co-leading-an-ai-safety-bootcamp-for-legal-and",
+          "source": "LessWrong AI",
+          "publisher": "LessWrong AI",
+          "category": "commentary",
+          "published": "2026-10-03T16:14:23+00:00",
+          "rank_score": 4.25,
+          "stars": 5,
+          "story_kind": "other"
+        },
+        {
+          "title": "Reviewing my LessWrong post history with Claude",
+          "url": "https://www.lesswrong.com/posts/PAzerqAofFCLoWsgK/reviewing-my-lesswrong-post-history-with-claude",
+          "source": "LessWrong AI",
+          "publisher": "LessWrong AI",
+          "category": "commentary",
+          "published": "2026-10-03T01:42:55+00:00",
+          "rank_score": 4.25,
+          "stars": 5,
+          "story_kind": "other"
+        },
+        {
+          "title": "Introducing Web Search API via AI Gateway",
+          "url": "https://blog.cloudflare.com/introducing-web-search-api/",
+          "source": "Cloudflare",
+          "publisher": "Cloudflare",
+          "category": "engineering",
+          "published": "2026-10-02T13:28:10+00:00",
+          "rank_score": 3.0,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "Who Tests The Frontier AI Labs? What We Know",
+          "url": "https://cleverhack.com/who-tests-the-frontier-ai-labs-evaluators",
+          "source": "Clever Hack",
+          "publisher": "Clever Hack",
+          "category": "commentary",
+          "published": "2026-10-02T02:00:00+00:00",
+          "rank_score": 3.0,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "Build Applications on NVIDIA BlueField Faster with NVIDIA DOCA Agent Skills",
+          "url": "https://developer.nvidia.com/blog/build-applications-on-nvidia-bluefield-faster-with-nvidia-doca-agent-skills/",
+          "source": "NVIDIA Developer",
+          "publisher": "NVIDIA Developer",
+          "category": "engineering",
+          "published": "2026-10-01T18:13:29+00:00",
+          "rank_score": 3.0,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "Build Local AI Apps with C++ and NVIDIA TensorRT RTX Samples",
+          "url": "https://developer.nvidia.com/blog/build-local-ai-apps-with-c-and-nvidia-tensorrt-rtx-samples/",
+          "source": "NVIDIA Developer",
+          "publisher": "NVIDIA Developer",
+          "category": "engineering",
+          "published": "2026-10-01T17:59:27+00:00",
+          "rank_score": 3.0,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "Claude-shaped science",
+          "url": "https://www.anthropic.com/research/claude-shaped-science",
+          "source": "Anthropic Research",
+          "publisher": "Anthropic",
+          "category": "frontier_lab",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": 2.75,
+          "stars": 3,
+          "story_kind": "lab_research"
+        },
+        {
+          "title": "Inside-Out AI: Rebuilding Airbnb Behind the Scenes and Across the Guest Experience",
+          "url": "https://www.latent.space/p/airbnb",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-10-02T14:04:49+00:00",
+          "rank_score": 2.25,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "[AINews] Pi 1.0, Pi Durable, and AIE NYC",
+          "url": "https://www.latent.space/p/ainews-pi-10-pi-durable-and-aie-nyc",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-10-02T06:40:53+00:00",
+          "rank_score": 2.25,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "Academia is for Ambition \u2014 Alex Zhang, MIT",
+          "url": "https://www.latent.space/p/rlm",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-10-02T00:28:04+00:00",
+          "rank_score": 2.25,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "[AINews] Gemini 4 Argon: GDM\u2019s answer to Astra/Fable, with 1M output",
+          "url": "https://www.latent.space/p/ainews-gemini-4-argon-gdms-answer",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-10-01T06:45:05+00:00",
+          "rank_score": 2.25,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "Why Dwarkesh is Wrong about Computer Use + How OpenAI shipped its Jev competitor in 1 Week",
+          "url": "https://www.latent.space/p/devday-2026",
+          "source": "Latent Space",
+          "publisher": "Latent Space",
+          "category": "commentary",
+          "published": "2026-09-30T22:23:40+00:00",
+          "rank_score": 2.25,
+          "stars": 3,
+          "story_kind": "other"
+        },
+        {
+          "title": "A model guide for the GPT-6 family",
+          "url": "https://openai.com/index/practical-guide-building-gpt-6",
+          "source": "OpenAI",
+          "publisher": "OpenAI",
+          "category": "frontier_lab",
+          "published": "2026-10-02T16:15:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "How to choose your first Genie Agents for maximum impact",
+          "url": "https://www.databricks.com/blog/how-choose-your-first-genie-agents-maximum-impact",
+          "source": "Databricks",
+          "publisher": "Databricks",
+          "category": "engineering",
+          "published": "2026-10-02T16:15:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Open-sourcing AstaBrief, the fast report-generation model in Asta",
+          "url": "https://huggingface.co/blog/allenai/astabrief",
+          "source": "Hugging Face",
+          "publisher": "Hugging Face",
+          "category": "engineering",
+          "published": "2026-10-02T15:19:50+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Real-Time Retail Intelligence: Building E-Commerce Recommendations with Lakebase and AI Search on Databricks",
+          "url": "https://www.databricks.com/blog/real-time-retail-intelligence-building-e-commerce-recommendations-lakebase-and-ai-search",
+          "source": "Databricks",
+          "publisher": "Databricks",
+          "category": "engineering",
+          "published": "2026-10-02T11:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Tavus' AI looks, listens, and talks back live",
+          "url": "https://www.therundown.ai/articles/tavus-ai-looks-listens-and-talks-back-live",
+          "source": "The Rundown AI",
+          "publisher": "The Rundown AI",
+          "category": "commentary",
+          "published": "2026-10-02T09:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Open-sourcing AstaBrief, the fast report-generation model in Asta",
+          "url": "https://allenai.org/blog/astabrief",
+          "source": "AI2",
+          "publisher": "AI2",
+          "category": "research",
+          "published": "2026-10-02T08:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "AutoSynthData: Generating Training Data for Enterprise Agents",
+          "url": "https://huggingface.co/blog/ServiceNow-AI/autosynthdata",
+          "source": "Hugging Face",
+          "publisher": "Hugging Face",
+          "category": "engineering",
+          "published": "2026-10-02T04:01:31+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "How Rogo ships agent-written code to production in 5 minutes on Vercel",
+          "url": "https://vercel.com/blog/how-rogo-ships-agent-written-code-to-production-in-5-minutes-on-vercel",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-10-02T04:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Chatham scales its capital markets expertise with OpenAI",
+          "url": "https://openai.com/index/chatham-financial",
+          "source": "OpenAI",
+          "publisher": "OpenAI",
+          "category": "frontier_lab",
+          "published": "2026-10-02T00:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Anthropic invests $100 million to train 10,000 engineers and tackle the enterprise AI talent gap",
+          "url": "https://www.anthropic.com/news/claude-frontier-academy",
+          "source": "Anthropic News",
+          "publisher": "Anthropic",
+          "category": "frontier_lab",
+          "published": "2026-10-02T00:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "One year later: Sovereign AI and the fight for choice",
+          "url": "https://blog.cloudflare.com/sovereign-ai-choice-one-year-later/",
+          "source": "Cloudflare",
+          "publisher": "Cloudflare",
+          "category": "engineering",
+          "published": "2026-10-01T13:04:19+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Cloudflare OS: your company\u2019s agent workspace, managed for you",
+          "url": "https://blog.cloudflare.com/managed-cloudflare-os/",
+          "source": "Cloudflare",
+          "publisher": "Cloudflare",
+          "category": "engineering",
+          "published": "2026-10-01T13:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "AI Search is now generally available",
+          "url": "https://blog.cloudflare.com/ai-search-ga/",
+          "source": "Cloudflare",
+          "publisher": "Cloudflare",
+          "category": "engineering",
+          "published": "2026-10-01T13:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Connecting customer context to measurable ROI with agentic marketing",
+          "url": "https://www.databricks.com/blog/connecting-customer-context-measurable-roi-agentic-marketing",
+          "source": "Databricks",
+          "publisher": "Databricks",
+          "category": "engineering",
+          "published": "2026-10-01T12:11:31+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "The Den frees up 10-15 hours a week to grow with ChatGPT Work",
+          "url": "https://openai.com/index/the-den-family-social",
+          "source": "OpenAI",
+          "publisher": "OpenAI",
+          "category": "frontier_lab",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Laya decision model now available on AI Gateway, free through October 31",
+          "url": "https://vercel.com/changelog/laya-decision-model-now-available-on-ai-gateway-free-through-october-31",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Microsoft AI models are now available on AI Gateway",
+          "url": "https://vercel.com/changelog/microsoft-ai-models-are-now-available-on-ai-gateway",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Barclays scales Claude to upgrade operations and improve client experience",
+          "url": "https://www.anthropic.com/news/barclays-scales-claude",
+          "source": "Anthropic News",
+          "publisher": "Anthropic",
+          "category": "frontier_lab",
+          "published": "2026-10-01T00:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Vercel Agent now installs private packages from npm and custom registries",
+          "url": "https://vercel.com/changelog/vercel-agent-now-installs-private-packages-from-npm-and-custom-registries",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-09-30T23:22:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "AI Gateway adds Browserbase Search and Fetch tools",
+          "url": "https://vercel.com/changelog/ai-gateway-adds-browserbase-search-and-fetch-tools",
+          "source": "Vercel",
+          "publisher": "Vercel",
+          "category": "engineering",
+          "published": "2026-09-30T21:00:00+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Deploying an HSTU Generative Recommender with NVIDIA Dynamo-Triton",
+          "url": "https://developer.nvidia.com/blog/deploying-an-hstu-generative-recommender-with-nvidia-dynamo-triton/",
+          "source": "NVIDIA Developer",
+          "publisher": "NVIDIA Developer",
+          "category": "engineering",
+          "published": "2026-09-30T20:54:59+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        },
+        {
+          "title": "Expanding AI Storage Access with NVIDIA cuObject and the NVIDIA SCADA Server SDK",
+          "url": "https://developer.nvidia.com/blog/expanding-ai-storage-access-with-nvidia-cuobject-and-the-nvidia-scada-server-sdk/",
+          "source": "NVIDIA Developer",
+          "publisher": "NVIDIA Developer",
+          "category": "engineering",
+          "published": "2026-09-30T19:13:02+00:00",
+          "rank_score": 2.0,
+          "stars": 2,
+          "story_kind": "other"
+        }
+      ],
+      "publisher_counts": {
+        "LessWrong AI": 2,
+        "Cloudflare": 4,
+        "Clever Hack": 1,
+        "NVIDIA Developer": 4,
+        "Anthropic": 3,
+        "Latent Space": 4,
+        "Databricks": 3,
+        "Hugging Face": 2,
+        "The Rundown AI": 1,
+        "AI2": 1,
+        "Vercel": 4
+      },
+      "diagnostics": [
+        [
+          "Latent Space: [AINews] not much happened today",
+          "Quiet-day roundup excluded by title policy."
+        ],
+        [
+          "Latent Space",
+          "Freshness: 14 entries excluded: older than coverage window."
+        ],
+        [
+          "Simon Willison",
+          "Freshness: 28 entries excluded: older than coverage window."
+        ],
+        [
+          "smol.ai",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "smol.ai",
+          "Freshness: 716 entries excluded: older than coverage window."
+        ],
+        [
+          "Clever Hack",
+          "Freshness: 20 entries excluded: older than coverage window."
+        ],
+        [
+          "The Rundown AI",
+          "Freshness: 46 entries excluded: older than coverage window."
+        ],
+        [
+          "Substack Technology",
+          "No stable public feed endpoint confirmed for the category page."
+        ],
+        [
+          "Google DeepMind",
+          "Freshness: 99 entries excluded: older than coverage window."
+        ],
+        [
+          "Hugging Face",
+          "Freshness: 870 entries excluded: older than coverage window."
+        ],
+        [
+          "PyTorch",
+          "Freshness: 7 entries excluded: older than coverage window."
+        ],
+        [
+          "Mistral AI",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "Mistral AI",
+          "Freshness: 88 entries excluded: older than coverage window."
+        ],
+        [
+          "Google Research",
+          "Freshness: 99 entries excluded: older than coverage window."
+        ],
+        [
+          "Microsoft Research",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "Microsoft Research",
+          "Freshness: 10 entries excluded: older than coverage window."
+        ],
+        [
+          "AI2",
+          "Freshness: 23 entries excluded: older than coverage window."
+        ],
+        [
+          "OpenAI",
+          "Freshness: 1240 entries excluded: older than coverage window."
+        ],
+        [
+          "DeepSeek Research & News",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "DeepSeek Research & News",
+          "Freshness: 15 entries excluded: older than coverage window."
+        ],
+        [
+          "Anthropic Research",
+          "Freshness: 13 entries excluded: older than coverage window."
+        ],
+        [
+          "Cloudflare",
+          "Freshness: 1 entries excluded: older than coverage window."
+        ],
+        [
+          "AMD ROCm",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "AMD ROCm",
+          "Freshness: 10 entries excluded: older than coverage window."
+        ],
+        [
+          "World Labs",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "World Labs",
+          "Freshness: 19 entries excluded: older than coverage window."
+        ],
+        [
+          "NVIDIA Developer",
+          "Freshness: 95 entries excluded: older than coverage window."
+        ],
+        [
+          "NAVER D2",
+          "Freshness: 19 entries excluded: older than coverage window."
+        ],
+        [
+          "Kakao Tech",
+          "Freshness: 9 entries excluded: older than coverage window."
+        ],
+        [
+          "LY Corporation Engineering",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "LY Corporation Engineering",
+          "Freshness: 50 entries excluded: older than coverage window."
+        ],
+        [
+          "GitHub Engineering",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "GitHub Engineering",
+          "Freshness: 10 entries excluded: older than coverage window."
+        ],
+        [
+          "Vercel",
+          "Freshness: 1622 entries excluded: older than coverage window."
+        ],
+        [
+          "Databricks",
+          "Freshness: 2 entries excluded: older than coverage window."
+        ],
+        [
+          "Bending Spoons",
+          "Verified publication feed is stale: newest entry November 7, 2024. A current dated engineering/research source is needed."
+        ],
+        [
+          "Anthropic News",
+          "Freshness: 13 entries excluded: older than coverage window."
+        ],
+        [
+          "Black Forest Labs",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "Black Forest Labs",
+          "Freshness: 10 entries excluded: older than coverage window."
+        ],
+        [
+          "xAI",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "xAI",
+          "Freshness: 84 entries excluded: older than coverage window."
+        ],
+        [
+          "Meta AI",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "Meta AI",
+          "Freshness: 5 entries excluded: older than coverage window."
+        ],
+        [
+          "Alibaba Qwen",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "Alibaba Qwen",
+          "Freshness: 40 entries excluded: older than coverage window."
+        ],
+        [
+          "MiniMax",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "MiniMax",
+          "Freshness: 12 entries excluded: older than coverage window."
+        ],
+        [
+          "ByteDance Seed",
+          "Freshness: no dated entries within the coverage window."
+        ],
+        [
+          "ByteDance Seed",
+          "Freshness: 18 entries excluded: older than coverage window."
+        ],
+        [
+          "Z.ai / GLM",
+          "Official blog is a client-rendered bundle; no stable dated listing input validated. Needs a dedicated adapter (issue #17)."
+        ],
+        [
+          "Moonshot / Kimi",
+          "Official listing/article HTML exposes titles but no verified publication dates; image timestamps and dates in prose are not publication dates. Needs a dated input (issue #17)."
+        ],
+        [
+          "Latent Space",
+          "Selection: publisher cap (4) excluded Why Dwarkesh is Wrong about Computer Use + How OpenAI shipped its Jev competitor in 1 Week."
+        ],
+        [
+          "OpenAI: [A model guide for the GPT-6 family](https://openai.com/index/practical-guide-building-gpt-6)",
+          "HTTP 403."
+        ],
+        [
+          "OpenAI: [Chatham scales its capital markets expertise with OpenAI](https://openai.com/index/chatham-financial)",
+          "HTTP 403."
+        ],
+        [
+          "OpenAI: [The Den frees up 10-15 hours a week to grow with ChatGPT Work](https://openai.com/index/the-den-family-social)",
+          "HTTP 403."
+        ],
+        [
+          "Vercel",
+          "Selection: publisher cap (4) excluded AI Gateway adds Browserbase Search and Fetch tools."
+        ]
+      ]
+    }
+  },
+  "same_candidate_urls": true,
+  "link_outcomes": {
+    "https://www.lesswrong.com/posts/KtAug62dYRgAS8sqJ/what-i-learnt-co-leading-an-ai-safety-bootcamp-for-legal-and": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://www.lesswrong.com/posts/PAzerqAofFCLoWsgK/reviewing-my-lesswrong-post-history-with-claude": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://www.latent.space/p/airbnb": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://blog.cloudflare.com/introducing-web-search-api/": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://www.latent.space/p/ainews-pi-10-pi-durable-and-aie-nyc": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://cleverhack.com/who-tests-the-frontier-ai-labs-evaluators": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://www.latent.space/p/rlm": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://developer.nvidia.com/blog/build-applications-on-nvidia-bluefield-faster-with-nvidia-doca-agent-skills/": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://developer.nvidia.com/blog/build-local-ai-apps-with-c-and-nvidia-tensorrt-rtx-samples/": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://www.latent.space/p/ainews-gemini-4-argon-gdms-answer": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://www.latent.space/p/devday-2026": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://openai.com/index/practical-guide-building-gpt-6": {
+      "accessible": false,
+      "reason": "HTTP 403."
+    },
+    "https://www.databricks.com/blog/how-choose-your-first-genie-agents-maximum-impact": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://huggingface.co/blog/allenai/astabrief": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://www.databricks.com/blog/real-time-retail-intelligence-building-e-commerce-recommendations-lakebase-and-ai-search": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://www.therundown.ai/articles/tavus-ai-looks-listens-and-talks-back-live": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://allenai.org/blog/astabrief": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://huggingface.co/blog/ServiceNow-AI/autosynthdata": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://vercel.com/blog/how-rogo-ships-agent-written-code-to-production-in-5-minutes-on-vercel": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://openai.com/index/chatham-financial": {
+      "accessible": false,
+      "reason": "HTTP 403."
+    },
+    "https://www.anthropic.com/news/claude-frontier-academy": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://blog.cloudflare.com/sovereign-ai-choice-one-year-later/": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://blog.cloudflare.com/managed-cloudflare-os/": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://blog.cloudflare.com/ai-search-ga/": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://www.databricks.com/blog/connecting-customer-context-measurable-roi-agentic-marketing": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://openai.com/index/the-den-family-social": {
+      "accessible": false,
+      "reason": "HTTP 403."
+    },
+    "https://www.anthropic.com/research/claude-shaped-science": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://vercel.com/changelog/laya-decision-model-now-available-on-ai-gateway-free-through-october-31": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://vercel.com/changelog/microsoft-ai-models-are-now-available-on-ai-gateway": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://www.anthropic.com/news/barclays-scales-claude": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://vercel.com/changelog/vercel-agent-now-installs-private-packages-from-npm-and-custom-registries": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://vercel.com/changelog/ai-gateway-adds-browserbase-search-and-fetch-tools": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://developer.nvidia.com/blog/deploying-an-hstu-generative-recommender-with-nvidia-dynamo-triton/": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://developer.nvidia.com/blog/expanding-ai-storage-access-with-nvidia-cuobject-and-the-nvidia-scada-server-sdk/": {
+      "accessible": true,
+      "reason": ""
+    }
+  }
+}

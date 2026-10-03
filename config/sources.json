@@ -4,42 +4,60 @@
     "homepage": "https://www.lesswrong.com/w/ai?sortedBy=new",
     "feed_url": "https://www.lesswrong.com/feed.xml?view=ai",
     "priority": 5,
-    "enabled": true
+    "enabled": true,
+    "category": "commentary",
+    "publisher": "LessWrong AI",
+    "coverage": "mixed"
   },
   {
     "name": "Latent Space",
     "homepage": "https://www.latent.space/s/ainews",
     "feed_url": "https://www.latent.space/feed",
     "priority": 5,
-    "enabled": true
+    "enabled": true,
+    "category": "commentary",
+    "publisher": "Latent Space",
+    "coverage": "mixed"
   },
   {
     "name": "Simon Willison",
     "homepage": "https://simonwillison.net/",
     "feed_url": "https://simonwillison.net/atom/everything/",
     "priority": 4,
-    "enabled": true
+    "enabled": true,
+    "category": "commentary",
+    "publisher": "Simon Willison",
+    "coverage": "mixed"
   },
   {
     "name": "smol.ai",
     "homepage": "https://news.smol.ai/",
     "feed_url": "https://news.smol.ai/rss.xml",
     "priority": 5,
-    "enabled": true
+    "enabled": true,
+    "category": "commentary",
+    "publisher": "smol.ai",
+    "coverage": "mixed"
   },
   {
     "name": "Clever Hack",
     "homepage": "https://cleverhack.com/frontier-ai-lab-tracker",
     "feed_url": "https://cleverhack.com/feed.xml",
     "priority": 3,
-    "enabled": true
+    "enabled": true,
+    "category": "commentary",
+    "publisher": "Clever Hack",
+    "coverage": "mixed"
   },
   {
     "name": "The Rundown AI",
     "homepage": "https://www.therundown.ai/",
     "feed_url": "https://www.therundown.ai/feed",
     "priority": 4,
-    "enabled": true
+    "enabled": true,
+    "category": "commentary",
+    "publisher": "The Rundown AI",
+    "coverage": "mixed"
   },
   {
     "name": "Substack Technology",
@@ -47,63 +65,90 @@
     "feed_url": "",
     "priority": 2,
     "enabled": false,
-    "disabled_reason": "No stable public feed endpoint confirmed for the category page."
+    "disabled_reason": "No stable public feed endpoint confirmed for the category page.",
+    "category": "commentary",
+    "publisher": "Substack Technology",
+    "coverage": "mixed"
   },
   {
     "name": "Google DeepMind",
     "homepage": "https://deepmind.google/discover/blog/",
     "feed_url": "https://deepmind.google/blog/rss.xml",
     "priority": 4,
-    "enabled": true
+    "enabled": true,
+    "category": "frontier_lab",
+    "publisher": "Google DeepMind",
+    "coverage": "mixed"
   },
   {
     "name": "Hugging Face",
     "homepage": "https://huggingface.co/blog",
     "feed_url": "https://huggingface.co/blog/feed.xml",
     "priority": 4,
-    "enabled": true
+    "enabled": true,
+    "category": "engineering",
+    "publisher": "Hugging Face",
+    "coverage": "mixed"
   },
   {
     "name": "PyTorch",
     "homepage": "https://pytorch.org/blog/",
     "feed_url": "https://pytorch.org/feed/",
     "priority": 4,
-    "enabled": true
+    "enabled": true,
+    "category": "engineering",
+    "publisher": "PyTorch",
+    "coverage": "mixed"
   },
   {
     "name": "Mistral AI",
     "homepage": "https://mistral.ai/news",
     "feed_url": "https://mistral.ai/news/rss",
     "priority": 4,
-    "enabled": true
+    "enabled": true,
+    "category": "frontier_lab",
+    "publisher": "Mistral",
+    "coverage": "mixed"
   },
   {
     "name": "Google Research",
     "homepage": "https://research.google/blog/",
     "feed_url": "https://research.google/blog/rss/",
     "priority": 4,
-    "enabled": true
+    "enabled": true,
+    "category": "research",
+    "publisher": "Google Research",
+    "coverage": "mixed"
   },
   {
     "name": "Microsoft Research",
     "homepage": "https://www.microsoft.com/en-us/research/blog/",
     "feed_url": "https://www.microsoft.com/en-us/research/feed/",
     "priority": 4,
-    "enabled": true
+    "enabled": true,
+    "category": "research",
+    "publisher": "Microsoft Research",
+    "coverage": "mixed"
   },
   {
     "name": "AI2",
     "homepage": "https://allenai.org/blog",
     "feed_url": "https://allenai.org/rss.xml",
     "priority": 4,
-    "enabled": true
+    "enabled": true,
+    "category": "research",
+    "publisher": "AI2",
+    "coverage": "mixed"
   },
   {
     "name": "OpenAI",
     "homepage": "https://openai.com/news/",
     "feed_url": "https://openai.com/news/rss.xml",
     "priority": 4,
-    "enabled": true
+    "enabled": true,
+    "category": "frontier_lab",
+    "publisher": "OpenAI",
+    "coverage": "mixed"
   },
   {
     "name": "DeepSeek Research & News",
@@ -111,7 +156,10 @@
     "feed_url": "https://www.deepseek.com/en/news/",
     "priority": 4,
     "enabled": true,
-    "format": "dated_html"
+    "format": "dated_html",
+    "category": "frontier_lab",
+    "publisher": "DeepSeek",
+    "coverage": "mixed"
   },
   {
     "name": "Anthropic Research",
@@ -119,21 +167,30 @@
     "feed_url": "https://www.anthropic.com/research",
     "priority": 4,
     "enabled": true,
-    "format": "dated_html"
+    "format": "dated_html",
+    "category": "frontier_lab",
+    "publisher": "Anthropic",
+    "coverage": "research"
   },
   {
     "name": "Cloudflare",
     "homepage": "https://blog.cloudflare.com/",
     "feed_url": "https://blog.cloudflare.com/rss/",
     "priority": 3,
-    "enabled": true
+    "enabled": true,
+    "category": "engineering",
+    "publisher": "Cloudflare",
+    "coverage": "mixed"
   },
   {
     "name": "AMD ROCm",
     "homepage": "https://rocm.blogs.amd.com/",
     "feed_url": "https://rocm.blogs.amd.com/blog/atom.xml",
     "priority": 4,
-    "enabled": true
+    "enabled": true,
+    "category": "engineering",
+    "publisher": "AMD ROCm",
+    "coverage": "mixed"
   },
   {
     "name": "World Labs",
@@ -141,56 +198,80 @@
     "feed_url": "https://www.worldlabs.ai/blog",
     "priority": 4,
     "enabled": true,
-    "format": "dated_html"
+    "format": "dated_html",
+    "category": "frontier_lab",
+    "publisher": "World Labs",
+    "coverage": "mixed"
   },
   {
     "name": "NVIDIA Developer",
     "homepage": "https://developer.nvidia.com/blog/",
     "feed_url": "https://developer.nvidia.com/blog/feed/",
     "priority": 4,
-    "enabled": true
+    "enabled": true,
+    "category": "engineering",
+    "publisher": "NVIDIA Developer",
+    "coverage": "mixed"
   },
   {
     "name": "NAVER D2",
     "homepage": "https://d2.naver.com/",
     "feed_url": "https://d2.naver.com/d2.atom",
     "priority": 3,
-    "enabled": true
+    "enabled": true,
+    "category": "engineering",
+    "publisher": "NAVER D2",
+    "coverage": "mixed"
   },
   {
     "name": "Kakao Tech",
     "homepage": "https://tech.kakao.com/",
     "feed_url": "https://tech.kakao.com/feed/",
     "priority": 3,
-    "enabled": true
+    "enabled": true,
+    "category": "engineering",
+    "publisher": "Kakao Tech",
+    "coverage": "mixed"
   },
   {
     "name": "LY Corporation Engineering",
     "homepage": "https://techblog.lycorp.co.jp/en",
     "feed_url": "https://techblog.lycorp.co.jp/en/feed/index.xml",
     "priority": 3,
-    "enabled": true
+    "enabled": true,
+    "category": "engineering",
+    "publisher": "LY Corporation Engineering",
+    "coverage": "mixed"
   },
   {
     "name": "GitHub Engineering",
     "homepage": "https://github.blog/engineering/",
     "feed_url": "https://github.blog/engineering/feed/",
     "priority": 3,
-    "enabled": true
+    "enabled": true,
+    "category": "engineering",
+    "publisher": "GitHub Engineering",
+    "coverage": "mixed"
   },
   {
     "name": "Vercel",
     "homepage": "https://vercel.com/blog",
     "feed_url": "https://vercel.com/atom",
     "priority": 3,
-    "enabled": true
+    "enabled": true,
+    "category": "engineering",
+    "publisher": "Vercel",
+    "coverage": "mixed"
   },
   {
     "name": "Databricks",
     "homepage": "https://www.databricks.com/blog",
     "feed_url": "https://www.databricks.com/feed",
     "priority": 4,
-    "enabled": true
+    "enabled": true,
+    "category": "engineering",
+    "publisher": "Databricks",
+    "coverage": "mixed"
   },
   {
     "name": "Bending Spoons",
@@ -198,7 +279,10 @@
     "feed_url": "https://medium.com/feed/bendingspoons",
     "priority": 3,
     "enabled": false,
-    "disabled_reason": "Verified publication feed is stale: newest entry November 7, 2024. A current dated engineering/research source is needed."
+    "disabled_reason": "Verified publication feed is stale: newest entry November 7, 2024. A current dated engineering/research source is needed.",
+    "category": "engineering",
+    "publisher": "Bending Spoons",
+    "coverage": "mixed"
   },
   {
     "name": "Anthropic News",
@@ -206,7 +290,10 @@
     "feed_url": "https://www.anthropic.com/news",
     "priority": 4,
     "enabled": true,
-    "format": "dated_html"
+    "format": "dated_html",
+    "category": "frontier_lab",
+    "publisher": "Anthropic",
+    "coverage": "mixed"
   },
   {
     "name": "Black Forest Labs",
@@ -214,7 +301,10 @@
     "feed_url": "https://bfl.ai/blog",
     "priority": 4,
     "enabled": true,
-    "format": "dated_html"
+    "format": "dated_html",
+    "category": "frontier_lab",
+    "publisher": "Black Forest Labs",
+    "coverage": "mixed"
   },
   {
     "name": "xAI",
@@ -222,7 +312,10 @@
     "feed_url": "https://x.ai/news",
     "priority": 4,
     "enabled": true,
-    "format": "dated_html"
+    "format": "dated_html",
+    "category": "frontier_lab",
+    "publisher": "xAI",
+    "coverage": "mixed"
   },
   {
     "name": "Meta AI",
@@ -230,7 +323,10 @@
     "feed_url": "https://ai.meta.com/blog/",
     "priority": 4,
     "enabled": true,
-    "format": "meta_html"
+    "format": "meta_html",
+    "category": "frontier_lab",
+    "publisher": "Meta",
+    "coverage": "mixed"
   },
   {
     "name": "Alibaba Qwen",
@@ -238,7 +334,10 @@
     "feed_url": "https://qwen.ai/api/v2/article/retrieval?type=qwen_ai&language=en-US",
     "priority": 4,
     "enabled": true,
-    "format": "qwen_api"
+    "format": "qwen_api",
+    "category": "frontier_lab",
+    "publisher": "Alibaba Qwen",
+    "coverage": "mixed"
   },
   {
     "name": "MiniMax",
@@ -246,7 +345,10 @@
     "feed_url": "https://www.minimax.io/blog",
     "priority": 4,
     "enabled": true,
-    "format": "dated_html"
+    "format": "dated_html",
+    "category": "frontier_lab",
+    "publisher": "MiniMax",
+    "coverage": "mixed"
   },
   {
     "name": "ByteDance Seed",
@@ -254,7 +356,10 @@
     "feed_url": "https://seed.bytedance.com/en/",
     "priority": 4,
     "enabled": true,
-    "format": "dated_html"
+    "format": "dated_html",
+    "category": "frontier_lab",
+    "publisher": "ByteDance",
+    "coverage": "mixed"
   },
   {
     "name": "Z.ai / GLM",
@@ -262,7 +367,10 @@
     "feed_url": "",
     "priority": 4,
     "enabled": false,
-    "disabled_reason": "Official blog is a client-rendered bundle; no stable dated listing input validated. Needs a dedicated adapter (issue #17)."
+    "disabled_reason": "Official blog is a client-rendered bundle; no stable dated listing input validated. Needs a dedicated adapter (issue #17).",
+    "category": "frontier_lab",
+    "publisher": "Z.ai",
+    "coverage": "mixed"
   },
   {
     "name": "Moonshot / Kimi",
@@ -271,6 +379,9 @@
     "priority": 4,
     "enabled": false,
     "format": "dated_html",
-    "disabled_reason": "Official listing/article HTML exposes titles but no verified publication dates; image timestamps and dates in prose are not publication dates. Needs a dated input (issue #17)."
+    "disabled_reason": "Official listing/article HTML exposes titles but no verified publication dates; image timestamps and dates in prose are not publication dates. Needs a dated input (issue #17).",
+    "category": "frontier_lab",
+    "publisher": "Moonshot",
+    "coverage": "mixed"
   }
 ]

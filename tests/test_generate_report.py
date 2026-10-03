@@ -26,6 +26,124 @@ NOW = dt.datetime(2026, 4, 25, 12, 0, tzinfo=dt.timezone.utc)
 
 
 class GenerateReportTest(unittest.TestCase):
+    def test_report_limit_exclusions_do_not_fetch_remaining_links(self):
+        items = [
+            Item("AI first", "https://example.com/first", "First", 3),
+            Item("AI second", "https://example.com/second", "Second", 3),
+        ]
+        with patch.object(
+            generate_report, "check_url_accessible", return_value=(True, "")
+        ) as check:
+            selected, diagnostics = filter_accessible_items(items, 1)
+        self.assertEqual(len(selected), 1)
+        check.assert_called_once_with("https://example.com/first")
+        self.assertTrue(diagnostics[0][1].startswith("Selection: report limit (1)"))
+
+    def test_lab_bonus_beats_publisher_prior_and_sort_uses_continuous_score(self):
+        published = NOW - dt.timedelta(hours=30)
+        commentary = Item(
+            "AI update", "https://example.com/comment", "Daily", 5, published=published
+        )
+        lab = Item(
+            "Introducing FLUX 3",
+            "https://example.com/model",
+            "BFL",
+            4,
+            published=published - dt.timedelta(hours=1),
+            category="frontier_lab",
+        )
+        score_item(commentary, NOW)
+        score_item(lab, NOW)
+        self.assertEqual(lab.story_kind, "lab_announcement")
+        self.assertEqual(lab.stars, commentary.stars)
+        self.assertGreater(
+            generate_report.item_sort_key(lab),
+            generate_report.item_sort_key(commentary),
+        )
+
+    def test_lab_identity_does_not_boost_marketing_or_unrelated_announcements(self):
+        for title in (
+            "Introducing OpenAI Academy",
+            "OpenAI raises funding for AI models",
+            "Claude customer case study",
+            "Introducing a new AI pricing plan",
+            "Office opening",
+        ):
+            item = Item(
+                title, "https://example.com", "OpenAI", 4, category="frontier_lab"
+            )
+            score_item(item, NOW)
+            self.assertEqual(item.story_kind, "other", title)
+        for title in (
+            "Introducing Gemini model",
+            "Qwen-Image-2.1",
+            "Atlas: A World Model for Spatial Intelligence",
+            "Research on model interpretability",
+        ):
+            item = Item(title, "https://example.com", "Lab", 4, category="frontier_lab")
+            self.assertIn(
+                generate_report.classify_story(item),
+                {"lab_announcement", "lab_research"},
+            )
+        item = Item(
+            "Introducing Gemini model",
+            "https://example.com",
+            "Platform",
+            4,
+            category="engineering",
+        )
+        self.assertEqual(generate_report.classify_story(item), "other")
+
+    def test_publisher_cap_groups_channels_and_failed_links_do_not_use_slots(self):
+        items = [
+            Item(
+                f"AI {i}",
+                f"https://example.com/{i}",
+                "Anthropic News" if i % 2 else "Anthropic Research",
+                4,
+                publisher="Anthropic",
+            )
+            for i in range(6)
+        ]
+        items.append(Item("Other AI", "https://other.example.com", "Other", 4))
+        with patch.object(
+            generate_report,
+            "check_url_accessible",
+            side_effect=lambda url: (not url.endswith("/0"), "HTTP 403"),
+        ) as check:
+            selected, diagnostics = filter_accessible_items(items, 30)
+        self.assertEqual(len(selected), 5)
+        self.assertEqual(sum(item.publisher == "Anthropic" for item in selected), 4)
+        self.assertFalse(
+            any(call.args[0].endswith("/5") for call in check.call_args_list)
+        )
+        self.assertTrue(
+            any(reason.startswith("Selection:") for _, reason in diagnostics)
+        )
+        report = render_report(selected, diagnostics, NOW)
+        self.assertIn("Selection exclusions (1)", report)
+        self.assertIn("Skipped sources and links (1)", report)
+
+    def test_lab_bonus_does_not_override_freshness(self):
+        source = Source(
+            "Lab",
+            "https://example.com",
+            "https://example.com/feed",
+            4,
+            category="frontier_lab",
+            publisher="Lab",
+        )
+        feed = "<rss><channel><item><title>Introducing Gemini model</title><link>https://example.com/old</link><pubDate>2026-04-01T00:00:00Z</pubDate></item></channel></rss>"
+        with (
+            patch.object(
+                generate_report, "fetch_url", return_value=(200, source.feed_url, feed)
+            ),
+            patch.object(generate_report, "check_url_accessible") as check,
+        ):
+            selected, _ = generate_report.collect_items([source], NOW)
+        self.assertEqual(selected, [])
+        check.assert_not_called()
+
     def test_iso_dated_cards_and_brand_relevance(self):
         source = Source(
             "MiniMax",
@@ -515,8 +633,8 @@ class GenerateReportTest(unittest.TestCase):
         self.assertIn(
             "<summary>Skipped sources and links (0)</summary>\n\n- None.", report
         )
-        self.assertEqual(report.count("<details>"), 3)
-        self.assertEqual(report.count("</details>"), 3)
+        self.assertEqual(report.count("<details>"), 4)
+        self.assertEqual(report.count("</details>"), 4)
         self.assertLess(report.index("## Source policy"), report.rindex("</details>"))
 
     def test_render_report_keeps_double_digit_metadata_inside_list(self):
