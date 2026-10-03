@@ -25,6 +25,48 @@ NOW = dt.datetime(2026, 4, 25, 12, 0, tzinfo=dt.timezone.utc)
 
 
 class GenerateReportTest(unittest.TestCase):
+    def test_engineering_and_korean_ai_headlines_are_relevant(self):
+        for title in (
+            "Building an agentic development platform",
+            "Lessons from software factories",
+            "The software factory workflow",
+            "Spatial intelligence for developers",
+            "인공지능 서비스 개발",
+        ):
+            with self.subTest(title=title):
+                self.assertTrue(
+                    is_ai_related(Item(title, "https://example.com", "Engineering", 3))
+                )
+        self.assertFalse(
+            is_ai_related(
+                Item(
+                    "Improving database backups",
+                    "https://example.com",
+                    "Engineering",
+                    3,
+                )
+            )
+        )
+
+    def test_world_labs_title_and_date_card(self):
+        source = Source(
+            "World Labs",
+            "https://example.com",
+            "https://example.com/blog",
+            4,
+            format="dated_html",
+        )
+        items = parse_source(
+            '<a href="/blog/atlas"><h3>Atlas: A World Model for Spatial Intelligence</h3><span>September 1, 2026</span></a>',
+            source,
+        )
+        self.assertEqual(
+            items[0].title, "Atlas: A World Model for Spatial Intelligence"
+        )
+        self.assertEqual(
+            items[0].published, dt.datetime(2026, 9, 1, tzinfo=dt.timezone.utc)
+        )
+
     def test_quiet_day_filter_is_scoped_to_publisher_and_exact_title(self):
         for source, title in (
             ("Latent Space", "[AINews] not much happened today"),

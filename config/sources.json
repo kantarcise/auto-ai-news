@@ -120,5 +120,84 @@
     "priority": 4,
     "enabled": true,
     "format": "dated_html"
+  },
+  {
+    "name": "Cloudflare",
+    "homepage": "https://blog.cloudflare.com/",
+    "feed_url": "https://blog.cloudflare.com/rss/",
+    "priority": 3,
+    "enabled": true
+  },
+  {
+    "name": "AMD ROCm",
+    "homepage": "https://rocm.blogs.amd.com/",
+    "feed_url": "https://rocm.blogs.amd.com/blog/atom.xml",
+    "priority": 4,
+    "enabled": true
+  },
+  {
+    "name": "World Labs",
+    "homepage": "https://www.worldlabs.ai/blog",
+    "feed_url": "https://www.worldlabs.ai/blog",
+    "priority": 4,
+    "enabled": true,
+    "format": "dated_html"
+  },
+  {
+    "name": "NVIDIA Developer",
+    "homepage": "https://developer.nvidia.com/blog/",
+    "feed_url": "https://developer.nvidia.com/blog/feed/",
+    "priority": 4,
+    "enabled": true
+  },
+  {
+    "name": "NAVER D2",
+    "homepage": "https://d2.naver.com/",
+    "feed_url": "https://d2.naver.com/d2.atom",
+    "priority": 3,
+    "enabled": true
+  },
+  {
+    "name": "Kakao Tech",
+    "homepage": "https://tech.kakao.com/",
+    "feed_url": "https://tech.kakao.com/feed/",
+    "priority": 3,
+    "enabled": true
+  },
+  {
+    "name": "LY Corporation Engineering",
+    "homepage": "https://techblog.lycorp.co.jp/en",
+    "feed_url": "https://techblog.lycorp.co.jp/en/feed/index.xml",
+    "priority": 3,
+    "enabled": true
+  },
+  {
+    "name": "GitHub Engineering",
+    "homepage": "https://github.blog/engineering/",
+    "feed_url": "https://github.blog/engineering/feed/",
+    "priority": 3,
+    "enabled": true
+  },
+  {
+    "name": "Vercel",
+    "homepage": "https://vercel.com/blog",
+    "feed_url": "https://vercel.com/atom",
+    "priority": 3,
+    "enabled": true
+  },
+  {
+    "name": "Databricks",
+    "homepage": "https://www.databricks.com/blog",
+    "feed_url": "https://www.databricks.com/feed",
+    "priority": 4,
+    "enabled": true
+  },
+  {
+    "name": "Bending Spoons",
+    "homepage": "https://medium.com/bendingspoons",
+    "feed_url": "https://medium.com/feed/bendingspoons",
+    "priority": 3,
+    "enabled": false,
+    "disabled_reason": "Verified publication feed is stale: newest entry November 7, 2024. A current dated engineering/research source is needed."
   }
 ]
