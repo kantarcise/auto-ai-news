@@ -77,6 +77,9 @@ class GenerateReportTest(unittest.TestCase):
         for title in (
             "Introducing Gemini model",
             "Qwen-Image-2.1",
+            "GPT-6",
+            "Mistral Small 4",
+            "Llama 5",
             "Atlas: A World Model for Spatial Intelligence",
             "Research on model interpretability",
         ):

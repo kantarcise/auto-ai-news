@@ -552,7 +552,7 @@ def classify_story(item: Item) -> str:
     ):
         return "lab_research"
     brand = re.search(
-        r"\b(qwen|grok|flux|deepseek|claude|gemini|glm|kimi|minimax|seedance|seedream|muse spark|muse image|muse video)\b",
+        r"\b(qwen|grok|gpt|mistral|llama|flux|deepseek|claude|gemini|glm|kimi|minimax|seedance|seedream|muse spark|muse image|muse video)\b",
         title,
     )
     model_topic = re.search(
