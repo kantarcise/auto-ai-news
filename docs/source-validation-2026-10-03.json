@@ -1,0 +1,309 @@
+{
+  "checked_at": "2026-10-03T15:15:48.560260+00:00",
+  "sources": [
+    {
+      "source": "LessWrong AI",
+      "url": "https://www.lesswrong.com/feed.xml?view=ai",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://www.lesswrong.com/feed.xml?view=ai",
+      "entries": 10,
+      "dated_entries": 10,
+      "relevant_candidates": 1,
+      "newest_date": "2026-10-03T15:02:53+00:00",
+      "windows": {
+        "48": 1,
+        "72": 1,
+        "168": 1
+      },
+      "sample_url": "https://www.lesswrong.com/posts/Azn6WWQb8HRNjxH9A/singular-learning-theory-comprehensive-3",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Latent Space",
+      "url": "https://www.latent.space/feed",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://www.latent.space/feed",
+      "entries": 20,
+      "dated_entries": 20,
+      "relevant_candidates": 19,
+      "newest_date": "2026-10-03T08:45:15+00:00",
+      "windows": {
+        "48": 3,
+        "72": 5,
+        "168": 9
+      },
+      "sample_url": "https://www.latent.space/p/ainews-not-much-happened-today-cee",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/atom/everything/",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://simonwillison.net/atom/everything/",
+      "entries": 30,
+      "dated_entries": 30,
+      "relevant_candidates": 10,
+      "newest_date": "2026-10-01T06:29:01+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 5
+      },
+      "sample_url": "https://simonwillison.net/2026/Oct/1/matthew-green/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "smol.ai",
+      "url": "https://news.smol.ai/rss.xml",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://news.smol.ai/rss.xml",
+      "entries": 716,
+      "dated_entries": 716,
+      "relevant_candidates": 455,
+      "newest_date": "2026-09-09T05:44:39+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 0
+      },
+      "sample_url": "https://news.smol.ai/issues/26-09-09-not-much/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Clever Hack",
+      "url": "https://cleverhack.com/feed.xml",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://cleverhack.com/feed.xml",
+      "entries": 21,
+      "dated_entries": 21,
+      "relevant_candidates": 17,
+      "newest_date": "2026-10-02T02:00:00+00:00",
+      "windows": {
+        "48": 1,
+        "72": 1,
+        "168": 1
+      },
+      "sample_url": "https://cleverhack.com/who-tests-the-frontier-ai-labs-evaluators",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "The Rundown AI",
+      "url": "https://www.therundown.ai/feed",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://www.therundown.ai/feed",
+      "entries": 50,
+      "dated_entries": 50,
+      "relevant_candidates": 26,
+      "newest_date": "2026-10-02T14:34:09+00:00",
+      "windows": {
+        "48": 1,
+        "72": 1,
+        "168": 4
+      },
+      "sample_url": "https://www.therundown.ai/articles/apple-no-video-security-camera",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Google DeepMind",
+      "url": "https://deepmind.google/blog/rss.xml",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://deepmind.google/blog/rss.xml",
+      "entries": 100,
+      "dated_entries": 100,
+      "relevant_candidates": 39,
+      "newest_date": "2026-09-30T20:01:45+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 0
+      },
+      "sample_url": "https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Hugging Face",
+      "url": "https://huggingface.co/blog/feed.xml",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://huggingface.co/blog/feed.xml",
+      "entries": 872,
+      "dated_entries": 872,
+      "relevant_candidates": 378,
+      "newest_date": "2026-10-02T15:19:50+00:00",
+      "windows": {
+        "48": 2,
+        "72": 2,
+        "168": 4
+      },
+      "sample_url": "https://huggingface.co/blog/allenai/astabrief",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "PyTorch",
+      "url": "https://pytorch.org/feed/",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://pytorch.org/feed/",
+      "entries": 10,
+      "dated_entries": 10,
+      "relevant_candidates": 1,
+      "newest_date": "2026-10-02T19:55:07+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 0
+      },
+      "sample_url": "https://pytorch.org/blog/building-a-high-performance-and-portable-vllm-linear-backend-with-helion/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Mistral AI",
+      "url": "https://mistral.ai/news/rss",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://mistral.ai/news/rss",
+      "entries": 88,
+      "dated_entries": 88,
+      "relevant_candidates": 46,
+      "newest_date": "2026-09-28T15:57:59+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 0
+      },
+      "sample_url": "https://mistral.ai/news/hallo-deutschland/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Google Research",
+      "url": "https://research.google/blog/rss/",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://research.google/blog/rss/",
+      "entries": 100,
+      "dated_entries": 100,
+      "relevant_candidates": 43,
+      "newest_date": "2026-10-02T14:57:41+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 1
+      },
+      "sample_url": "https://research.google/blog/toward-provably-private-learning-from-federated-data/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Microsoft Research",
+      "url": "https://www.microsoft.com/en-us/research/feed/",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://www.microsoft.com/en-us/research/feed/",
+      "entries": 10,
+      "dated_entries": 10,
+      "relevant_candidates": 3,
+      "newest_date": "2026-09-30T16:00:00+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 1
+      },
+      "sample_url": "https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "AI2",
+      "url": "https://allenai.org/rss.xml",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://allenai.org/rss.xml",
+      "entries": 25,
+      "dated_entries": 25,
+      "relevant_candidates": 15,
+      "newest_date": "2026-10-02T08:00:00+00:00",
+      "windows": {
+        "48": 1,
+        "72": 1,
+        "168": 1
+      },
+      "sample_url": "https://allenai.org/blog/astabrief",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "OpenAI",
+      "url": "https://openai.com/news/rss.xml",
+      "format": "feed",
+      "status": 200,
+      "final_url": "https://openai.com/news/rss.xml",
+      "entries": 1245,
+      "dated_entries": 1245,
+      "relevant_candidates": 789,
+      "newest_date": "2026-10-02T16:15:00+00:00",
+      "windows": {
+        "48": 2,
+        "72": 3,
+        "168": 9
+      },
+      "sample_url": "https://openai.com/index/practical-guide-building-gpt-6",
+      "sample_accessible": false,
+      "sample_failure": "HTTP 403."
+    },
+    {
+      "source": "DeepSeek Research & News",
+      "url": "https://www.deepseek.com/en/news/",
+      "format": "dated_html",
+      "status": 200,
+      "final_url": "https://www.deepseek.com/en/news/",
+      "entries": 15,
+      "dated_entries": 15,
+      "relevant_candidates": 11,
+      "newest_date": "2026-09-10T00:00:00+00:00",
+      "windows": {
+        "48": 0,
+        "72": 0,
+        "168": 0
+      },
+      "sample_url": "https://www.deepseek.com/en/news/deepseek-v4-1-flash/",
+      "sample_accessible": true,
+      "sample_failure": ""
+    },
+    {
+      "source": "Anthropic Research",
+      "url": "https://www.anthropic.com/research",
+      "format": "dated_html",
+      "status": 200,
+      "final_url": "https://www.anthropic.com/research",
+      "entries": 14,
+      "dated_entries": 14,
+      "relevant_candidates": 8,
+      "newest_date": "2026-10-01T00:00:00+00:00",
+      "windows": {
+        "48": 0,
+        "72": 1,
+        "168": 2
+      },
+      "sample_url": "https://www.anthropic.com/research/claude-shaped-science",
+      "sample_accessible": true,
+      "sample_failure": ""
+    }
+  ]
+}

@@ -37,6 +37,9 @@ AI_KEYWORDS = {
     "chatgpt",
     "claude",
     "deepmind",
+    "deepseek",
+    "mistral",
+    "qwen",
     "diffusion",
     "embedding",
     "eval",
@@ -81,6 +84,7 @@ class Source:
     priority: int
     enabled: bool = True
     disabled_reason: str = ""
+    format: str = "feed"
 
 
 @dataclass
@@ -180,6 +184,80 @@ def parse_datetime(value: str) -> dt.datetime | None:
     if parsed.tzinfo is None:
         parsed = parsed.replace(tzinfo=dt.timezone.utc)
     return parsed.astimezone(dt.timezone.utc)
+
+
+class DatedNewsParser(HTMLParser):
+    """Read dated article cards from the validated DeepSeek/Anthropic listings."""
+
+    def __init__(self, source: Source) -> None:
+        super().__init__()
+        self.source = source
+        self.items: list[Item] = []
+        self.href = ""
+        self.parts: list[str] = []
+        self.title_parts: list[str] = []
+        self.title_tag = ""
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        attributes = dict(attrs)
+        if tag == "a":
+            self.href = attributes.get("href") or ""
+            self.parts = []
+            self.title_parts = []
+            self.title_tag = ""
+        if self.href and (
+            tag in {"h2", "h3", "h4"}
+            or (tag == "span" and "title" in (attributes.get("class") or "").lower())
+        ):
+            self.title_tag = tag
+
+    def handle_data(self, data: str) -> None:
+        if self.href:
+            self.parts.append(data)
+            if self.title_tag:
+                self.title_parts.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == self.title_tag:
+            self.title_tag = ""
+        if tag != "a" or not self.href:
+            return
+        text = normalize_space(" ".join(self.parts))
+        match = re.search(r"\b([A-Z][a-z]+ \d{1,2}, \d{4})\b", text)
+        title = normalize_space(" ".join(self.title_parts))
+        if match and title:
+            published = None
+            for date_format in ("%B %d, %Y", "%b %d, %Y"):
+                try:
+                    published = dt.datetime.strptime(match[1], date_format).replace(
+                        tzinfo=dt.timezone.utc
+                    )
+                    break
+                except ValueError:
+                    continue
+            if published:
+                self.items.append(
+                    Item(
+                        title,
+                        self.href,
+                        self.source.name,
+                        self.source.priority,
+                        published=published,
+                    )
+                )
+        self.href = ""
+
+
+def parse_source(content: str, source: Source) -> list[Item]:
+    if source.format == "feed":
+        return parse_feed(content, source)
+    if source.format != "dated_html":
+        raise ValueError(f"Unsupported source format: {source.format}")
+    parser = DatedNewsParser(source)
+    parser.feed(content)
+    if not parser.items:
+        raise ValueError("Dated news listing contained no recognized article cards.")
+    return parser.items
 
 
 def parse_feed(xml_text: str, source: Source) -> list[Item]:
@@ -313,9 +391,10 @@ def collect_items(
                     (source.name, f"HTTP {status} from {source.feed_url}.")
                 )
                 continue
-            parsed_items = parse_feed(feed_text, source)
+            parsed_items = parse_source(feed_text, source)
         except (
             ET.ParseError,
+            ValueError,
             TimeoutError,
             urllib.error.URLError,
             UnicodeDecodeError,

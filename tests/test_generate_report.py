@@ -15,6 +15,7 @@ from scripts.generate_report import (
     is_ai_related,
     is_quiet_day_roundup,
     parse_feed,
+    parse_source,
     render_report,
     score_item,
 )
@@ -76,6 +77,49 @@ class GenerateReportTest(unittest.TestCase):
                 )
             ],
         )
+
+    def test_parse_dated_html_news_and_research_cards(self):
+        source = Source(
+            "DeepSeek",
+            "https://example.com",
+            "https://example.com/news",
+            4,
+            format="dated_html",
+        )
+        content = """<a href="/news/model"><span>News September 10, 2026</span>
+        <h3>DeepSeek model &amp; research</h3><p>Summary</p></a>
+        <a href="https://arxiv.org/abs/1234"><span>June 24, 2026</span>
+        <span class="ds-research-title">Inference research</span></a>
+        <a href="/nav"><h3>Navigation</h3></a>"""
+        items = parse_source(content, source)
+        self.assertEqual(
+            [item.title for item in items],
+            ["DeepSeek model & research", "Inference research"],
+        )
+        self.assertEqual(
+            items[0].published, dt.datetime(2026, 9, 10, tzinfo=dt.timezone.utc)
+        )
+        self.assertEqual(items[1].url, "https://arxiv.org/abs/1234")
+
+    def test_parse_anthropic_card_and_detect_layout_failure(self):
+        source = Source(
+            "Anthropic",
+            "https://example.com",
+            "https://example.com",
+            4,
+            format="dated_html",
+        )
+        items = parse_source(
+            '<a href="/research/claude"><time>Oct 1, 2026</time>'
+            '<span class="PublicationList__title">Claude science</span></a>',
+            source,
+        )
+        self.assertEqual(items[0].title, "Claude science")
+        self.assertEqual(
+            items[0].published, dt.datetime(2026, 10, 1, tzinfo=dt.timezone.utc)
+        )
+        with self.assertRaisesRegex(ValueError, "no recognized article cards"):
+            parse_source('<a href="/other">Oct 1, 2026</a>', source)
 
     def test_canonicalize_url_removes_tracking_and_fragments(self):
         url = "HTTPS://Example.com/story/?utm_source=x&keep=1#comments"
