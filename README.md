@@ -12,6 +12,8 @@ Quiet-day editions titled “not much happened today” from Latent Space and sm
 
 Reports cover the last 72 hours by default. Older entries, missing/invalid dates, and future dates are excluded before link checks. Freshness exclusions are grouped separately from network failures. Short or empty reports are allowed; old stories never fill unused slots. A story may recur on consecutive days within this window. Date-only HTML listings use midnight UTC, so boundary decisions are conservative.
 
+Selection gives qualifying frontier-lab research/model announcements a bounded bonus, using a headline rule that excludes common corporate/customer marketing. Scores are sorted before being mapped to stars. The cap is four accessible articles per publisher; Anthropic News and Research share one publisher. Cap/report-limit exclusions appear separately from freshness and network diagnostics. Short reports are allowed, and the 72-hour window is unchanged. See [the selection policy](docs/selection-policy.md) for weights and limitations.
+
 ## Disclosure
 
 This project was built with AI assistance. The daily reports are generated automatically from public source feeds.

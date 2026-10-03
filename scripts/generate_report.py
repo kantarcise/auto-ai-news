@@ -27,6 +27,8 @@ USER_AGENT = "auto-ai-news/0.1 (+https://github.com/kantarcise/auto-ai-news)"
 READING_WPM = 225
 MIN_CONTENT_WORDS = 100
 MAX_ITEMS = 30
+MAX_PER_PUBLISHER = 4
+LAB_ANNOUNCEMENT_BONUS = 0.75
 DEFAULT_LOOKBACK_HOURS = 72
 FETCH_TIMEOUT = 20
 LINK_TIMEOUT = 10
@@ -103,6 +105,9 @@ class Source:
     enabled: bool = True
     disabled_reason: str = ""
     format: str = "feed"
+    category: str = "other"
+    publisher: str = ""
+    coverage: str = "mixed"
 
 
 @dataclass
@@ -120,6 +125,11 @@ class Item:
     content: str = ""
     content_format: str = "text"
     content_provenance: str = "missing"
+    category: str = "other"
+    publisher: str = ""
+    coverage: str = "mixed"
+    story_kind: str = "other"
+    rank_score: float | None = None
 
 
 class TextExtractor(HTMLParser):
@@ -526,28 +536,64 @@ def reading_time_label(item: Item) -> str:
     return "Read time unknown (no article text)"
 
 
+def classify_story(item: Item) -> str:
+    """Conservative headline rule; lab membership is not automatic importance."""
+    if item.category != "frontier_lab" or not is_ai_related(item):
+        return "other"
+    title = item.title.casefold()
+    if re.search(
+        r"\b(partners?|partnership|customers?|case study|funding|raises|investment|acquisition|pricing|hiring|careers|conference)\b",
+        title,
+    ):
+        return "other"
+    if item.coverage == "research" or re.search(
+        r"\b(research|benchmark|evaluations?|alignment|interpretability|discovers|proof|world model|spatial intelligence)\b",
+        title,
+    ):
+        return "lab_research"
+    brand = re.search(
+        r"\b(qwen|grok|gpt|mistral|llama|flux|deepseek|claude|gemini|glm|kimi|minimax|seedance|seedream|muse spark|muse image|muse video)\b",
+        title,
+    )
+    model_topic = re.search(
+        r"\b(model|llm|multimodal|inference|reasoning|agent|agents|diffusion)\b", title
+    )
+    if (brand or model_topic) and re.search(
+        r"^(introducing|announcing|releasing|unveiling)\b", title
+    ):
+        return "lab_announcement"
+    if brand and re.search(r"\d|\b(model|reasoning|vision)\b", title):
+        return "lab_announcement"
+    return "other"
+
+
 def score_item(item: Item, now: dt.datetime) -> int:
-    score = 1
+    score = 1.0
     if item.source_priority >= 5:
-        score += 2
+        score += 1.25
     elif item.source_priority >= 3:
-        score += 1
-    relevance = ai_relevance_score(item)
-    if relevance >= 3:
-        score += 1
+        score += 1.0
+    if ai_relevance_score(item) >= 3:
+        score += 1.0
     if item.published:
         age_hours = max(0.0, (now - item.published).total_seconds() / 3600)
         if age_hours <= 24:
-            score += 1
+            score += 1.0
         elif age_hours > 7 * 24:
-            score -= 1
-    item.stars = max(1, min(5, score))
+            score -= 1.0
+    item.story_kind = classify_story(item)
+    if item.story_kind in {"lab_research", "lab_announcement"}:
+        score += LAB_ANNOUNCEMENT_BONUS
+    item.rank_score = score
+    item.stars = max(1, min(5, math.ceil(score)))
     return item.stars
 
 
-def item_sort_key(item: Item) -> tuple[int, dt.datetime]:
+def item_sort_key(item: Item) -> tuple[float, dt.datetime]:
     published = item.published or dt.datetime.min.replace(tzinfo=dt.timezone.utc)
-    return item.stars, published
+    return item.rank_score if item.rank_score is not None else float(
+        item.stars
+    ), published
 
 
 def freshness_reason(item: Item, now: dt.datetime, lookback_hours: int) -> str:
@@ -599,6 +645,9 @@ def collect_items(
         freshness_counts: dict[str, int] = {}
         fresh_count = 0
         for item in parsed_items:
+            item.category = source.category
+            item.publisher = source.publisher or source.name
+            item.coverage = source.coverage
             reason = freshness_reason(item, now, lookback_hours)
             if reason:
                 freshness_counts[reason] = freshness_counts.get(reason, 0) + 1
@@ -668,15 +717,41 @@ def check_url_accessible_with_get(url: str, timeout: int) -> tuple[bool, str]:
 
 
 def filter_accessible_items(
-    items: list[Item], limit: int
+    items: list[Item], limit: int, publisher_limit: int | None = MAX_PER_PUBLISHER
 ) -> tuple[list[Item], list[tuple[str, str]]]:
     accessible: list[Item] = []
+    if publisher_limit is not None and publisher_limit <= 0:
+        raise ValueError("publisher_limit must be positive")
+    publisher_counts: dict[str, int] = {}
     failures: list[tuple[str, str]] = []
-    for item in items:
+    for index, item in enumerate(items):
+        publisher = item.publisher or item.source
+        if (
+            publisher_limit is not None
+            and publisher_counts.get(publisher, 0) >= publisher_limit
+        ):
+            failures.append(
+                (
+                    item.source,
+                    f"Selection: publisher cap ({publisher_limit}) excluded {item.title}.",
+                )
+            )
+            continue
         ok, reason = check_url_accessible(item.url)
         if ok:
             accessible.append(item)
+            publisher_counts[publisher] = publisher_counts.get(publisher, 0) + 1
             if len(accessible) == limit:
+                remaining: dict[str, int] = {}
+                for candidate in items[index + 1 :]:
+                    remaining[candidate.source] = remaining.get(candidate.source, 0) + 1
+                for source, count in remaining.items():
+                    failures.append(
+                        (
+                            source,
+                            f"Selection: report limit ({limit}) left {count} lower-ranked candidates unselected; links not checked.",
+                        )
+                    )
                 break
         else:
             failures.append((f"{item.source}: [{item.title}]({item.url})", reason))
@@ -727,6 +802,16 @@ def render_report(
     lookback_hours: int = DEFAULT_LOOKBACK_HOURS,
 ) -> str:
     generated = now.astimezone(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    selection = [
+        (source, reason.removeprefix("Selection: "))
+        for source, reason in unavailable
+        if reason.startswith("Selection: ")
+    ]
+    unavailable = [
+        (source, reason)
+        for source, reason in unavailable
+        if not reason.startswith("Selection: ")
+    ]
     freshness = [
         (source, reason.removeprefix("Freshness: "))
         for source, reason in unavailable
@@ -743,14 +828,16 @@ def render_report(
         .strftime("%Y-%m-%d %H:%M UTC")
     )
     source_count = len({item.source for item in items})
+    publisher_count = len({item.publisher or item.source for item in items})
     article_label = "article" if len(items) == 1 else "articles"
     source_label = "source" if source_count == 1 else "sources"
+    publisher_label = "publisher" if publisher_count == 1 else "publishers"
     lines = [
         "# Daily AI News",
         "",
         (
             f"{len(items)} {article_label} · {source_count} {source_label} · "
-            f"Generated {generated}"
+            f"{publisher_count} {publisher_label} · Generated {generated}"
         ),
         "",
         f"Coverage: last {lookback_hours} hours ({start} through {generated}, inclusive).",
@@ -796,6 +883,16 @@ def render_report(
         lines.append("- None.")
     lines.extend(["", "</details>", ""])
     lines.extend(
+        ["<details>", f"<summary>Selection exclusions ({len(selection)})</summary>", ""]
+    )
+    lines.extend(
+        f"- **{markdown_escape(source)}**: {markdown_escape(reason)}"
+        for source, reason in selection
+    )
+    if not selection:
+        lines.append("- None.")
+    lines.extend(["", "</details>", ""])
+    lines.extend(
         [
             "<details>",
             f"<summary>Skipped sources and links ({len(unavailable)})</summary>",
@@ -832,6 +929,8 @@ def render_report(
             ),
             "",
             "Articles with missing/invalid or future dates are excluded. Older articles never backfill a short report. Date-only HTML listings use midnight UTC; boundary decisions are conservative. A story may recur across consecutive reports within the window.",
+            "",
+            "Selection uses a continuous score before mapping to stars. Source bonuses are 1.25 for priority 5 and 1 for priorities 3–4; qualifying frontier-lab research/model announcements add 0.75. Headline classification is heuristic; corporate posts receive no lab bonus. At most four accessible articles per publisher are selected, with shared lab channels grouped together. No older articles fill excluded slots.",
             "",
             "## Source policy",
             "",
