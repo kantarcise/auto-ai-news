@@ -8,6 +8,8 @@ Reports use a ranked article list with source names and UTC publication dates. R
 
 Latest report: https://github.com/kantarcise/auto-ai-news/releases/latest
 
+Quiet-day editions titled “not much happened today” from Latent Space and smol.ai are excluded, with the reason listed in the report's skipped section. These editions can contain substantial recap content; this is a title-based selection preference, not a full-content quality judgment.
+
 ## Disclosure
 
 This project was built with AI assistance. The daily reports are generated automatically from public source feeds.

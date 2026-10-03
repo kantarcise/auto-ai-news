@@ -1,6 +1,7 @@
 import datetime as dt
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from scripts import generate_report
 from scripts.generate_report import (
@@ -12,6 +13,7 @@ from scripts.generate_report import (
     extract_text_from_html,
     filter_accessible_items,
     is_ai_related,
+    is_quiet_day_roundup,
     parse_feed,
     render_report,
     score_item,
@@ -22,6 +24,59 @@ NOW = dt.datetime(2026, 4, 25, 12, 0, tzinfo=dt.timezone.utc)
 
 
 class GenerateReportTest(unittest.TestCase):
+    def test_quiet_day_filter_is_scoped_to_publisher_and_exact_title(self):
+        for source, title in (
+            ("Latent Space", "[AINews] not much happened today"),
+            ("smol.ai", "  Not Much Happened Today.  "),
+            ("Latent Space", "[AINews]\nnot much happened today!"),
+        ):
+            with self.subTest(source=source, title=title):
+                self.assertTrue(
+                    is_quiet_day_roundup(Item(title, "https://example.com", source, 5))
+                )
+        for source, title in (
+            ("Simon Willison", "Not much happened today"),
+            (
+                "Latent Space",
+                "Why ‘not much happened today’ misses important AI research",
+            ),
+            ("smol.ai", "A new AI model launched today"),
+        ):
+            with self.subTest(source=source, title=title):
+                self.assertFalse(
+                    is_quiet_day_roundup(Item(title, "https://example.com", source, 5))
+                )
+
+    def test_collection_skips_quiet_day_before_link_checks_and_reports_reason(self):
+        source = Source(
+            "Latent Space", "https://example.com", "https://example.com/feed", 5
+        )
+        feed = """<rss><channel>
+        <item><title>[AINews] not much happened today</title><link>https://example.com/quiet</link>
+        <description>A substantial recap about AI models and agents.</description></item>
+        <item><title>New AI model</title><link>https://example.com/model</link></item>
+        </channel></rss>"""
+        with (
+            patch.object(
+                generate_report, "fetch_url", return_value=(200, source.feed_url, feed)
+            ),
+            patch.object(
+                generate_report, "check_url_accessible", return_value=(True, "")
+            ) as check,
+        ):
+            items, skipped = generate_report.collect_items([source], NOW)
+        self.assertEqual([item.title for item in items], ["New AI model"])
+        check.assert_called_once_with("https://example.com/model")
+        self.assertEqual(
+            skipped,
+            [
+                (
+                    "Latent Space: [AINews] not much happened today",
+                    "Quiet-day roundup excluded by title policy.",
+                )
+            ],
+        )
+
     def test_canonicalize_url_removes_tracking_and_fragments(self):
         url = "HTTPS://Example.com/story/?utm_source=x&keep=1#comments"
         self.assertEqual(canonicalize_url(url), "https://example.com/story?keep=1")
