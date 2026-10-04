@@ -1,0 +1,42 @@
+# Editorial evaluation baseline
+
+This first batch contains all 34 candidates from the frozen October 3 comparison, including selected and unselected candidates. Labels are deliberately blank. It is a pilot review, not a multi-day or representative quality benchmark. Articles rejected before this captured candidate stage are absent; it cannot measure those relevance/collection misses.
+
+## Editorial brief
+
+Prioritize substantive model/capability releases, research with concrete findings or evaluations, and useful AI engineering with reproducible methods. Include independent analysis that adds evidence or insight. Cover general-purpose models and specialist visual/spatial models across regions. Assess the article, not just its publisher; frontier-lab marketing is not automatically important. Deprioritize corporate/customer promotions, generic advice, unsupported claims and repeated summaries that add little.
+
+The 72-hour window is an operational eligibility rule. Assess relevance/value separately; a valuable blocked article is not an irrelevant article. Do not treat star ratings or the new classifier as human labels.
+
+## Review each candidate
+
+Browse the [linked candidate list](review-batch.md), open each article and record the evidence you could inspect. Only links and metadata are included; no article body is republished. Edit [review-2026-10-03.json](review-2026-10-03.json), keeping candidate IDs/URLs intact, and set `reviewer` to your name or chosen identifier.
+
+| Field | Values and meaning |
+| --- | --- |
+| relevant | `yes`, `no`, `unsure`, or `null` (unreviewed): fits the AI editorial brief |
+| include | `yes`, `no`, `unsure`, or `null`: worth including before redundancy/diversity selection |
+| importance | 0: little value; 1: useful niche material; 2: significant development/analysis; 3: essential coverage; `null`: not judged |
+| story_id | A short identifier shared by articles about the same event; included articles require one |
+| evidence | `article`: inspected substantive text; `title`: provisional headline judgment; `unavailable`: evidence could not be inspected; `null`: unreviewed |
+| notes | Explain the judgment, uncertainty, or what additional analysis distinguishes duplicate coverage |
+
+An included item must be relevant, have importance 1–3 and a story ID. Unavailable evidence requires `unsure` or an unreviewed inclusion label. Disagreement/uncertainty is a useful result, not something to force into a negative label. Scores and policy selections are omitted from the review sheet to avoid anchoring judgments to current ranking. Publisher identity remains visible for attribution.
+
+## Run offline
+
+```bash
+python3 -m scripts.review_candidates evaluate docs/frontier-selection-comparison-2026-10-03.json docs/evaluation/review-2026-10-03.json
+```
+
+The evaluator validates snapshot/URL identity, complete row coverage and label consistency. It reports label coverage alongside precision among reviewed selections and recall of reviewed include-worthy candidates. Unreviewed/unsure items are never treated as negative; absent denominators produce `null`, not a zero quality score. Recall covers this captured candidate pool, including operationally blocked candidates, not the universe of AI news. On partial reviews, numbers may be biased toward whichever items were reviewed first. Title-only judgments are provisional; metrics are judgments of this reviewer, not fact verification.
+
+To recreate a blank review sheet in a separate file:
+
+```bash
+python3 -m scripts.review_candidates prepare docs/frontier-selection-comparison-2026-10-03.json --output /tmp/ai-news-review.json
+```
+
+## Next evaluation steps
+
+Review this pilot and refine the rubric, then capture multiple dates including rejected candidates and representative regions/modalities. Freeze each snapshot's clock and operational outcomes. Group duplicate stories before chronological train/test splits, retain an unseen-publisher check, and measure important-story recall, graded ranking, repetition and concentration. Set acceptance targets from labeled baseline results. This pilot adds no runtime dependencies and changes no production ranking, workflow or releases.

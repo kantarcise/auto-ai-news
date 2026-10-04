@@ -38,3 +38,5 @@ Merging a freshness change does not rerun a deployment or edit historical releas
 Contributor and agent guidance: [AGENTS.md](AGENTS.md).
 
 Source coverage, live-validation results, and collection limitations: [docs/sources.md](docs/sources.md).
+
+Editorial rubric, human review batch and offline evaluation: [docs/evaluation](docs/evaluation/README.md).
