@@ -26,6 +26,108 @@ NOW = dt.datetime(2026, 4, 25, 12, 0, tzinfo=dt.timezone.utc)
 
 
 class GenerateReportTest(unittest.TestCase):
+    def test_shared_astabrief_title_groups_and_preserves_both_links(self):
+        title = "Open-sourcing AstaBrief, the fast report-generation model in Asta"
+        syndicated = Item(
+            title,
+            "https://huggingface.co/blog/allenai/astabrief",
+            "Hugging Face",
+            4,
+            published=NOW,
+            category="engineering",
+            rank_score=3,
+        )
+        original = Item(
+            title,
+            "https://allenai.org/blog/astabrief",
+            "AI2",
+            4,
+            published=NOW,
+            category="research",
+            rank_score=2,
+        )
+        groups = generate_report.group_stories([syndicated, original])
+        self.assertEqual(len(groups), 1)
+        self.assertIs(groups[0], original)
+        self.assertEqual(groups[0].related_coverage, [syndicated])
+        with patch.object(
+            generate_report, "check_url_accessible", return_value=(True, "")
+        ):
+            selected, _ = filter_accessible_items(groups, 30)
+        report = render_report(selected, [], NOW)
+        self.assertIn("1 story · 2 sources", report)
+        self.assertIn(
+            "Also published by: [Hugging Face](https://huggingface.co/blog/allenai/astabrief)",
+            report,
+        )
+        self.assertIn("https://allenai.org/blog/astabrief", report)
+
+    def test_grouping_preserves_versions_analysis_short_titles_and_date_gap(self):
+        titles = [
+            "Introducing Qwen 3.1 model for advanced coding tasks",
+            "Introducing Qwen 3.2 model for advanced coding tasks",
+            "Analysis of Qwen 3.1 model for advanced coding tasks",
+            "Weekly AI news",
+            "Weekly AI news",
+            "Building local AI apps with C++ and TensorRT samples",
+            "Building local AI apps with C# and TensorRT samples",
+        ]
+        items = [
+            Item(title, f"https://example.com/{i}", "Example", 3, published=NOW)
+            for i, title in enumerate(titles)
+        ]
+        self.assertEqual(len(generate_report.group_stories(items)), len(titles))
+        title = "A detailed model release announcement about spatial intelligence"
+        items = [
+            Item(title, "https://example.com/a", "A", 3, published=NOW),
+            Item(
+                title,
+                "https://example.com/b",
+                "B",
+                3,
+                published=NOW - dt.timedelta(hours=25),
+            ),
+        ]
+        self.assertEqual(len(generate_report.group_stories(items)), 2)
+        items[1].published = None
+        self.assertEqual(len(generate_report.group_stories(items)), 2)
+        chain = [
+            Item(
+                title,
+                f"https://example.com/{i}",
+                "Example",
+                3,
+                published=NOW - dt.timedelta(hours=hours),
+            )
+            for i, hours in enumerate((0, 20, 40))
+        ]
+        self.assertEqual(len(generate_report.group_stories(chain)), 2)
+
+    def test_group_primary_blocked_falls_back_without_dead_alternate(self):
+        title = "Open-sourcing AstaBrief, the fast report-generation model in Asta"
+        primary = Item(
+            title,
+            "https://example.com/blocked",
+            "Original",
+            3,
+            published=NOW,
+            category="research",
+        )
+        alternative = Item(
+            title, "https://example.com/accessible", "Mirror", 3, published=NOW
+        )
+        groups = generate_report.group_stories([primary, alternative])
+        with patch.object(
+            generate_report,
+            "check_url_accessible",
+            side_effect=lambda url: (url.endswith("accessible"), "HTTP 403"),
+        ):
+            selected, skipped = filter_accessible_items(groups, 30)
+        self.assertEqual(selected, [alternative])
+        self.assertEqual(selected[0].related_coverage, [])
+        self.assertEqual(len(skipped), 1)
+        self.assertIn("HTTP 403", skipped[0][1])
+
     def test_report_limit_exclusions_do_not_fetch_remaining_links(self):
         items = [
             Item("AI first", "https://example.com/first", "First", 3),
@@ -362,7 +464,7 @@ class GenerateReportTest(unittest.TestCase):
             diagnostics,
         )
         report = render_report(items, diagnostics + [("Broken", "Network error")], NOW)
-        self.assertIn("0 articles · 0 sources", report)
+        self.assertIn("0 stories · 0 sources", report)
         self.assertIn("Coverage: last 72 hours", report)
         self.assertIn("Freshness exclusions (2 source diagnostics)", report)
         self.assertIn("Skipped sources and links (1)", report)
@@ -603,7 +705,7 @@ class GenerateReportTest(unittest.TestCase):
             report,
         )
         self.assertIn("HTTP 403 from source\\.", report)
-        self.assertIn("1 article · 1 source", report)
+        self.assertIn("1 story · 1 source", report)
         self.assertIn("★★★★☆ · Example · 2026-04-25 · ~2 min (feed content)", report)
         self.assertIn("<summary>Skipped sources and links (1)</summary>", report)
         self.assertIn("This report was generated automatically by auto-ai-news", report)
@@ -628,7 +730,7 @@ class GenerateReportTest(unittest.TestCase):
     def test_render_report_empty_state_and_balanced_details(self):
         report = render_report([], [], NOW)
 
-        self.assertIn("0 articles · 0 sources", report)
+        self.assertIn("0 stories · 0 sources", report)
         self.assertIn(
             "No accessible AI-related articles found within the coverage window.",
             report,
@@ -647,7 +749,7 @@ class GenerateReportTest(unittest.TestCase):
         ]
         report = render_report(items, [], NOW)
 
-        self.assertIn("12 articles · 1 source", report)
+        self.assertIn("12 stories · 1 source", report)
         self.assertIn("10. **[Article 9](https://example.com/9)**  \n    ★☆☆☆☆", report)
         self.assertLess(report.index("[Article 0]"), report.index("[Article 11]"))
 
