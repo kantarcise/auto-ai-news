@@ -12,11 +12,12 @@ import math
 import re
 import sys
 import textwrap
+import unicodedata
 import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -130,6 +131,7 @@ class Item:
     coverage: str = "mixed"
     story_kind: str = "other"
     rank_score: float | None = None
+    related_coverage: list[Item] = field(default_factory=list)
 
 
 class TextExtractor(HTMLParser):
@@ -678,7 +680,7 @@ def collect_items(
             unavailable.append(
                 (source.name, f"Freshness: {count} entries excluded: {reason}.")
             )
-    candidates = dedupe_items(items)
+    candidates = group_stories(dedupe_items(items))
     accessible, link_failures = filter_accessible_items(candidates, MAX_ITEMS)
     return accessible, unavailable + link_failures
 
@@ -737,9 +739,31 @@ def filter_accessible_items(
                 )
             )
             continue
-        ok, reason = check_url_accessible(item.url)
-        if ok:
-            accessible.append(item)
+        verified = []
+        for member in [item, *item.related_coverage]:
+            ok, reason = check_url_accessible(member.url)
+            if ok:
+                verified.append(member)
+            else:
+                failures.append(
+                    (f"{member.source}: [{member.title}]({member.url})", reason)
+                )
+        primary = next(
+            (
+                member
+                for member in verified
+                if publisher_limit is None
+                or publisher_counts.get(member.publisher or member.source, 0)
+                < publisher_limit
+            ),
+            None,
+        )
+        if primary is not None:
+            primary.related_coverage = [
+                member for member in verified if member is not primary
+            ]
+            accessible.append(primary)
+            publisher = primary.publisher or primary.source
             publisher_counts[publisher] = publisher_counts.get(publisher, 0) + 1
             if len(accessible) == limit:
                 remaining: dict[str, int] = {}
@@ -753,8 +777,13 @@ def filter_accessible_items(
                         )
                     )
                 break
-        else:
-            failures.append((f"{item.source}: [{item.title}]({item.url})", reason))
+        elif verified:
+            failures.append(
+                (
+                    item.source,
+                    "Selection: all accessible representatives reached their publisher cap.",
+                )
+            )
     return accessible, failures
 
 
@@ -775,6 +804,63 @@ def dedupe_items(items: list[Item]) -> list[Item]:
         if existing is None or item_sort_key(item) > item_sort_key(existing):
             best_by_url[item.canonical_url] = item
     return sorted(best_by_url.values(), key=item_sort_key, reverse=True)
+
+
+def story_title_key(title: str) -> tuple[str, ...]:
+    tokens = tuple(
+        re.findall(
+            r"\w+(?:[+#]+|\.\d+)*", unicodedata.normalize("NFKC", title).casefold()
+        )
+    )
+    # Short/generic headlines are poor evidence of a shared announcement.
+    return tokens if len(tokens) >= 6 else ()
+
+
+def group_stories(items: list[Item]) -> list[Item]:
+    """Group only identical normalized detailed titles published within 24 hours."""
+    groups: list[list[Item]] = []
+    for item in items:
+        key = story_title_key(item.title)
+        match = next(
+            (
+                group
+                for group in groups
+                if key
+                and story_title_key(group[0].title) == key
+                and item.published is not None
+                and all(
+                    member.published is not None
+                    and abs((item.published - member.published).total_seconds())
+                    <= 24 * 3600
+                    for member in group
+                )
+            ),
+            None,
+        )
+        if match is None:
+            groups.append([item])
+        else:
+            match.append(item)
+    representatives = []
+    for group in groups:
+        preferred = sorted(
+            group,
+            key=lambda item: (
+                item.category in {"frontier_lab", "research"},
+                item_sort_key(item),
+            ),
+            reverse=True,
+        )
+        primary = preferred[0]
+        primary.related_coverage = preferred[1:]
+        representatives.append(primary)
+    return sorted(
+        representatives,
+        key=lambda item: max(
+            item_sort_key(member) for member in [item, *item.related_coverage]
+        ),
+        reverse=True,
+    )
 
 
 def stars(value: int) -> str:
@@ -827,9 +913,10 @@ def render_report(
         .astimezone(dt.timezone.utc)
         .strftime("%Y-%m-%d %H:%M UTC")
     )
-    source_count = len({item.source for item in items})
-    publisher_count = len({item.publisher or item.source for item in items})
-    article_label = "article" if len(items) == 1 else "articles"
+    coverage = [member for item in items for member in [item, *item.related_coverage]]
+    source_count = len({member.source for member in coverage})
+    publisher_count = len({member.publisher or member.source for member in coverage})
+    article_label = "story" if len(items) == 1 else "stories"
     source_label = "source" if source_count == 1 else "sources"
     publisher_label = "publisher" if publisher_count == 1 else "publishers"
     lines = [
@@ -864,6 +951,16 @@ def render_report(
                     "",
                 ]
             )
+            if item.related_coverage:
+                lines[-2] += "  "
+                lines.insert(
+                    len(lines) - 1,
+                    f"{indent}Also published by: "
+                    + "; ".join(
+                        markdown_link(member.source, member.url)
+                        for member in item.related_coverage
+                    ),
+                )
     else:
         lines.extend(
             ["No accessible AI-related articles found within the coverage window.", ""]
@@ -930,7 +1027,7 @@ def render_report(
             "",
             "Articles with missing/invalid or future dates are excluded. Older articles never backfill a short report. Date-only HTML listings use midnight UTC; boundary decisions are conservative. A story may recur across consecutive reports within the window.",
             "",
-            "Selection uses a continuous score before mapping to stars. Source bonuses are 1.25 for priority 5 and 1 for priorities 3–4; qualifying frontier-lab research/model announcements add 0.75. Headline classification is heuristic; corporate posts receive no lab bonus. At most four accessible articles per publisher are selected, with shared lab channels grouped together. No older articles fill excluded slots.",
+            "Selection uses a continuous score before mapping to stars. Source bonuses are 1.25 for priority 5 and 1 for priorities 3–4; qualifying frontier-lab research/model announcements add 0.75. Headline classification is heuristic; corporate posts receive no lab bonus. At most four story headlines per representative publisher are selected, with shared lab channels grouped together. Detailed identical titles within 24 hours are grouped, preferring research/lab representatives when available; other accessible source links appear as alternate coverage. This is a conservative title rule, not semantic story matching. No older articles fill excluded slots.",
             "",
             "## Source policy",
             "",
@@ -979,7 +1076,7 @@ def main(argv: list[str] | None = None) -> int:
         render_report(items, unavailable, now, args.lookback_hours), encoding="utf-8"
     )
     print(
-        f"Wrote {args.output} with {len(items)} links and {len(unavailable)} diagnostics."
+        f"Wrote {args.output} with {len(items)} stories and {len(unavailable)} diagnostics."
     )
     return 0
 

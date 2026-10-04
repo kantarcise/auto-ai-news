@@ -40,3 +40,5 @@ Contributor and agent guidance: [AGENTS.md](AGENTS.md).
 Source coverage, live-validation results, and collection limitations: [docs/sources.md](docs/sources.md).
 
 Editorial rubric, human review batch and offline evaluation: [docs/evaluation](docs/evaluation/README.md).
+
+Shared announcements with identical detailed titles published within 24 hours are shown as one story with checked alternate source links. Different titles/versions remain separate; this is conservative grouping rather than semantic similarity. Story limits apply to representative publishers; alternate attribution does not consume extra headline slots.
