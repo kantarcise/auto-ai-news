@@ -37,6 +37,10 @@ To recreate a blank review sheet in a separate file:
 python3 -m scripts.review_candidates prepare docs/frontier-selection-comparison-2026-10-03.json --output /tmp/ai-news-review.json
 ```
 
+## October 4 release feedback
+
+The owner has reviewed all 21 selected articles in the latest release. [Recorded preferences and limitations](feedback-2026-10-04.md) distinguish firsthand experience, technical substance, useful vendor updates, promotional concerns, access concerns and an explicit AstaBrief duplicate group. These qualitative notes are separate from the blank October 3 batch; no numeric or binary labels are inferred.
+
 ## Next evaluation steps
 
 Review this pilot and refine the rubric, then capture multiple dates including rejected candidates and representative regions/modalities. Freeze each snapshot's clock and operational outcomes. Group duplicate stories before chronological train/test splits, retain an unseen-publisher check, and measure important-story recall, graded ranking, repetition and concentration. Set acceptance targets from labeled baseline results. This pilot adds no runtime dependencies and changes no production ranking, workflow or releases.
