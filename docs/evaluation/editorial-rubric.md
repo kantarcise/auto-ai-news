@@ -1,6 +1,6 @@
 # Article-level editorial review rubric
 
-This refinement uses the owner's [October 4 feedback](feedback-2026-10-04.md) to guide the human-review pilot for issue #12. It does not convert those qualitative notes into scored labels. Use the existing fields and validation rules in the [evaluation guide](README.md); assess each article before checking its saved selection outcome or ranking.
+This refinement uses the owner's [October 4 feedback](feedback-2026-10-04.md) and [October 5 omitted-candidate feedback](omitted-feedback-2026-10-05.json) to guide the human-review pilot for issue #12. It does not convert those qualitative notes into scored labels. Use the existing fields and validation rules in the [evaluation guide](README.md); assess each article before checking its saved selection outcome or ranking.
 
 ## Inclusion and importance
 
@@ -21,12 +21,16 @@ These anchors guide judgment; they are not keyword rules. Length, lab membership
 | --- | --- |
 | Technical substance | Concrete methods, implementation details, evaluations, reproducible resources, constraints, or tradeoffs. Explain what the reader learns; a code link alone is insufficient. |
 | Firsthand experience | What the author actually did or observed, lessons learned, and limits of the experience. Bootcamp and practice accounts can qualify without a model launch. |
+| Frontier-lab practitioner perspective | The owner values statements from people close to frontier-lab work. Record the attributed speaker, their role where supported, and what insight they contribute. This preference applies to interviews or commentary in other publications too; proximity does not itself verify claims or establish an importance grade. |
 | Useful product/API update | What changed and what it enables, including limitations or usage details. Vendor publication is not itself a negative. |
 | Promotional framing | Whether customer praise, sales claims, or generic advice dominate without adding evidence or practical lessons. Weigh substance alongside framing rather than rejecting all corporate posts. |
+| Testimonials and presentation | The owner can value a well-produced testimonial, including useful information in promotional material. Record concrete reader value separately from presentation quality; neither customer-story format nor polished design settles inclusion. |
 | Synthesis or independent analysis | What evidence, comparison, or interpretation the article adds. A useful roundup can qualify; identify the substantive section when it mixes topics. |
 | Readable access | What text the reviewer could inspect: substantive article, excerpt, subscription gate, sign-in gate, or unavailable page. Record the review date in UTC and any uncertainty. HTTP success and a reading-time estimate do not prove full-text access. |
 
 The owner's positive examples include bootcamp experience posts, Airbnb's engineering account, AutoSynthData, the technical Databricks retail article, and Cloudflare API/workspace updates. NVIDIA samples/skills posts, Genie Agents advice, and the Vercel customer story prompted promotional concerns. These examples calibrate discussion; they are not automatic labels for other articles from those publishers.
+
+The October 5 feedback adds positive examples: the OpenAI model guide's short summary followed by extensive technical detail; useful information in the promotional Chatham story; the quality of The Den testimonial; and OpenAI practitioner content in the Latent Space article. The brief Vercel announcement received a tentative lower-priority assessment. Consider how much a short update contributes when comparing priority, but do not impose a word-count or one-minute-read exclusion. The reported page length and contributor affiliations are owner observations, not independently verified facts.
 
 ## Evidence, access, and shared stories
 

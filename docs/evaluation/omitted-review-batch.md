@@ -24,6 +24,12 @@ A later readable page may support a new article-level judgment; record when and 
 
 The captured pool excludes articles rejected before the candidate stage. Source-level diagnostics record freshness and other failures, but do not supply a complete article-level review queue for those rejects. A subsequent capture must retain that metadata to evaluate relevance-filter and ingestion misses.
 
+## Owner feedback received October 5
+
+[Structured qualitative feedback](omitted-feedback-2026-10-05.json) records the owner's response on all five links: strong praise for the technical model guide and frontier-lab practitioner discussion, appreciation of useful promotional/testimonial content, and tentative lower priority for the short Vercel announcement. Snapshot URLs and submitted feedback URLs are both retained, including trailing-slash differences; redirect/canonical equivalence was not independently checked.
+
+This completes qualitative feedback collection for this queue. It does not complete scored labeling: the owner supplied no explicit binary inclusion decisions or numeric importance grades. Those fields remain null in the feedback record and the full review sheet. Owner-reported article observations remain separate from independent inspection and do not change the historical HTTP 403 outcomes. Next, agree on inclusion decisions and importance grades, then review selected candidates with the same rubric before reporting quality metrics.
+
 ## Validate partial labels offline
 
 ```bash
