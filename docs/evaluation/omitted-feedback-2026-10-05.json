@@ -1,0 +1,104 @@
+{
+  "review_date": "2026-10-05",
+  "snapshot_captured_at": "2026-10-03T16:53:17.216262+00:00",
+  "reviewer": "repository owner",
+  "provenance": "Direct owner feedback in the PR #24 review conversation. Notes lightly normalized, not verbatim quotations. No independent article, contributor affiliation, access, or read-time verification performed. Exact review time was not supplied.",
+  "scope": "Qualitative feedback on all five omitted frontier-policy candidates from the October 3 frozen pool. No explicit binary inclusion decisions or numeric importance grades supplied; none inferred.",
+  "general_preferences": [
+    {
+      "signal": "frontier_lab_practitioner_perspective",
+      "note": "The owner considers statements by people working at frontier labs valuable because of their proximity to the work. This is an editorial preference, not independent verification of affiliation, accuracy, or importance."
+    }
+  ],
+  "items": [
+    {
+      "id": "c38af6e5cae43e23",
+      "snapshot_url": "https://openai.com/index/practical-guide-building-gpt-6",
+      "feedback_url": "https://openai.com/index/practical-guide-building-gpt-6/",
+      "title": "A model guide for the GPT-6 family",
+      "source": "OpenAI",
+      "assessment": "strong_positive",
+      "reviewer_note": "Really good: a short summary at the top followed by extensive technical detail.",
+      "signals": [
+        "technical_depth",
+        "summary_then_detail"
+      ],
+      "relevant": null,
+      "include": null,
+      "importance": null,
+      "story_id": null,
+      "evidence": "user_feedback"
+    },
+    {
+      "id": "882596cbc7639eb4",
+      "snapshot_url": "https://openai.com/index/chatham-financial",
+      "feedback_url": "https://openai.com/index/chatham-financial/",
+      "title": "Chatham scales its capital markets expertise with OpenAI",
+      "source": "OpenAI",
+      "assessment": "mixed_positive",
+      "reviewer_note": "Feels like an advertisement, but provides useful information.",
+      "signals": [
+        "promotional_framing",
+        "useful_information"
+      ],
+      "relevant": null,
+      "include": null,
+      "importance": null,
+      "story_id": null,
+      "evidence": "user_feedback"
+    },
+    {
+      "id": "2167384f51e2a446",
+      "snapshot_url": "https://openai.com/index/the-den-family-social",
+      "feedback_url": "https://openai.com/index/the-den-family-social/",
+      "title": "The Den frees up 10-15 hours a week to grow with ChatGPT Work",
+      "source": "OpenAI",
+      "assessment": "positive",
+      "reviewer_note": "Really nice: the owner values the quality of the testimonial work and the high-quality web pages.",
+      "signals": [
+        "testimonial_value",
+        "presentation_quality"
+      ],
+      "relevant": null,
+      "include": null,
+      "importance": null,
+      "story_id": null,
+      "evidence": "user_feedback"
+    },
+    {
+      "id": "cfe32cdb08fcc91a",
+      "snapshot_url": "https://www.latent.space/p/devday-2026",
+      "feedback_url": "https://www.latent.space/p/devday-2026",
+      "title": "Why Dwarkesh is Wrong about Computer Use + How OpenAI shipped its Jev competitor in 1 Week",
+      "source": "Latent Space",
+      "assessment": "strong_positive",
+      "reviewer_note": "Really good: includes content from highly relevant people working at OpenAI. The owner values statements from frontier-lab practitioners because of their proximity to the work.",
+      "signals": [
+        "frontier_lab_practitioner_perspective"
+      ],
+      "relevant": null,
+      "include": null,
+      "importance": null,
+      "story_id": null,
+      "evidence": "user_feedback"
+    },
+    {
+      "id": "1e8ed424c4f3832a",
+      "snapshot_url": "https://vercel.com/changelog/ai-gateway-adds-browserbase-search-and-fetch-tools",
+      "feedback_url": "https://vercel.com/changelog/ai-gateway-adds-browserbase-search-and-fetch-tools",
+      "title": "AI Gateway adds Browserbase Search and Fetch tools",
+      "source": "Vercel",
+      "assessment": "tentative_lower_priority",
+      "reviewer_note": "The page reports a one-minute read and looks like a very short announcement; the owner tentatively suggests a lower ranking.",
+      "signals": [
+        "brief_announcement",
+        "tentative_lower_priority"
+      ],
+      "relevant": null,
+      "include": null,
+      "importance": null,
+      "story_id": null,
+      "evidence": "user_feedback"
+    }
+  ]
+}

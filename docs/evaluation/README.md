@@ -10,6 +10,8 @@ The 72-hour window is an operational eligibility rule. Assess relevance/value se
 
 ## Review each candidate
 
+Use the [article-level editorial rubric](editorial-rubric.md) for importance anchors, technical substance, firsthand experience, promotion, readable access and shared-story judgments. It refines the brief using the October 4 feedback without assigning labels on the owner's behalf. The [first omitted-candidate queue](omitted-review-batch.md) gives a five-item starting point from the frozen October 3 pool; enter its judgments in the full sheet below.
+
 Browse the [linked candidate list](review-batch.md), open each article and record the evidence you could inspect. Only links and metadata are included; no article body is republished. Edit [review-2026-10-03.json](review-2026-10-03.json), keeping candidate IDs/URLs intact, and set `reviewer` to your name or chosen identifier.
 
 | Field | Values and meaning |
@@ -42,5 +44,7 @@ python3 -m scripts.review_candidates prepare docs/frontier-selection-comparison-
 The owner has reviewed all 21 selected articles in the latest release. [Recorded preferences and limitations](feedback-2026-10-04.md) distinguish firsthand experience, technical substance, useful vendor updates, promotional concerns, access concerns and an explicit AstaBrief duplicate group. These qualitative notes are separate from the blank October 3 batch; no numeric or binary labels are inferred.
 
 ## Next evaluation steps
+
+The owner has supplied [qualitative feedback on all five omitted candidates](omitted-feedback-2026-10-05.json). The rubric now reflects useful testimonials, frontier-lab practitioner perspectives and tentative lower priority for brief announcements. Explicit inclusion decisions and importance grades remain outstanding; the scored sheet is still unreviewed, so the evaluator reports no quality scores.
 
 Review this pilot and refine the rubric, then capture multiple dates including rejected candidates and representative regions/modalities. Freeze each snapshot's clock and operational outcomes. Group duplicate stories before chronological train/test splits, retain an unseen-publisher check, and measure important-story recall, graded ranking, repetition and concentration. Set acceptance targets from labeled baseline results. This pilot adds no runtime dependencies and changes no production ranking, workflow or releases.
