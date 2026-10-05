@@ -21,6 +21,11 @@ from dataclasses import dataclass, field
 from html.parser import HTMLParser
 from pathlib import Path
 
+try:
+    from scripts.article_content import MAX_REQUESTS, fetch_body
+except ModuleNotFoundError:
+    from article_content import MAX_REQUESTS, fetch_body
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCES = ROOT / "config" / "sources.json"
 DEFAULT_OUTPUT = ROOT / "README.md"
@@ -132,6 +137,7 @@ class Item:
     story_kind: str = "other"
     rank_score: float | None = None
     related_coverage: list[Item] = field(default_factory=list)
+    body_status: str = ""
 
 
 class TextExtractor(HTMLParser):
@@ -521,7 +527,7 @@ def estimate_reading_time(item: Item) -> int | None:
     item.word_count = len(re.findall(r"\b[\w'-]+\b", text))
     item.read_minutes = None
     if (
-        item.content_provenance in {"rss_content", "atom_content"}
+        item.content_provenance in {"rss_content", "atom_content", "article_body"}
         and item.word_count >= MIN_CONTENT_WORDS
     ):
         item.read_minutes = math.ceil(item.word_count / READING_WPM)
@@ -530,12 +536,47 @@ def estimate_reading_time(item: Item) -> int | None:
 
 def reading_time_label(item: Item) -> str:
     if item.read_minutes is not None:
-        return f"~{format_reading_time(item.read_minutes)} (feed content)"
+        label = (
+            "extracted body"
+            if item.content_provenance == "article_body"
+            else "feed content"
+        )
+        return f"~{format_reading_time(item.read_minutes)} ({label})"
+    if item.body_status:
+        return "Read time unknown (article body unavailable)"
     if item.content.strip():
         return "Read time unknown (insufficient feed content)"
     if item.summary:
         return "Read time unknown (summary only)"
     return "Read time unknown (no article text)"
+
+
+def enrich_article_bodies(
+    items: list[Item], request_limit: int = MAX_REQUESTS
+) -> list[tuple[str, str]]:
+    """Enrich selected representatives only; failures never remove a story."""
+    cache: dict[str, tuple[str, str]] = {}
+    diagnostics = []
+    for item in items:
+        if estimate_reading_time(item) is not None:
+            continue
+        key = canonicalize_url(item.url)
+        if key not in cache:
+            cache[key] = (
+                fetch_body(item.url, USER_AGENT)
+                if len(cache) < request_limit
+                else ("", "Article request budget exhausted.")
+            )
+        body, reason = cache[key]
+        if body:
+            item.content = body
+            item.content_format = "text"
+            item.content_provenance = "article_body"
+            estimate_reading_time(item)
+        else:
+            item.body_status = reason
+            diagnostics.append((item.source, f"Content: {item.title}: {reason}"))
+    return diagnostics
 
 
 def classify_story(item: Item) -> str:
@@ -989,6 +1030,30 @@ def render_report(
     if not selection:
         lines.append("- None.")
     lines.extend(["", "</details>", ""])
+    content_failures = [
+        (source, reason.removeprefix("Content: "))
+        for source, reason in unavailable
+        if reason.startswith("Content: ")
+    ]
+    unavailable = [
+        (source, reason)
+        for source, reason in unavailable
+        if not reason.startswith("Content: ")
+    ]
+    lines.extend(
+        [
+            "<details>",
+            f"<summary>Article text unavailable ({len(content_failures)})</summary>",
+            "",
+        ]
+    )
+    lines.extend(
+        f"- **{markdown_escape(source)}**: {markdown_escape(reason)}"
+        for source, reason in content_failures
+    )
+    if not content_failures:
+        lines.append("- None.")
+    lines.extend(["", "</details>", ""])
     lines.extend(
         [
             "<details>",
@@ -1021,8 +1086,8 @@ def render_report(
             "",
             "Ratings range from 1 to 5 stars and indicate heuristic rank, not article quality.",
             (
-                "Reading times estimate explicit RSS/Atom content at 225 words per minute when at least 100 words are available; summaries and short/missing content have unknown estimates. Feed content may be incomplete; "
-                "full articles may take longer. No article bodies are fetched. Publication dates are shown in UTC."
+                "Reading times estimate available text at 225 words per minute with a 100-word minimum. Feed content and extracted bodies may be incomplete; "
+                "full articles may take longer. Selected stories with insufficient feed text receive bounded HTML body retrieval; estimates are labeled extracted body when successful, and failures remain unknown. Publication dates are shown in UTC."
             ),
             "",
             "Articles with missing/invalid or future dates are excluded. Older articles never backfill a short report. Date-only HTML listings use midnight UTC; boundary decisions are conservative. A story may recur across consecutive reports within the window.",
@@ -1061,6 +1126,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         default=DEFAULT_LOOKBACK_HOURS,
         help="Positive coverage window in hours (default: 72).",
     )
+    parser.add_argument(
+        "--no-article-bodies",
+        action="store_true",
+        help="Disable bounded body retrieval for selected stories.",
+    )
     args = parser.parse_args(argv)
     if args.lookback_hours <= 0:
         parser.error("--lookback-hours must be positive")
@@ -1072,6 +1142,8 @@ def main(argv: list[str] | None = None) -> int:
     now = dt.datetime.now(dt.timezone.utc)
     sources = load_sources(args.sources)
     items, unavailable = collect_items(sources, now, args.lookback_hours)
+    if not args.no_article_bodies:
+        unavailable.extend(enrich_article_bodies(items))
     args.output.write_text(
         render_report(items, unavailable, now, args.lookback_hours), encoding="utf-8"
     )

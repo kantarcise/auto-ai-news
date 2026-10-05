@@ -738,8 +738,8 @@ class GenerateReportTest(unittest.TestCase):
         self.assertIn(
             "<summary>Skipped sources and links (0)</summary>\n\n- None.", report
         )
-        self.assertEqual(report.count("<details>"), 4)
-        self.assertEqual(report.count("</details>"), 4)
+        self.assertEqual(report.count("<details>"), 5)
+        self.assertEqual(report.count("</details>"), 5)
         self.assertLess(report.index("## Source policy"), report.rindex("</details>"))
 
     def test_render_report_keeps_double_digit_metadata_inside_list(self):
