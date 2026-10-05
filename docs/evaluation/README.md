@@ -10,6 +10,8 @@ The 72-hour window is an operational eligibility rule. Assess relevance/value se
 
 ## Review each candidate
 
+Use the [article-level editorial rubric](editorial-rubric.md) for importance anchors, technical substance, firsthand experience, promotion, readable access and shared-story judgments. It refines the brief using the October 4 feedback without assigning labels on the owner's behalf. The [first omitted-candidate queue](omitted-review-batch.md) gives a five-item starting point from the frozen October 3 pool; enter its judgments in the full sheet below.
+
 Browse the [linked candidate list](review-batch.md), open each article and record the evidence you could inspect. Only links and metadata are included; no article body is republished. Edit [review-2026-10-03.json](review-2026-10-03.json), keeping candidate IDs/URLs intact, and set `reviewer` to your name or chosen identifier.
 
 | Field | Values and meaning |
