@@ -1,0 +1,744 @@
+{
+  "captured_at": "2026-10-06T17:57:42.282185+00:00",
+  "lookback_hours": 72,
+  "scope": "Recent linked title admission; not final ranking or report selection.",
+  "recent_candidates": 45,
+  "owner_wanted": 11,
+  "owner_unwanted": 1,
+  "confirmed_article_inspections": 5,
+  "topic_patterns": {
+    "versioned model name": "\\b(?:qwen|gpt|llama|claude|gemini|deepseek|mistral)[- ]?\\d+(?:\\.\\d+)*(?![\\w]|\\.\\d)",
+    "framework or GPU term": "\\b(?:pytorch|gpus?|cuda|rocm)\\b",
+    "vector search": "\\bvector\\s+search\\b"
+  },
+  "policies": {
+    "current": {
+      "admitted": 19,
+      "owner_wanted_admitted": 3,
+      "owner_unwanted_admitted": 1,
+      "no_decided_preference_admitted": 15
+    },
+    "alternative": {
+      "admitted": 27,
+      "owner_wanted_admitted": 11,
+      "owner_unwanted_admitted": 1,
+      "no_decided_preference_admitted": 15
+    }
+  },
+  "newly_admitted": [
+    "f9524fd6a641f04a",
+    "aeeca9d719da2c7d",
+    "7c477c1278221668",
+    "537645ae693322a4",
+    "cb9f0e720ea299b4",
+    "62e7b26700c11383",
+    "69f5bd9058f87f8c",
+    "910657809987cc3e"
+  ],
+  "decisions": [
+    {
+      "id": "44b03140de4a0c7b",
+      "title": "Everything we launched during Birthday Week 2026",
+      "url": "https://blog.cloudflare.com/birthday-week-2026-wrap-up/",
+      "source": "Cloudflare",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "9a1667b7b376f49f",
+      "title": "One year later: the power of 1.1.1.1 interns",
+      "url": "https://blog.cloudflare.com/one-year-later-1111-interns/",
+      "source": "Cloudflare",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "3d9c7800b1392d74",
+      "title": "The keys to the Internet change on October 11. Are you ready?",
+      "url": "https://blog.cloudflare.com/root-ksk-2024-rollover/",
+      "source": "Cloudflare",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "f9524fd6a641f04a",
+      "title": "AICR v1.0: Open, stable, and verifiable GPU cluster configuration",
+      "url": "https://developer.nvidia.com/blog/aicr-v1-0-open-stable-and-verifiable-gpu-cluster-configuration/",
+      "source": "NVIDIA Developer",
+      "current_admitted": false,
+      "alternative_admitted": true,
+      "added_topic_matches": [
+        "framework or GPU term"
+      ],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": "yes",
+      "owner_importance": 3,
+      "inspection_evidence": "article"
+    },
+    {
+      "id": "aeeca9d719da2c7d",
+      "title": "Control How Your GPU Shares Work with Green Contexts",
+      "url": "https://developer.nvidia.com/blog/control-how-your-gpu-shares-work-with-green-contexts/",
+      "source": "NVIDIA Developer",
+      "current_admitted": false,
+      "alternative_admitted": true,
+      "added_topic_matches": [
+        "framework or GPU term"
+      ],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": "yes",
+      "owner_importance": 3,
+      "inspection_evidence": "article"
+    },
+    {
+      "id": "bd1136d0fcfd6f13",
+      "title": "The Agent Said It Was Done. The Database Disagreed.",
+      "url": "https://huggingface.co/blog/microsoft/thinkingbox",
+      "source": "Hugging Face",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": true,
+      "frozen_link_outcome": {
+        "accessible": true,
+        "reason": ""
+      },
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "fe424883c3cacf66",
+      "title": "Falcon-Emirati: When an LLM Learns the Dialect, the Culture, and the Nuance",
+      "url": "https://huggingface.co/blog/tiiuae/falcon-emirati",
+      "source": "Hugging Face",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": true,
+      "frozen_link_outcome": {
+        "accessible": true,
+        "reason": ""
+      },
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "1ef243007176e85c",
+      "title": "Introducing Mistral Large 4",
+      "url": "https://mistral.ai/news/mistral-large-4/",
+      "source": "Mistral AI",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": true,
+      "frozen_link_outcome": {
+        "accessible": true,
+        "reason": ""
+      },
+      "owner_include": "yes",
+      "owner_importance": 3,
+      "inspection_evidence": null
+    },
+    {
+      "id": "2896758265cec81d",
+      "title": "Atlassian and OpenAI expand partnership to turn enterprise knowledge into action",
+      "url": "https://openai.com/index/atlassian-partnership",
+      "source": "OpenAI",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": {
+        "accessible": false,
+        "reason": "HTTP 403."
+      },
+      "owner_include": "yes",
+      "owner_importance": 2,
+      "inspection_evidence": null
+    },
+    {
+      "id": "d2b5b29b4c815525",
+      "title": "Our approach to EU text provenance rules",
+      "url": "https://openai.com/index/eu-text-provenance",
+      "source": "OpenAI",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "2d8e70fb45cef747",
+      "title": "Building advertising for the way people use AI",
+      "url": "https://openai.com/index/new-chatgpt-ads-format-and-measurement",
+      "source": "OpenAI",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": {
+        "accessible": false,
+        "reason": "HTTP 403."
+      },
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "7c477c1278221668",
+      "title": "Evolution of the PyTorch Media Processing Landscape",
+      "url": "https://pytorch.org/blog/evolution-of-the-pytorch-media-processing-landscape/",
+      "source": "PyTorch",
+      "current_admitted": false,
+      "alternative_admitted": true,
+      "added_topic_matches": [
+        "framework or GPU term"
+      ],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": "yes",
+      "owner_importance": 1,
+      "inspection_evidence": "article"
+    },
+    {
+      "id": "537645ae693322a4",
+      "title": "PyTorch Hardware Enablement: Updates from the Accelerator Integration Working Group",
+      "url": "https://pytorch.org/blog/pytorch-hardware-enablement-updates-from-the-acceleration-integration-working-group/",
+      "source": "PyTorch",
+      "current_admitted": false,
+      "alternative_admitted": true,
+      "added_topic_matches": [
+        "framework or GPU term"
+      ],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": "yes",
+      "owner_importance": 3,
+      "inspection_evidence": "article"
+    },
+    {
+      "id": "c02127d349672db4",
+      "title": "Unlocking Earth AI’s planetary geospatial foundation models for global public health",
+      "url": "https://research.google/blog/earth-ais-planetary-geospatial-foundation-models-for-global-public-health/",
+      "source": "Google Research",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": true,
+      "frozen_link_outcome": {
+        "accessible": true,
+        "reason": ""
+      },
+      "owner_include": "yes",
+      "owner_importance": 3,
+      "inspection_evidence": null
+    },
+    {
+      "id": "7eeb0a9dde534539",
+      "title": "Open and Emergent Problems in Agentic Privacy and Security: A Contextual Angle",
+      "url": "https://research.google/blog/open-and-emergent-problems-in-agentic-privacy-and-security-a-contextual-angle/",
+      "source": "Google Research",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": true,
+      "frozen_link_outcome": {
+        "accessible": true,
+        "reason": ""
+      },
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "cb9f0e720ea299b4",
+      "title": "Completing the GPU Performance Picture: Understanding TAF Alongside Peak FLOPs and MAF",
+      "url": "https://rocm.blogs.amd.com/artificial-intelligence/taf-blog/README.html",
+      "source": "AMD ROCm",
+      "current_admitted": false,
+      "alternative_admitted": true,
+      "added_topic_matches": [
+        "framework or GPU term"
+      ],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": "yes",
+      "owner_importance": 3,
+      "inspection_evidence": null
+    },
+    {
+      "id": "62e7b26700c11383",
+      "title": "ROCm 10.1: Breaking the Data-Movement Bottleneck",
+      "url": "https://rocm.blogs.amd.com/ecosystems-and-partners/rocm-10.1-blog/README.html",
+      "source": "AMD ROCm",
+      "current_admitted": false,
+      "alternative_admitted": true,
+      "added_topic_matches": [
+        "framework or GPU term"
+      ],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": "yes",
+      "owner_importance": 3,
+      "inspection_evidence": "article"
+    },
+    {
+      "id": "345f1755705d282a",
+      "title": "We're going to need default hard budget caps on pretty much everything",
+      "url": "https://simonwillison.net/2026/Oct/3/default-hard-budget-caps/",
+      "source": "Simon Willison",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "637b19621e90d689",
+      "title": "September sponsors-only newsletter",
+      "url": "https://simonwillison.net/2026/Oct/3/newsletter/",
+      "source": "Simon Willison",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "69f5bd9058f87f8c",
+      "title": "Qwen3.8 27B addition in words",
+      "url": "https://simonwillison.net/2026/Oct/4/qwen38-addition-in-words/",
+      "source": "Simon Willison",
+      "current_admitted": false,
+      "alternative_admitted": true,
+      "added_topic_matches": [
+        "versioned model name"
+      ],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": "yes",
+      "owner_importance": 2,
+      "inspection_evidence": null
+    },
+    {
+      "id": "d43019accfd19e1e",
+      "title": "Quoting Felix Rieseberg",
+      "url": "https://simonwillison.net/2026/Oct/5/felix-rieseberg/",
+      "source": "Simon Willison",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "40554e21f87e8f4b",
+      "title": "Scrimshaw Jukebox",
+      "url": "https://simonwillison.net/2026/Oct/6/scrimshaw-jukebox/",
+      "source": "Simon Willison",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "913dedb81fc2ba6c",
+      "title": "AI Gateway adds confidence-based decision fallbacks",
+      "url": "https://vercel.com/changelog/confidence-based-decision-fallbacks",
+      "source": "Vercel",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": true,
+      "frozen_link_outcome": {
+        "accessible": true,
+        "reason": ""
+      },
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "1bd9bbfeb6db4165",
+      "title": "Mistral Large 4 now available on AI Gateway",
+      "url": "https://vercel.com/changelog/mistral-large-4-now-available-on-ai-gateway",
+      "source": "Vercel",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": true,
+      "frozen_link_outcome": {
+        "accessible": true,
+        "reason": ""
+      },
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "bdce6de7d4b25dd6",
+      "title": "Nano Banana 2.1 now available on AI Gateway",
+      "url": "https://vercel.com/changelog/nano-banana-2-1-now-available-on-ai-gateway",
+      "source": "Vercel",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": true,
+      "frozen_link_outcome": {
+        "accessible": true,
+        "reason": ""
+      },
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "39554b494460c9c7",
+      "title": "How Genie Ontology powers product development at Databricks",
+      "url": "https://www.databricks.com/blog/how-genie-ontology-powers-product-development-databricks",
+      "source": "Databricks",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "18c2e8e8ee5914b1",
+      "title": "Meta’s ads MCP server comes to Databricks: Put your customer intelligence to work in advertising campaigns",
+      "url": "https://www.databricks.com/blog/meta-ads-mcp-databricks",
+      "source": "Databricks",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "910657809987cc3e",
+      "title": "NEAREST BY Join: Scaling Vector Search in Databricks Runtime",
+      "url": "https://www.databricks.com/blog/nearest-join-scaling-vector-search-databricks-runtime",
+      "source": "Databricks",
+      "current_admitted": false,
+      "alternative_admitted": true,
+      "added_topic_matches": [
+        "vector search"
+      ],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": "yes",
+      "owner_importance": 2,
+      "inspection_evidence": null
+    },
+    {
+      "id": "32a9da8b966fc7ec",
+      "title": "Scaling and Operating a Large dbt Project on Databricks: IFCO's Data Team on Performance, Visibility, and Debugging",
+      "url": "https://www.databricks.com/blog/scaling-and-operating-large-dbt-project-databricks-ifcos-data-team-performance-visibility-and-debugging",
+      "source": "Databricks",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "4eb8817664adeeeb",
+      "title": "Unlocking Data Portability: Preventing Catalog Lock-in with REGISTER and UNREGISTER APIs",
+      "url": "https://www.databricks.com/blog/unlocking-data-portability-preventing-catalog-lock-register-and-unregister-apis",
+      "source": "Databricks",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "417c3a0572d8db45",
+      "title": "[AINews] Reflection Beam - 501B-A23B American Open Model",
+      "url": "https://www.latent.space/p/ainews-reflection-beam-501b-a23b",
+      "source": "Latent Space",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": true,
+      "frozen_link_outcome": {
+        "accessible": true,
+        "reason": ""
+      },
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "7d33f8ab03d5890a",
+      "title": "March to Stop Building AI",
+      "url": "https://www.lesswrong.com/events/ZmTdRM6NaXPmTtrxS/march-to-stop-building-ai",
+      "source": "LessWrong AI",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": true,
+      "frozen_link_outcome": {
+        "accessible": true,
+        "reason": ""
+      },
+      "owner_include": "no",
+      "owner_importance": 0,
+      "inspection_evidence": null
+    },
+    {
+      "id": "7c03fb7d32fe5007",
+      "title": "What's the Type of an Ontological Mismatch?",
+      "url": "https://www.lesswrong.com/posts/CJE8csmjWdqLrSjy4/what-s-the-type-of-an-ontological-mismatch",
+      "source": "LessWrong AI",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "e6191bee8109348b",
+      "title": "Dance, Dance",
+      "url": "https://www.lesswrong.com/posts/R7jsxihAzvd6Gf24R/dance-dance",
+      "source": "LessWrong AI",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "1237877492bc9e9b",
+      "title": "If cleantech funding is scarce, does founding another startup actually help the world?",
+      "url": "https://www.lesswrong.com/posts/Z7TcwNzzndxn7tBc9/if-cleantech-funding-is-scarce-does-founding-another-startup",
+      "source": "LessWrong AI",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "56dbbedce7cc90c8",
+      "title": "TasteVal: Measuring the Experimental Research Taste of AI Systems Against Human Experts",
+      "url": "https://www.lesswrong.com/posts/bAGagjZAPgXEHmkAH/tasteval-measuring-the-experimental-research-taste-of-ai",
+      "source": "LessWrong AI",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": true,
+      "frozen_link_outcome": {
+        "accessible": true,
+        "reason": ""
+      },
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "cf6bcc87030c8553",
+      "title": "Takes One to Know One - Training a model to grade reward hacks causes it to reward hack less itself",
+      "url": "https://www.lesswrong.com/posts/dAbHSGXFNkgjcGAuz/takes-one-to-know-one-training-a-model-to-grade-reward-hacks",
+      "source": "LessWrong AI",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": true,
+      "frozen_link_outcome": {
+        "accessible": true,
+        "reason": ""
+      },
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "ba138324e4fb9761",
+      "title": "The Unacknowledgable Labor of Pastor's Wives",
+      "url": "https://www.lesswrong.com/posts/gAjWKHwMpXmcoaxpT/the-unacknowledgable-labor-of-pastor-s-wives",
+      "source": "LessWrong AI",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "bb9abd2099ec61b8",
+      "title": "How funny are the frontier AI models?",
+      "url": "https://www.lesswrong.com/posts/oG53pJxkHgpL4Ny4d/how-funny-are-the-frontier-ai-models",
+      "source": "LessWrong AI",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": true,
+      "frozen_link_outcome": {
+        "accessible": true,
+        "reason": ""
+      },
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "c002af267e137bc3",
+      "title": "Did Human Forecasters Improve Preseen’s Performance?",
+      "url": "https://www.lesswrong.com/posts/pQ6e7QaAGoaHzfj3e/did-human-forecasters-improve-preseen-s-performance",
+      "source": "LessWrong AI",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "c120150f34827be9",
+      "title": "Kurzgesagt's video on the Hugging Face incident: \"AI Just Crossed the Terrifying Line - Now What?\"",
+      "url": "https://www.lesswrong.com/posts/rtqK2L6FPvDiooxAS/kurzgesagt-s-video-on-the-hugging-face-incident-ai-just",
+      "source": "LessWrong AI",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "a38ad8641743fbf5",
+      "title": "What AI gets wrong and what failure teaches us",
+      "url": "https://www.microsoft.com/en-us/research/podcast/what-ai-gets-wrong-and-what-failure-teaches-us/",
+      "source": "Microsoft Research",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": true,
+      "frozen_link_outcome": {
+        "accessible": true,
+        "reason": ""
+      },
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "3b8dcc10396e6831",
+      "title": "An OpenAI safety insider calls the culture 'broken'",
+      "url": "https://www.therundown.ai/articles/an-openai-safety-insider-calls-the-culture-broken",
+      "source": "The Rundown AI",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": true,
+      "frozen_link_outcome": {
+        "accessible": true,
+        "reason": ""
+      },
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "7ee4d070b9934578",
+      "title": "California crashes robot fight club",
+      "url": "https://www.therundown.ai/articles/california-crashes-robot-fight-club",
+      "source": "The Rundown AI",
+      "current_admitted": false,
+      "alternative_admitted": false,
+      "added_topic_matches": [],
+      "actually_selected": false,
+      "frozen_link_outcome": null,
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    },
+    {
+      "id": "ea578d7118702a73",
+      "title": "The 'DeepSeek of the West' finally has a model",
+      "url": "https://www.therundown.ai/articles/the-deepseek-of-the-west-finally-has-a-model",
+      "source": "The Rundown AI",
+      "current_admitted": true,
+      "alternative_admitted": true,
+      "added_topic_matches": [],
+      "actually_selected": true,
+      "frozen_link_outcome": {
+        "accessible": true,
+        "reason": ""
+      },
+      "owner_include": null,
+      "owner_importance": null,
+      "inspection_evidence": null
+    }
+  ],
+  "input_sha256": {
+    "snapshot": "2fd4ef0d8fdd9b601e0966261f77798ddd400a84a8b52f842ae6db050ba81267",
+    "feedback": "38e8ab7a9fe722ed6377f37e5a0a719f6a450cc2fa5919628bd8d954f30af11f"
+  }
+}
