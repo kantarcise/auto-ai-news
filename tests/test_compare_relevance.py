@@ -176,15 +176,15 @@ class CompareRelevanceTest(unittest.TestCase):
         )
         result = compare(snapshot, feedback)
         self.assertEqual(result["recent_candidates"], 45)
-        self.assertEqual(result["owner_wanted"], 7)
-        self.assertEqual(result["confirmed_article_inspections"], 1)
+        self.assertEqual(result["owner_wanted"], 11)
+        self.assertEqual(result["confirmed_article_inspections"], 5)
         self.assertEqual(result["policies"]["current"]["admitted"], 19)
         self.assertEqual(result["policies"]["alternative"]["admitted"], 27)
         added = [
             row for row in result["decisions"] if row["id"] in result["newly_admitted"]
         ]
-        self.assertEqual(sum(row["owner_include"] == "yes" for row in added), 4)
-        self.assertEqual(sum(row["owner_include"] is None for row in added), 4)
+        self.assertEqual(sum(row["owner_include"] == "yes" for row in added), 8)
+        self.assertEqual(sum(row["owner_include"] is None for row in added), 0)
         saved = json.loads(
             (ROOT / "docs/evaluation/relevance-results-2026-10-06.json").read_text()
         )

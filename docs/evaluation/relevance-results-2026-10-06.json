@@ -3,9 +3,9 @@
   "lookback_hours": 72,
   "scope": "Recent linked title admission; not final ranking or report selection.",
   "recent_candidates": 45,
-  "owner_wanted": 7,
+  "owner_wanted": 11,
   "owner_unwanted": 1,
-  "confirmed_article_inspections": 1,
+  "confirmed_article_inspections": 5,
   "topic_patterns": {
     "versioned model name": "\\b(?:qwen|gpt|llama|claude|gemini|deepseek|mistral)[- ]?\\d+(?:\\.\\d+)*(?![\\w]|\\.\\d)",
     "framework or GPU term": "\\b(?:pytorch|gpus?|cuda|rocm)\\b",
@@ -20,9 +20,9 @@
     },
     "alternative": {
       "admitted": 27,
-      "owner_wanted_admitted": 7,
+      "owner_wanted_admitted": 11,
       "owner_unwanted_admitted": 1,
-      "no_decided_preference_admitted": 19
+      "no_decided_preference_admitted": 15
     }
   },
   "newly_admitted": [
@@ -90,9 +90,9 @@
       ],
       "actually_selected": false,
       "frozen_link_outcome": null,
-      "owner_include": null,
-      "owner_importance": null,
-      "inspection_evidence": null
+      "owner_include": "yes",
+      "owner_importance": 3,
+      "inspection_evidence": "article"
     },
     {
       "id": "aeeca9d719da2c7d",
@@ -106,9 +106,9 @@
       ],
       "actually_selected": false,
       "frozen_link_outcome": null,
-      "owner_include": null,
-      "owner_importance": null,
-      "inspection_evidence": null
+      "owner_include": "yes",
+      "owner_importance": 3,
+      "inspection_evidence": "article"
     },
     {
       "id": "bd1136d0fcfd6f13",
@@ -221,9 +221,9 @@
       ],
       "actually_selected": false,
       "frozen_link_outcome": null,
-      "owner_include": null,
-      "owner_importance": null,
-      "inspection_evidence": null
+      "owner_include": "yes",
+      "owner_importance": 1,
+      "inspection_evidence": "article"
     },
     {
       "id": "537645ae693322a4",
@@ -303,9 +303,9 @@
       ],
       "actually_selected": false,
       "frozen_link_outcome": null,
-      "owner_include": null,
-      "owner_importance": null,
-      "inspection_evidence": null
+      "owner_include": "yes",
+      "owner_importance": 3,
+      "inspection_evidence": "article"
     },
     {
       "id": "345f1755705d282a",
@@ -739,6 +739,6 @@
   ],
   "input_sha256": {
     "snapshot": "2fd4ef0d8fdd9b601e0966261f77798ddd400a84a8b52f842ae6db050ba81267",
-    "feedback": "6e30b90763ae166065c2c86aad90989e4ca9dc4cc04faebf2bc63c897e492f6b"
+    "feedback": "38e8ab7a9fe722ed6377f37e5a0a719f6a450cc2fa5919628bd8d954f30af11f"
   }
 }

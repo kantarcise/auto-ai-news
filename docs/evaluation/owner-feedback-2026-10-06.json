@@ -5,7 +5,7 @@
   "snapshot_sha256": "754f5da6ecbd556c611bd0d136871ad945330d15e461f7a9d0b3541c8d8b6697",
   "provenance": "Direct owner feedback in chat. Notes lightly normalized, not verbatim quotes. Explicit inclusion decisions and grades retained; no independent article inspection, fact verification or affiliation verification performed. Exact review time was not supplied.",
   "pending_clarifications": [
-    "Inspection evidence for the other seven articles was not specified in the follow-up; keep their explicit decisions/grades in this feedback record without inventing provenance."
+    "Inspection evidence for seven of the original eight articles remains unspecified. PyTorch hardware enablement and the four follow-up articles have owner-confirmed article evidence."
   ],
   "items": [
     {
@@ -87,7 +87,47 @@
       "evidence": "user_feedback",
       "inspection_evidence": null,
       "reviewer_note": "Really cool; the owner values a hardware company discussing its own hardware."
+    },
+    {
+      "id": "f9524fd6a641f04a",
+      "url": "https://developer.nvidia.com/blog/aicr-v1-0-open-stable-and-verifiable-gpu-cluster-configuration/",
+      "title": "AICR v1.0: Open, stable, and verifiable GPU cluster configuration",
+      "include": "yes",
+      "importance": 3,
+      "evidence": "user_feedback",
+      "inspection_evidence": "article",
+      "reviewer_note": "Really good; the owner values GPU-cluster runtime work as relevant to future work, particularly the lifecycle diagram and hygienic maintenance. Inclusion follows the unambiguous positive response to the requested inclusion review. The owner explicitly stated that all four articles were read."
+    },
+    {
+      "id": "aeeca9d719da2c7d",
+      "url": "https://developer.nvidia.com/blog/control-how-your-gpu-shares-work-with-green-contexts/",
+      "title": "Control How Your GPU Shares Work with Green Contexts",
+      "include": "yes",
+      "importance": 3,
+      "evidence": "user_feedback",
+      "inspection_evidence": "article",
+      "reviewer_note": "Really good; the owner values explanations of concurrent GPU workloads and tools that help deployment engineers improve throughput. Interested in a future experiment with concurrent work on a locally deployed model and an RTX 3090; compatibility and expected effect have not been verified. Inclusion follows the unambiguous positive response to the requested inclusion review. The owner explicitly stated that all four articles were read."
+    },
+    {
+      "id": "7c477c1278221668",
+      "url": "https://pytorch.org/blog/evolution-of-the-pytorch-media-processing-landscape/",
+      "title": "Evolution of the PyTorch Media Processing Landscape",
+      "include": "yes",
+      "importance": 1,
+      "evidence": "user_feedback",
+      "inspection_evidence": "article",
+      "reviewer_note": "Include yes, importance 1. A useful update even if alternatives exist. The owner appreciates consolidation of media I/O in TorchCodec and discussion of native dependencies, builds, CI, releases and the maintenance burden; interested in examining their CI. The owner explicitly stated that all four articles were read."
+    },
+    {
+      "id": "62e7b26700c11383",
+      "url": "https://rocm.blogs.amd.com/ecosystems-and-partners/rocm-10.1-blog/README.html",
+      "title": "ROCm 10.1: Breaking the Data-Movement Bottleneck",
+      "include": "yes",
+      "importance": 3,
+      "evidence": "user_feedback",
+      "inspection_evidence": "article",
+      "reviewer_note": "Include yes, importance 3. The owner values an opening that teaches about data-movement versus GPU-compute limits, followed by compiler, library and tooling work. The owner explicitly stated that all four articles were read."
     }
   ],
-  "sampling": "Purposeful eight-item diagnostic sample: four recent title-filter rejects across commentary/engineering publishers, one blocked eligible lab article, and three selected representatives across model/research/event content. Selected using snapshot metadata, without independent article inspection. Order sorted by candidate ID; not randomized or a representative benchmark."
+  "sampling": "Purposeful eight-item diagnostic sample: four recent title-filter rejects across commentary/engineering publishers, one blocked eligible lab article, and three selected representatives across model/research/event content. Selected using snapshot metadata, without independent article inspection. Order sorted by candidate ID; not randomized or a representative benchmark. Follow-up: all four previously unreviewed titles added by the proposed rule were presented to the owner, who read and approved them. Same-date, rule-selected follow-up; not a random or held-out sample."
 }
