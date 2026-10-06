@@ -1,0 +1,652 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-10-06T17:57:42.282185+00:00",
+  "lookback_hours": 72,
+  "source_snapshot_sha256": "754f5da6ecbd556c611bd0d136871ad945330d15e461f7a9d0b3541c8d8b6697",
+  "scope": "Derived metadata-only subset: all 45 parsed entries within the original 72-hour window. Original full capture contained 5317 occurrences and 5302 linked URLs. No rows were selected using feedback.",
+  "collection": [
+    {
+      "title": "If cleantech funding is scarce, does founding another startup actually help the world?",
+      "url": "https://www.lesswrong.com/posts/Z7TcwNzzndxn7tBc9/if-cleantech-funding-is-scarce-does-founding-another-startup",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-06T16:45:10+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "March to Stop Building AI",
+      "url": "https://www.lesswrong.com/events/ZmTdRM6NaXPmTtrxS/march-to-stop-building-ai",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-06T14:29:27+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "TasteVal: Measuring the Experimental Research Taste of AI Systems Against Human Experts",
+      "url": "https://www.lesswrong.com/posts/bAGagjZAPgXEHmkAH/tasteval-measuring-the-experimental-research-taste-of-ai",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-06T14:12:29+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "How funny are the frontier AI models?",
+      "url": "https://www.lesswrong.com/posts/oG53pJxkHgpL4Ny4d/how-funny-are-the-frontier-ai-models",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-06T12:30:50+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Did Human Forecasters Improve Preseen’s Performance?",
+      "url": "https://www.lesswrong.com/posts/pQ6e7QaAGoaHzfj3e/did-human-forecasters-improve-preseen-s-performance",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-06T16:08:25+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "What's the Type of an Ontological Mismatch?",
+      "url": "https://www.lesswrong.com/posts/CJE8csmjWdqLrSjy4/what-s-the-type-of-an-ontological-mismatch",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-06T04:40:25+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Takes One to Know One - Training a model to grade reward hacks causes it to reward hack less itself",
+      "url": "https://www.lesswrong.com/posts/dAbHSGXFNkgjcGAuz/takes-one-to-know-one-training-a-model-to-grade-reward-hacks",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-06T02:20:39+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Kurzgesagt's video on the Hugging Face incident: \"AI Just Crossed the Terrifying Line - Now What?\"",
+      "url": "https://www.lesswrong.com/posts/rtqK2L6FPvDiooxAS/kurzgesagt-s-video-on-the-hugging-face-incident-ai-just",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-06T01:29:30+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "The Unacknowledgable Labor of Pastor's Wives",
+      "url": "https://www.lesswrong.com/posts/gAjWKHwMpXmcoaxpT/the-unacknowledgable-labor-of-pastor-s-wives",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-05T23:29:41+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Dance, Dance",
+      "url": "https://www.lesswrong.com/posts/R7jsxihAzvd6Gf24R/dance-dance",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-05T23:05:44+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "[AINews] Reflection Beam - 501B-A23B American Open Model",
+      "url": "https://www.latent.space/p/ainews-reflection-beam-501b-a23b",
+      "source": "Latent Space",
+      "publisher": "Latent Space",
+      "category": "commentary",
+      "published": "2026-10-06T06:28:43+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Scrimshaw Jukebox",
+      "url": "https://simonwillison.net/2026/Oct/6/scrimshaw-jukebox/",
+      "source": "Simon Willison",
+      "publisher": "Simon Willison",
+      "category": "commentary",
+      "published": "2026-10-06T15:17:39+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Quoting Felix Rieseberg",
+      "url": "https://simonwillison.net/2026/Oct/5/felix-rieseberg/",
+      "source": "Simon Willison",
+      "publisher": "Simon Willison",
+      "category": "commentary",
+      "published": "2026-10-05T23:56:47+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Qwen3.8 27B addition in words",
+      "url": "https://simonwillison.net/2026/Oct/4/qwen38-addition-in-words/",
+      "source": "Simon Willison",
+      "publisher": "Simon Willison",
+      "category": "commentary",
+      "published": "2026-10-04T23:34:00+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "We're going to need default hard budget caps on pretty much everything",
+      "url": "https://simonwillison.net/2026/Oct/3/default-hard-budget-caps/",
+      "source": "Simon Willison",
+      "publisher": "Simon Willison",
+      "category": "commentary",
+      "published": "2026-10-03T23:34:02+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "September sponsors-only newsletter",
+      "url": "https://simonwillison.net/2026/Oct/3/newsletter/",
+      "source": "Simon Willison",
+      "publisher": "Simon Willison",
+      "category": "commentary",
+      "published": "2026-10-03T22:00:31+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "The 'DeepSeek of the West' finally has a model",
+      "url": "https://www.therundown.ai/articles/the-deepseek-of-the-west-finally-has-a-model",
+      "source": "The Rundown AI",
+      "publisher": "The Rundown AI",
+      "category": "commentary",
+      "published": "2026-10-06T09:00:00+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "California crashes robot fight club",
+      "url": "https://www.therundown.ai/articles/california-crashes-robot-fight-club",
+      "source": "The Rundown AI",
+      "publisher": "The Rundown AI",
+      "category": "commentary",
+      "published": "2026-10-05T14:30:00+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "An OpenAI safety insider calls the culture 'broken'",
+      "url": "https://www.therundown.ai/articles/an-openai-safety-insider-calls-the-culture-broken",
+      "source": "The Rundown AI",
+      "publisher": "The Rundown AI",
+      "category": "commentary",
+      "published": "2026-10-05T09:00:00+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Falcon-Emirati: When an LLM Learns the Dialect, the Culture, and the Nuance",
+      "url": "https://huggingface.co/blog/tiiuae/falcon-emirati",
+      "source": "Hugging Face",
+      "publisher": "Hugging Face",
+      "category": "engineering",
+      "published": "2026-10-06T06:44:39+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "The Agent Said It Was Done. The Database Disagreed.",
+      "url": "https://huggingface.co/blog/microsoft/thinkingbox",
+      "source": "Hugging Face",
+      "publisher": "Hugging Face",
+      "category": "engineering",
+      "published": "2026-10-03T22:56:48+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Evolution of the PyTorch Media Processing Landscape",
+      "url": "https://pytorch.org/blog/evolution-of-the-pytorch-media-processing-landscape/",
+      "source": "PyTorch",
+      "publisher": "PyTorch",
+      "category": "engineering",
+      "published": "2026-10-05T20:45:50+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "PyTorch Hardware Enablement: Updates from the Accelerator Integration Working Group",
+      "url": "https://pytorch.org/blog/pytorch-hardware-enablement-updates-from-the-acceleration-integration-working-group/",
+      "source": "PyTorch",
+      "publisher": "PyTorch",
+      "category": "engineering",
+      "published": "2026-10-05T13:12:59+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Introducing Mistral Large 4",
+      "url": "https://mistral.ai/news/mistral-large-4/",
+      "source": "Mistral AI",
+      "publisher": "Mistral",
+      "category": "frontier_lab",
+      "published": "2026-10-06T12:00:27+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Unlocking Earth AI’s planetary geospatial foundation models for global public health",
+      "url": "https://research.google/blog/earth-ais-planetary-geospatial-foundation-models-for-global-public-health/",
+      "source": "Google Research",
+      "publisher": "Google Research",
+      "category": "research",
+      "published": "2026-10-06T15:05:11+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Open and Emergent Problems in Agentic Privacy and Security: A Contextual Angle",
+      "url": "https://research.google/blog/open-and-emergent-problems-in-agentic-privacy-and-security-a-contextual-angle/",
+      "source": "Google Research",
+      "publisher": "Google Research",
+      "category": "research",
+      "published": "2026-10-05T21:08:00+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "What AI gets wrong and what failure teaches us",
+      "url": "https://www.microsoft.com/en-us/research/podcast/what-ai-gets-wrong-and-what-failure-teaches-us/",
+      "source": "Microsoft Research",
+      "publisher": "Microsoft Research",
+      "category": "research",
+      "published": "2026-10-06T16:19:06+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Atlassian and OpenAI expand partnership to turn enterprise knowledge into action",
+      "url": "https://openai.com/index/atlassian-partnership",
+      "source": "OpenAI",
+      "publisher": "OpenAI",
+      "category": "frontier_lab",
+      "published": "2026-10-06T16:00:00+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Our approach to EU text provenance rules",
+      "url": "https://openai.com/index/eu-text-provenance",
+      "source": "OpenAI",
+      "publisher": "OpenAI",
+      "category": "frontier_lab",
+      "published": "2026-10-05T15:00:00+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Building advertising for the way people use AI",
+      "url": "https://openai.com/index/new-chatgpt-ads-format-and-measurement",
+      "source": "OpenAI",
+      "publisher": "OpenAI",
+      "category": "frontier_lab",
+      "published": "2026-10-05T10:00:00+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "The keys to the Internet change on October 11. Are you ready?",
+      "url": "https://blog.cloudflare.com/root-ksk-2024-rollover/",
+      "source": "Cloudflare",
+      "publisher": "Cloudflare",
+      "category": "engineering",
+      "published": "2026-10-06T17:50:11+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Everything we launched during Birthday Week 2026",
+      "url": "https://blog.cloudflare.com/birthday-week-2026-wrap-up/",
+      "source": "Cloudflare",
+      "publisher": "Cloudflare",
+      "category": "engineering",
+      "published": "2026-10-05T13:00:00+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "One year later: the power of 1.1.1.1 interns",
+      "url": "https://blog.cloudflare.com/one-year-later-1111-interns/",
+      "source": "Cloudflare",
+      "publisher": "Cloudflare",
+      "category": "engineering",
+      "published": "2026-10-05T13:00:00+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Completing the GPU Performance Picture: Understanding TAF Alongside Peak FLOPs and MAF",
+      "url": "https://rocm.blogs.amd.com/artificial-intelligence/taf-blog/README.html",
+      "source": "AMD ROCm",
+      "publisher": "AMD ROCm",
+      "category": "engineering",
+      "published": "2026-10-06T00:00:00+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "ROCm 10.1: Breaking the Data-Movement Bottleneck",
+      "url": "https://rocm.blogs.amd.com/ecosystems-and-partners/rocm-10.1-blog/README.html",
+      "source": "AMD ROCm",
+      "publisher": "AMD ROCm",
+      "category": "engineering",
+      "published": "2026-10-05T00:00:00+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "AICR v1.0: Open, stable, and verifiable GPU cluster configuration",
+      "url": "https://developer.nvidia.com/blog/aicr-v1-0-open-stable-and-verifiable-gpu-cluster-configuration/",
+      "source": "NVIDIA Developer",
+      "publisher": "NVIDIA Developer",
+      "category": "engineering",
+      "published": "2026-10-06T16:13:47+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Control How Your GPU Shares Work with Green Contexts",
+      "url": "https://developer.nvidia.com/blog/control-how-your-gpu-shares-work-with-green-contexts/",
+      "source": "NVIDIA Developer",
+      "publisher": "NVIDIA Developer",
+      "category": "engineering",
+      "published": "2026-10-06T15:00:00+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "AI Gateway adds confidence-based decision fallbacks",
+      "url": "https://vercel.com/changelog/confidence-based-decision-fallbacks",
+      "source": "Vercel",
+      "publisher": "Vercel",
+      "category": "engineering",
+      "published": "2026-10-06T17:19:00+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Nano Banana 2.1 now available on AI Gateway",
+      "url": "https://vercel.com/changelog/nano-banana-2-1-now-available-on-ai-gateway",
+      "source": "Vercel",
+      "publisher": "Vercel",
+      "category": "engineering",
+      "published": "2026-10-06T00:00:00+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Mistral Large 4 now available on AI Gateway",
+      "url": "https://vercel.com/changelog/mistral-large-4-now-available-on-ai-gateway",
+      "source": "Vercel",
+      "publisher": "Vercel",
+      "category": "engineering",
+      "published": "2026-10-06T00:00:00+00:00",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Scaling and Operating a Large dbt Project on Databricks: IFCO's Data Team on Performance, Visibility, and Debugging",
+      "url": "https://www.databricks.com/blog/scaling-and-operating-large-dbt-project-databricks-ifcos-data-team-performance-visibility-and-debugging",
+      "source": "Databricks",
+      "publisher": "Databricks",
+      "category": "engineering",
+      "published": "2026-10-06T16:00:00+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Meta’s ads MCP server comes to Databricks: Put your customer intelligence to work in advertising campaigns",
+      "url": "https://www.databricks.com/blog/meta-ads-mcp-databricks",
+      "source": "Databricks",
+      "publisher": "Databricks",
+      "category": "engineering",
+      "published": "2026-10-06T12:45:00+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "NEAREST BY Join: Scaling Vector Search in Databricks Runtime",
+      "url": "https://www.databricks.com/blog/nearest-join-scaling-vector-search-databricks-runtime",
+      "source": "Databricks",
+      "publisher": "Databricks",
+      "category": "engineering",
+      "published": "2026-10-05T20:00:00+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Unlocking Data Portability: Preventing Catalog Lock-in with REGISTER and UNREGISTER APIs",
+      "url": "https://www.databricks.com/blog/unlocking-data-portability-preventing-catalog-lock-register-and-unregister-apis",
+      "source": "Databricks",
+      "publisher": "Databricks",
+      "category": "engineering",
+      "published": "2026-10-05T16:00:00+00:00",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "How Genie Ontology powers product development at Databricks",
+      "url": "https://www.databricks.com/blog/how-genie-ontology-powers-product-development-databricks",
+      "source": "Databricks",
+      "publisher": "Databricks",
+      "category": "engineering",
+      "published": "2026-10-05T15:07:02+00:00",
+      "rejection_reason": "title relevance filter"
+    }
+  ],
+  "selected_representatives": [
+    {
+      "title": "TasteVal: Measuring the Experimental Research Taste of AI Systems Against Human Experts",
+      "url": "https://www.lesswrong.com/posts/bAGagjZAPgXEHmkAH/tasteval-measuring-the-experimental-research-taste-of-ai",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-06T14:12:29+00:00"
+    },
+    {
+      "title": "How funny are the frontier AI models?",
+      "url": "https://www.lesswrong.com/posts/oG53pJxkHgpL4Ny4d/how-funny-are-the-frontier-ai-models",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-06T12:30:50+00:00"
+    },
+    {
+      "title": "The 'DeepSeek of the West' finally has a model",
+      "url": "https://www.therundown.ai/articles/the-deepseek-of-the-west-finally-has-a-model",
+      "source": "The Rundown AI",
+      "publisher": "The Rundown AI",
+      "category": "commentary",
+      "published": "2026-10-06T09:00:00+00:00"
+    },
+    {
+      "title": "Open and Emergent Problems in Agentic Privacy and Security: A Contextual Angle",
+      "url": "https://research.google/blog/open-and-emergent-problems-in-agentic-privacy-and-security-a-contextual-angle/",
+      "source": "Google Research",
+      "publisher": "Google Research",
+      "category": "research",
+      "published": "2026-10-05T21:08:00+00:00"
+    },
+    {
+      "title": "Introducing Mistral Large 4",
+      "url": "https://mistral.ai/news/mistral-large-4/",
+      "source": "Mistral AI",
+      "publisher": "Mistral",
+      "category": "frontier_lab",
+      "published": "2026-10-06T12:00:27+00:00"
+    },
+    {
+      "title": "March to Stop Building AI",
+      "url": "https://www.lesswrong.com/events/ZmTdRM6NaXPmTtrxS/march-to-stop-building-ai",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-06T14:29:27+00:00"
+    },
+    {
+      "title": "[AINews] Reflection Beam - 501B-A23B American Open Model",
+      "url": "https://www.latent.space/p/ainews-reflection-beam-501b-a23b",
+      "source": "Latent Space",
+      "publisher": "Latent Space",
+      "category": "commentary",
+      "published": "2026-10-06T06:28:43+00:00"
+    },
+    {
+      "title": "Takes One to Know One - Training a model to grade reward hacks causes it to reward hack less itself",
+      "url": "https://www.lesswrong.com/posts/dAbHSGXFNkgjcGAuz/takes-one-to-know-one-training-a-model-to-grade-reward-hacks",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-06T02:20:39+00:00"
+    },
+    {
+      "title": "AI Gateway adds confidence-based decision fallbacks",
+      "url": "https://vercel.com/changelog/confidence-based-decision-fallbacks",
+      "source": "Vercel",
+      "publisher": "Vercel",
+      "category": "engineering",
+      "published": "2026-10-06T17:19:00+00:00"
+    },
+    {
+      "title": "What AI gets wrong and what failure teaches us",
+      "url": "https://www.microsoft.com/en-us/research/podcast/what-ai-gets-wrong-and-what-failure-teaches-us/",
+      "source": "Microsoft Research",
+      "publisher": "Microsoft Research",
+      "category": "research",
+      "published": "2026-10-06T16:19:06+00:00"
+    },
+    {
+      "title": "Unlocking Earth AI’s planetary geospatial foundation models for global public health",
+      "url": "https://research.google/blog/earth-ais-planetary-geospatial-foundation-models-for-global-public-health/",
+      "source": "Google Research",
+      "publisher": "Google Research",
+      "category": "research",
+      "published": "2026-10-06T15:05:11+00:00"
+    },
+    {
+      "title": "Falcon-Emirati: When an LLM Learns the Dialect, the Culture, and the Nuance",
+      "url": "https://huggingface.co/blog/tiiuae/falcon-emirati",
+      "source": "Hugging Face",
+      "publisher": "Hugging Face",
+      "category": "engineering",
+      "published": "2026-10-06T06:44:39+00:00"
+    },
+    {
+      "title": "Nano Banana 2.1 now available on AI Gateway",
+      "url": "https://vercel.com/changelog/nano-banana-2-1-now-available-on-ai-gateway",
+      "source": "Vercel",
+      "publisher": "Vercel",
+      "category": "engineering",
+      "published": "2026-10-06T00:00:00+00:00"
+    },
+    {
+      "title": "Mistral Large 4 now available on AI Gateway",
+      "url": "https://vercel.com/changelog/mistral-large-4-now-available-on-ai-gateway",
+      "source": "Vercel",
+      "publisher": "Vercel",
+      "category": "engineering",
+      "published": "2026-10-06T00:00:00+00:00"
+    },
+    {
+      "title": "An OpenAI safety insider calls the culture 'broken'",
+      "url": "https://www.therundown.ai/articles/an-openai-safety-insider-calls-the-culture-broken",
+      "source": "The Rundown AI",
+      "publisher": "The Rundown AI",
+      "category": "commentary",
+      "published": "2026-10-05T09:00:00+00:00"
+    },
+    {
+      "title": "The Agent Said It Was Done. The Database Disagreed.",
+      "url": "https://huggingface.co/blog/microsoft/thinkingbox",
+      "source": "Hugging Face",
+      "publisher": "Hugging Face",
+      "category": "engineering",
+      "published": "2026-10-03T22:56:48+00:00"
+    }
+  ],
+  "link_outcomes": {
+    "https://www.lesswrong.com/posts/bAGagjZAPgXEHmkAH/tasteval-measuring-the-experimental-research-taste-of-ai": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://www.lesswrong.com/posts/oG53pJxkHgpL4Ny4d/how-funny-are-the-frontier-ai-models": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://www.therundown.ai/articles/the-deepseek-of-the-west-finally-has-a-model": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://research.google/blog/open-and-emergent-problems-in-agentic-privacy-and-security-a-contextual-angle/": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://mistral.ai/news/mistral-large-4/": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://www.lesswrong.com/events/ZmTdRM6NaXPmTtrxS/march-to-stop-building-ai": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://www.latent.space/p/ainews-reflection-beam-501b-a23b": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://www.lesswrong.com/posts/dAbHSGXFNkgjcGAuz/takes-one-to-know-one-training-a-model-to-grade-reward-hacks": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://vercel.com/changelog/confidence-based-decision-fallbacks": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://www.microsoft.com/en-us/research/podcast/what-ai-gets-wrong-and-what-failure-teaches-us/": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://openai.com/index/atlassian-partnership": {
+      "accessible": false,
+      "reason": "HTTP 403."
+    },
+    "https://research.google/blog/earth-ais-planetary-geospatial-foundation-models-for-global-public-health/": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://huggingface.co/blog/tiiuae/falcon-emirati": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://vercel.com/changelog/nano-banana-2-1-now-available-on-ai-gateway": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://vercel.com/changelog/mistral-large-4-now-available-on-ai-gateway": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://openai.com/index/new-chatgpt-ads-format-and-measurement": {
+      "accessible": false,
+      "reason": "HTTP 403."
+    },
+    "https://www.therundown.ai/articles/an-openai-safety-insider-calls-the-culture-broken": {
+      "accessible": true,
+      "reason": ""
+    },
+    "https://huggingface.co/blog/microsoft/thinkingbox": {
+      "accessible": true,
+      "reason": ""
+    }
+  },
+  "diagnostics": [
+    [
+      "Substack Technology",
+      "No stable public feed endpoint confirmed for the category page."
+    ],
+    [
+      "Bending Spoons",
+      "Verified publication feed is stale: newest entry November 7, 2024. A current dated engineering/research source is needed."
+    ],
+    [
+      "xAI",
+      "HTTP 403 from source."
+    ],
+    [
+      "Z.ai / GLM",
+      "Official blog is a client-rendered bundle; no stable dated listing input validated. Needs a dedicated adapter (issue #17)."
+    ],
+    [
+      "Moonshot / Kimi",
+      "Official listing/article HTML exposes titles but no verified publication dates; image timestamps and dates in prose are not publication dates. Needs a dated input (issue #17)."
+    ],
+    [
+      "LessWrong AI",
+      "Selection: publisher cap (4) excluded Kurzgesagt's video on the Hugging Face incident: \"AI Just Crossed the Terrifying Line - Now What?\"."
+    ],
+    [
+      "OpenAI: [Atlassian and OpenAI expand partnership to turn enterprise knowledge into action](https://openai.com/index/atlassian-partnership)",
+      "HTTP 403."
+    ],
+    [
+      "OpenAI: [Building advertising for the way people use AI](https://openai.com/index/new-chatgpt-ads-format-and-measurement)",
+      "HTTP 403."
+    ]
+  ]
+}

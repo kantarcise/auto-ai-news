@@ -1,0 +1,93 @@
+{
+  "review_date": "2026-10-06",
+  "reviewer": "repository owner",
+  "snapshot_captured_at": "2026-10-06T17:57:42.282185+00:00",
+  "snapshot_sha256": "754f5da6ecbd556c611bd0d136871ad945330d15e461f7a9d0b3541c8d8b6697",
+  "provenance": "Direct owner feedback in chat. Notes lightly normalized, not verbatim quotes. Explicit inclusion decisions and grades retained; no independent article inspection, fact verification or affiliation verification performed. Exact review time was not supplied.",
+  "pending_clarifications": [
+    "Inspection evidence for the other seven articles was not specified in the follow-up; keep their explicit decisions/grades in this feedback record without inventing provenance."
+  ],
+  "items": [
+    {
+      "id": "1ef243007176e85c",
+      "url": "https://mistral.ai/news/mistral-large-4/",
+      "title": "Introducing Mistral Large 4",
+      "include": "yes",
+      "importance": 3,
+      "evidence": "user_feedback",
+      "inspection_evidence": null,
+      "reviewer_note": "A new frontier model; the owner definitely wants to read about it."
+    },
+    {
+      "id": "2896758265cec81d",
+      "url": "https://openai.com/index/atlassian-partnership",
+      "title": "Atlassian and OpenAI expand partnership to turn enterprise knowledge into action",
+      "include": "yes",
+      "importance": 2,
+      "evidence": "user_feedback",
+      "inspection_evidence": null,
+      "reviewer_note": "A cool update that helps the owner know what is going on."
+    },
+    {
+      "id": "537645ae693322a4",
+      "url": "https://pytorch.org/blog/pytorch-hardware-enablement-updates-from-the-acceleration-integration-working-group/",
+      "title": "PyTorch Hardware Enablement: Updates from the Accelerator Integration Working Group",
+      "include": "yes",
+      "importance": 3,
+      "evidence": "user_feedback",
+      "inspection_evidence": "article",
+      "reviewer_note": "A really cool story and nice writeup; the owner values PyTorch as one of the best frameworks. Follow-up explicitly confirmed inclusion yes, importance 3, and skimming with parts of the article read."
+    },
+    {
+      "id": "69f5bd9058f87f8c",
+      "url": "https://simonwillison.net/2026/Oct/4/qwen38-addition-in-words/",
+      "title": "Qwen3.8 27B addition in words",
+      "include": "yes",
+      "importance": 2,
+      "evidence": "user_feedback",
+      "inspection_evidence": null,
+      "reviewer_note": "Cool hacking around LLMs; the owner values curiosity, exploration and learning and wants to do this too."
+    },
+    {
+      "id": "7d33f8ab03d5890a",
+      "url": "https://www.lesswrong.com/events/ZmTdRM6NaXPmTtrxS/march-to-stop-building-ai",
+      "title": "March to Stop Building AI",
+      "include": "no",
+      "importance": 0,
+      "evidence": "user_feedback",
+      "inspection_evidence": null,
+      "reviewer_note": "An unwanted event announcement."
+    },
+    {
+      "id": "910657809987cc3e",
+      "url": "https://www.databricks.com/blog/nearest-join-scaling-vector-search-databricks-runtime",
+      "title": "NEAREST BY Join: Scaling Vector Search in Databricks Runtime",
+      "include": "yes",
+      "importance": 2,
+      "evidence": "user_feedback",
+      "inspection_evidence": null,
+      "reviewer_note": "Cool."
+    },
+    {
+      "id": "c02127d349672db4",
+      "url": "https://research.google/blog/earth-ais-planetary-geospatial-foundation-models-for-global-public-health/",
+      "title": "Unlocking Earth AI’s planetary geospatial foundation models for global public health",
+      "include": "yes",
+      "importance": 3,
+      "evidence": "user_feedback",
+      "inspection_evidence": null,
+      "reviewer_note": "Really cool; the owner likes the visual format and being able to read abstracts or skim before deciding whether to dive deeper."
+    },
+    {
+      "id": "cb9f0e720ea299b4",
+      "url": "https://rocm.blogs.amd.com/artificial-intelligence/taf-blog/README.html",
+      "title": "Completing the GPU Performance Picture: Understanding TAF Alongside Peak FLOPs and MAF",
+      "include": "yes",
+      "importance": 3,
+      "evidence": "user_feedback",
+      "inspection_evidence": null,
+      "reviewer_note": "Really cool; the owner values a hardware company discussing its own hardware."
+    }
+  ],
+  "sampling": "Purposeful eight-item diagnostic sample: four recent title-filter rejects across commentary/engineering publishers, one blocked eligible lab article, and three selected representatives across model/research/event content. Selected using snapshot metadata, without independent article inspection. Order sorted by candidate ID; not randomized or a representative benchmark."
+}
