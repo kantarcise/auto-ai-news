@@ -45,6 +45,8 @@ The owner has reviewed all 21 selected articles in the latest release. [Recorded
 
 ## Next evaluation steps
 
+For new dates, use the [optional broader capture](capture.md) to retain parsed entries rejected before ranking alongside selected stories, source diagnostics and actual link-check outcomes. The existing October 3 snapshot remains unchanged. Broader-pool recall includes operationally ineligible positives and must be distinguished from the older eligible-pool metrics.
+
 The owner has supplied [qualitative feedback on all five omitted candidates](omitted-feedback-2026-10-05.json). The rubric now reflects useful testimonials, frontier-lab practitioner perspectives and tentative lower priority for brief announcements. Explicit inclusion decisions and importance grades remain outstanding; the scored sheet is still unreviewed, so the evaluator reports no quality scores.
 
 Review this pilot and refine the rubric, then capture multiple dates including rejected candidates and representative regions/modalities. Freeze each snapshot's clock and operational outcomes. Group duplicate stories before chronological train/test splits, retain an unseen-publisher check, and measure important-story recall, graded ranking, repetition and concentration. Set acceptance targets from labeled baseline results. This pilot adds no runtime dependencies and changes no production ranking, workflow or releases.
