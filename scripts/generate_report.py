@@ -650,13 +650,30 @@ def freshness_reason(item: Item, now: dt.datetime, lookback_hours: int) -> str:
     return ""
 
 
+def evaluation_metadata(item: Item) -> dict:
+    """Export attributed metadata only, never feed text or article bodies."""
+    return {
+        "title": item.title,
+        "url": item.url,
+        "source": item.source,
+        "publisher": item.publisher,
+        "category": item.category,
+        "published": item.published.isoformat() if item.published else None,
+    }
+
+
 def collect_items(
     sources: list[Source],
     now: dt.datetime,
     lookback_hours: int = DEFAULT_LOOKBACK_HOURS,
+    *,
+    evaluation: dict | None = None,
 ) -> tuple[list[Item], list[tuple[str, str]]]:
     if lookback_hours <= 0:
         raise ValueError("lookback_hours must be positive")
+    if evaluation is not None and (now.tzinfo is None or now.utcoffset() is None):
+        raise ValueError("Evaluation capture requires a timezone-aware clock")
+    collection = []
     items: list[Item] = []
     unavailable: list[tuple[str, str]] = []
     for source in sources:
@@ -692,16 +709,28 @@ def collect_items(
             item.publisher = source.publisher or source.name
             item.coverage = source.coverage
             reason = freshness_reason(item, now, lookback_hours)
+            record = None
+            if evaluation is not None:
+                record = evaluation_metadata(item)
+                record["url"] = (
+                    urllib.parse.urljoin(final_url, item.url) if item.url else ""
+                )
+                record["rejection_reason"] = reason
+                collection.append(record)
             if reason:
                 freshness_counts[reason] = freshness_counts.get(reason, 0) + 1
                 continue
             fresh_count += 1
             if not item.url:
+                if record is not None:
+                    record["rejection_reason"] = "missing link"
                 unavailable.append((source.name, "Feed item missing link."))
                 continue
             item.url = urllib.parse.urljoin(final_url, item.url)
             item.canonical_url = canonicalize_url(item.url)
             if is_quiet_day_roundup(item):
+                if record is not None:
+                    record["rejection_reason"] = "quiet-day title policy"
                 unavailable.append(
                     (
                         f"{item.source}: {item.title}",
@@ -713,6 +742,8 @@ def collect_items(
                 estimate_reading_time(item)
                 score_item(item, now)
                 items.append(item)
+            elif record is not None:
+                record["rejection_reason"] = "title relevance filter"
         if not fresh_count:
             unavailable.append(
                 (source.name, "Freshness: no dated entries within the coverage window.")
@@ -722,7 +753,52 @@ def collect_items(
                 (source.name, f"Freshness: {count} entries excluded: {reason}.")
             )
     candidates = group_stories(dedupe_items(items))
-    accessible, link_failures = filter_accessible_items(candidates, MAX_ITEMS)
+    # Freeze group membership before selection mutates related coverage on fallback.
+    groups = (
+        [
+            [member.url for member in [item, *item.related_coverage]]
+            for item in candidates
+        ]
+        if evaluation is not None
+        else []
+    )
+    link_outcomes = {} if evaluation is not None else None
+    accessible, link_failures = filter_accessible_items(
+        candidates, MAX_ITEMS, link_outcomes=link_outcomes
+    )
+    if evaluation is not None:
+        # One review row per exact resolved URL; retain all occurrences in collection.
+        rows = {}
+        for record in collection:
+            if record["url"]:
+                rows.setdefault(
+                    record["url"],
+                    {k: v for k, v in record.items() if k != "rejection_reason"},
+                )
+        evaluation.update(
+            schema_version=1,
+            captured_at=now.astimezone(dt.timezone.utc).isoformat(),
+            lookback_hours=lookback_hours,
+            candidate_scope="all parsed entries with links, including pre-ranking rejects",
+            collection=collection,
+            story_groups=groups,
+            link_outcomes=link_outcomes,
+            diagnostics=unavailable + link_failures,
+            policies={
+                "frontier": {
+                    "candidates": list(rows.values()),
+                    "selected": [evaluation_metadata(item) for item in accessible],
+                    "alternate_coverage": [
+                        {
+                            "representative_url": item.url,
+                            "urls": [member.url for member in item.related_coverage],
+                        }
+                        for item in accessible
+                        if item.related_coverage
+                    ],
+                }
+            },
+        )
     return accessible, unavailable + link_failures
 
 
@@ -760,7 +836,11 @@ def check_url_accessible_with_get(url: str, timeout: int) -> tuple[bool, str]:
 
 
 def filter_accessible_items(
-    items: list[Item], limit: int, publisher_limit: int | None = MAX_PER_PUBLISHER
+    items: list[Item],
+    limit: int,
+    publisher_limit: int | None = MAX_PER_PUBLISHER,
+    *,
+    link_outcomes: dict | None = None,
 ) -> tuple[list[Item], list[tuple[str, str]]]:
     accessible: list[Item] = []
     if publisher_limit is not None and publisher_limit <= 0:
@@ -783,6 +863,8 @@ def filter_accessible_items(
         verified = []
         for member in [item, *item.related_coverage]:
             ok, reason = check_url_accessible(member.url)
+            if link_outcomes is not None:
+                link_outcomes[member.url] = {"accessible": ok, "reason": reason}
             if ok:
                 verified.append(member)
             else:
@@ -1121,6 +1203,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--sources", type=Path, default=DEFAULT_SOURCES)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument(
+        "--evaluation-output",
+        type=Path,
+        help="Optional metadata-only review snapshot including pre-ranking rejects.",
+    )
+    parser.add_argument(
         "--lookback-hours",
         type=int,
         default=DEFAULT_LOOKBACK_HOURS,
@@ -1134,6 +1221,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     args = parser.parse_args(argv)
     if args.lookback_hours <= 0:
         parser.error("--lookback-hours must be positive")
+    if (
+        args.evaluation_output is not None
+        and args.evaluation_output.resolve() == args.output.resolve()
+    ):
+        parser.error("--evaluation-output must differ from --output")
     return args
 
 
@@ -1141,7 +1233,15 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
     now = dt.datetime.now(dt.timezone.utc)
     sources = load_sources(args.sources)
-    items, unavailable = collect_items(sources, now, args.lookback_hours)
+    evaluation = {} if args.evaluation_output is not None else None
+    items, unavailable = collect_items(
+        sources, now, args.lookback_hours, evaluation=evaluation
+    )
+    if args.evaluation_output is not None:
+        args.evaluation_output.write_text(
+            json.dumps(evaluation, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
     if not args.no_article_bodies:
         unavailable.extend(enrich_article_bodies(items))
     args.output.write_text(

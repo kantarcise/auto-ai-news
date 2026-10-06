@@ -105,6 +105,8 @@ def evaluate(snapshot: dict, review: dict) -> dict:
         "total_candidates": len(labels),
         "policies": {},
     }
+    if "candidate_scope" in snapshot:
+        result["candidate_scope"] = snapshot["candidate_scope"]
     for name, policy in snapshot["policies"].items():
         selected = {candidate_id(row["url"]) for row in policy["selected"]}
         if not selected <= labels.keys():
