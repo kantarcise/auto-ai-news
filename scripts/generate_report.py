@@ -27,9 +27,9 @@ except ModuleNotFoundError:
     from article_content import MAX_REQUESTS, fetch_body
 
 try:
-    from scripts.relevance_topics import topic_matches
+    from scripts.editorial_relevance import Relevance, assess
 except ModuleNotFoundError:
-    from relevance_topics import topic_matches
+    from editorial_relevance import Relevance, assess
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCES = ROOT / "config" / "sources.json"
@@ -143,6 +143,7 @@ class Item:
     rank_score: float | None = None
     related_coverage: list[Item] = field(default_factory=list)
     body_status: str = ""
+    editorial_relevance: Relevance | None = None
 
 
 class TextExtractor(HTMLParser):
@@ -494,6 +495,13 @@ def ai_relevance_score(item: Item) -> int:
 
 
 def is_ai_related(item: Item) -> bool:
+    assessment = item.editorial_relevance
+    if assessment is None:
+        assessment = assess([{"title": item.title, "url": item.url}])[0]
+    if assessment.event_listing:
+        return False
+    if assessment.admitted:
+        return True
     if item.source in {"Latent Space", "smol.ai"}:
         return True
     title_only = Item(
@@ -502,7 +510,7 @@ def is_ai_related(item: Item) -> bool:
         source=item.source,
         source_priority=item.source_priority,
     )
-    return ai_relevance_score(title_only) > 0 or bool(topic_matches(item.title))
+    return ai_relevance_score(title_only) > 0
 
 
 def is_quiet_day_roundup(item: Item) -> bool:
@@ -603,14 +611,18 @@ def classify_story(item: Item) -> str:
         r"\b(qwen|grok|gpt|mistral|llama|flux|deepseek|claude|gemini|glm|kimi|minimax|seedance|seedream|muse spark|muse image|muse video)\b",
         title,
     )
+    family_match = bool(
+        item.editorial_relevance is not None
+        and "model_family" in item.editorial_relevance.terms
+    )
     model_topic = re.search(
         r"\b(model|llm|multimodal|inference|reasoning|agent|agents|diffusion)\b", title
     )
-    if (brand or model_topic) and re.search(
+    if (brand or family_match or model_topic) and re.search(
         r"^(introducing|announcing|releasing|unveiling)\b", title
     ):
         return "lab_announcement"
-    if brand and re.search(r"\d|\b(model|reasoning|vision)\b", title):
+    if (brand or family_match) and re.search(r"\d|\b(model|reasoning|vision)\b", title):
         return "lab_announcement"
     return "other"
 
@@ -632,6 +644,8 @@ def score_item(item: Item, now: dt.datetime) -> int:
     item.story_kind = classify_story(item)
     if item.story_kind in {"lab_research", "lab_announcement"}:
         score += LAB_ANNOUNCEMENT_BONUS
+    if item.editorial_relevance is not None:
+        score += item.editorial_relevance.rank_bonus
     item.rank_score = score
     item.stars = max(1, min(5, math.ceil(score)))
     return item.stars
@@ -680,6 +694,7 @@ def collect_items(
         raise ValueError("Evaluation capture requires a timezone-aware clock")
     collection = []
     items: list[Item] = []
+    pending: list[tuple[Item, dict | None]] = []
     unavailable: list[tuple[str, str]] = []
     for source in sources:
         if not source.enabled:
@@ -743,12 +758,7 @@ def collect_items(
                     )
                 )
                 continue
-            if is_ai_related(item):
-                estimate_reading_time(item)
-                score_item(item, now)
-                items.append(item)
-            elif record is not None:
-                record["rejection_reason"] = "title relevance filter"
+            pending.append((item, record))
         if not fresh_count:
             unavailable.append(
                 (source.name, "Freshness: no dated entries within the coverage window.")
@@ -756,6 +766,31 @@ def collect_items(
         for reason, count in freshness_counts.items():
             unavailable.append(
                 (source.name, f"Freshness: {count} entries excluded: {reason}.")
+            )
+    relevance = assess(
+        [
+            {"title": item.title, "summary": item.summary, "url": item.canonical_url}
+            for item, _ in pending
+        ]
+    )
+    for (item, record), assessment in zip(pending, relevance):
+        item.editorial_relevance = assessment
+        if record is not None:
+            record["editorial_relevance"] = {
+                "similarity": round(assessment.similarity, 6),
+                "topic": assessment.topic,
+                "matched_terms": list(assessment.terms),
+                "rank_bonus": round(assessment.rank_bonus, 6),
+            }
+        if is_ai_related(item):
+            estimate_reading_time(item)
+            score_item(item, now)
+            items.append(item)
+        elif record is not None:
+            record["rejection_reason"] = (
+                "event listing without technical topic"
+                if assessment.event_listing
+                else "title relevance filter"
             )
     candidates = group_stories(dedupe_items(items))
     # Freeze group membership before selection mutates related coverage on fallback.
@@ -1179,7 +1214,7 @@ def render_report(
             "",
             "Articles with missing/invalid or future dates are excluded. Older articles never backfill a short report. Date-only HTML listings use midnight UTC; boundary decisions are conservative. A story may recur across consecutive reports within the window.",
             "",
-            "Selection uses a continuous score before mapping to stars. Source bonuses are 1.25 for priority 5 and 1 for priorities 3–4; qualifying frontier-lab research/model announcements add 0.75. Headline classification is heuristic; corporate posts receive no lab bonus. At most four story headlines per representative publisher are selected, with shared lab channels grouped together. Detailed identical titles within 24 hours are grouped, preferring research/lab representatives when available; other accessible source links appear as alternate coverage. This is a conservative title rule, not semantic story matching. No older articles fill excluded slots.",
+            "Selection uses a continuous score before mapping to stars. Source bonuses are 1.25 for priority 5 and 1 for priorities 3–4; qualifying frontier-lab research/model announcements add 0.75. Topic descriptions matched against headlines and feed summaries add up to 1 point, with word weights calculated from the fresh candidate pool. Known model families accept future version numbers. Matching is lexical, not content understanding; event-directory listings without a technical topic are excluded. Headline classification is heuristic; corporate posts receive no lab bonus. At most four story headlines per representative publisher are selected, with shared lab channels grouped together. Detailed identical titles within 24 hours are grouped, preferring research/lab representatives when available; other accessible source links appear as alternate coverage. This is a conservative title rule, not semantic story matching. No older articles fill excluded slots.",
             "",
             "## Source policy",
             "",

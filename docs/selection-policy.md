@@ -4,7 +4,7 @@ The registry in `config/sources.json` assigns source category, publisher identit
 
 ## Eligibility and classification
 
-The existing 72-hour inclusive UTC cutoff, missing/future-date exclusions, quiet-day title policy, AI title relevance and canonical-URL deduplication still apply. The existing Latent Space/smol.ai relevance bypass remains evaluation work. Title relevance also admits the reviewed versioned model-name, PyTorch/GPU/CUDA/ROCm and vector-search matches shared in `scripts/relevance_topics.py`. These are topic signals, not quality judgments; they add no direct rank points. Newly eligible lab articles may qualify for the existing headline bonus. See [review evidence and limitations](evaluation/apply-reviewed-topics.md).
+The existing 72-hour inclusive UTC cutoff, missing/future-date exclusions, quiet-day title policy and canonical-URL deduplication still apply. Headlines and bounded feed summaries are compared with configurable editorial topic descriptions using word weights from the fresh candidate pool. Model families match future version numbers without listing each release. A headline topic anchor is required; summaries alone cannot admit unrelated titles. Generic AI title keywords and the Latent Space/smol.ai bypass remain fallbacks, except event-directory listings without a technical topic are excluded. See [algorithm, reviewed results and limitations](evaluation/adaptive-relevance.md).
 
 Only an eligible `frontier_lab` item can earn the additional preference. Headline classification excludes common marketing terms (customer/case study, funding, partnerships, pricing, hiring and conferences). Research-channel items and research/evaluation/interpretability/world-model headlines can qualify as `lab_research`. Model-topic/brand headlines beginning with introducing/announcing/releasing/unveiling, or numbered model-brand headlines, can qualify as `lab_announcement`.
 
@@ -20,8 +20,9 @@ These are conservative lexical rules, not content understanding. They can miss l
 | Existing title/summary keyword score >=3 | +1 |
 | Publication within 24 hours | +1 |
 | Qualifying frontier research/model announcement | +0.75 |
+| Eligible editorial topic similarity | +min(1, 2 × similarity) |
 
-The old priority-5 bonus was +2. Reducing that advantage to 0.25 over priority 3–4 lets a qualifying lab item outrank a generic priority-5 item with otherwise equal components. The selected bonus is bounded; a strong recent engineering or independent-analysis article can still beat an older lab announcement. This retains the existing keyword and 24-hour components rather than introducing an untested semantic model.
+The old priority-5 bonus was +2. Reducing that advantage to 0.25 over priority 3–4 lets a qualifying lab item outrank a generic priority-5 item with otherwise equal components. The selected bonus is bounded; a strong recent engineering or independent-analysis article can still beat an older lab announcement. The editorial component uses configurable descriptions and corpus-weighted lexical similarity. It is bounded by one point and has not been validated as an improvement in ranking quality. The existing keyword and 24-hour components remain.
 
 Sort by the unrounded score, then publication timestamp. Map stars afterward using `ceil(score)`, clamped to 1–5. Stars are heuristic rank buckets, not verified quality or importance. A legacy seven-day scoring penalty remains for direct scoring callers; the collection cutoff removes such items beforehand.
 

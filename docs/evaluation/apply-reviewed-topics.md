@@ -1,4 +1,6 @@
-# Apply the reviewed title matches
+# Earlier title-only proposal (superseded)
+
+PR #27 now implements [topic profiles and family normalization](adaptive-relevance.md). This document preserves the earlier static alternative and September 30 review provenance. References below to a proposed production effect describe the earlier proposal, not the final implementation.
 
 For issue #12, this change lets the daily collector recognize the same extra title words tested in PR #26: versioned model names, PyTorch/GPU/CUDA/ROCm terms, and vector search. The word patterns are unchanged. They are shared between the collector and the offline test so the two cannot quietly drift apart.
 
@@ -21,7 +23,7 @@ The old title check accepts 2 of the 7 wanted articles; the tested check accepts
 
 The conference grade makes sense: learning about a useful tool can justify inclusion at importance 1. Together with the earlier rejected march event, it argues against banning all announcements or conference posts. Importance is editorial value; it is not a model-capability claim or a production star rating.
 
-Across the two targeted reviews, all eleven newly admitted titles have positive inclusion feedback. That supports deploying this small admission change, but does not establish overall precision, guarantee final report inclusion, or optimize ranking. Other unreviewed titles may still be unwanted. GPU/framework topics can produce false positives; the existing source bypass and generic keywords remain limitations.
+Across the two targeted reviews, all eleven newly admitted titles have positive inclusion feedback. That supported the earlier small admission proposal, but does not establish overall precision, guarantee final report inclusion, or optimize ranking. Other unreviewed titles may still be unwanted. GPU/framework topics can produce false positives; the existing source bypass and generic keywords remain limitations.
 
 ## How the older-date check was made
 
@@ -35,7 +37,7 @@ The [feedback](owner-feedback-2026-09-30.json) and [results](relevance-results-2
 python3 -m scripts.compare_relevance docs/evaluation/relevance-input-2026-09-30.json docs/evaluation/owner-feedback-2026-09-30.json --output /tmp/september-30-results.json
 ```
 
-## Production effect and remaining work
+## Earlier proposed production effect and remaining work
 
 New topic matches let an article reach the ordinary ranking, deduplication, story grouping, publisher caps and access checks. They add no direct score points. The existing lab classifier can classify newly eligible lab headlines under its existing rules and award its existing bounded bonus. Neither the added admission rule nor the bonus guarantees selection. No article-length cutoff, automatic publisher admission, tier-list weighting, blanket event exclusion, new dependency or release publication is introduced.
 

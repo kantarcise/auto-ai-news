@@ -48,6 +48,7 @@ def compare(snapshot: dict, feedback: dict) -> dict:
             "",
             "title relevance filter",
             "quiet-day title policy",
+            "event listing without technical topic",
         ):
             raise ValueError("Unsupported recent collection outcome.")
         candidates[row["url"]] = row

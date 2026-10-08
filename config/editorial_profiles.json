@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "model_families": [
+    "gpt",
+    "chatgpt",
+    "claude",
+    "gemini",
+    "grok",
+    "llama",
+    "qwen",
+    "deepseek",
+    "mistral",
+    "kimi",
+    "glm",
+    "minimax",
+    "nemotron",
+    "nova",
+    "mimo",
+    "seed",
+    "inkling",
+    "muse"
+  ],
+  "minimum_similarity": 0.04,
+  "ambiguous_model_families": ["seed", "nova", "muse", "inkling"],
+  "maximum_rank_bonus": 1.0,
+  "profiles": [
+    {
+      "name": "model releases and research",
+      "anchors": [
+        "model_family",
+        "llm",
+        "transformer"
+      ],
+      "description": "model_family language models frontier intelligence reasoning training inference weights architecture context tokens benchmark evaluation multimodal transformer llm release research"
+    },
+    {
+      "name": "GPU and framework engineering",
+      "anchors": [
+        "gpu",
+        "cuda",
+        "rocm",
+        "pytorch",
+        "torchcodec",
+        "torch",
+        "compiler",
+        "kernel"
+      ],
+      "description": "gpu cuda rocm pytorch torch torchcodec hardware cluster runtime memory throughput latency performance compiler kernel decoding encoding integration maintenance deployment training inference data parallel distributed"
+    },
+    {
+      "name": "speech and model evaluation",
+      "anchors": [
+        "tts",
+        "speech",
+        "leaderboard",
+        "benchmark"
+      ],
+      "description": "tts speech voice cloning audio leaderboard benchmark evaluation scalable multilingual text speech open comparison reproducible measurements"
+    },
+    {
+      "name": "robotics research",
+      "anchors": [
+        "robot",
+        "robotics",
+        "embodied"
+      ],
+      "description": "robot robotics embodied manipulation research learning policy control tasks environment simulation"
+    },
+    {
+      "name": "retrieval and agent systems",
+      "anchors": [
+        "vector",
+        "retrieval",
+        "agent",
+        "embedding"
+      ],
+      "description": "vector search retrieval nearest join embedding agent harness tracing workflow observability efficiency evaluation inference deployment tools"
+    }
+  ]
+}
