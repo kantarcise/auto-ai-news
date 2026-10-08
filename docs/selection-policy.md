@@ -4,7 +4,7 @@ The registry in `config/sources.json` assigns source category, publisher identit
 
 ## Eligibility and classification
 
-The existing 72-hour inclusive UTC cutoff, missing/future-date exclusions, quiet-day title policy, AI title relevance and canonical-URL deduplication still apply. The existing Latent Space/smol.ai relevance bypass is unchanged in this step and remains evaluation work.
+The existing 72-hour inclusive UTC cutoff, missing/future-date exclusions, quiet-day title policy, AI title relevance and canonical-URL deduplication still apply. The existing Latent Space/smol.ai relevance bypass remains evaluation work. Title relevance also admits the reviewed versioned model-name, PyTorch/GPU/CUDA/ROCm and vector-search matches shared in `scripts/relevance_topics.py`. These are topic signals, not quality judgments; they add no direct rank points. Newly eligible lab articles may qualify for the existing headline bonus. See [review evidence and limitations](evaluation/apply-reviewed-topics.md).
 
 Only an eligible `frontier_lab` item can earn the additional preference. Headline classification excludes common marketing terms (customer/case study, funding, partnerships, pricing, hiring and conferences). Research-channel items and research/evaluation/interpretability/world-model headlines can qualify as `lab_research`. Model-topic/brand headlines beginning with introducing/announcing/releasing/unveiling, or numbered model-brand headlines, can qualify as `lab_announcement`.
 

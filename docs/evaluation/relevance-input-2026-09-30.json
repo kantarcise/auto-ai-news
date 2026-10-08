@@ -1,0 +1,255 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-10-06T17:57:42.282185+00:00",
+  "assessment_at": "2026-09-30T23:59:59.999999+00:00",
+  "lookback_hours": 72,
+  "source_snapshot_sha256": "754f5da6ecbd556c611bd0d136871ad945330d15e461f7a9d0b3541c8d8b6697",
+  "scope": "Retrospective title-only check on previously unreviewed September 30 entries in the October 6 capture. Recomputed current title checks because the historical run excluded these entries for freshness; original rejection reasons retained. No historical selection or access outcomes inferred. No new date capture or chronological held-out quality claim.",
+  "sampling": "Purposeful eight-item review: all three added matches, three titles neither rule admits, and two admitted by both. Previous owner-reviewed canonical URLs excluded; rule chosen before these labels. Policy outcomes hidden from review page but sample is diagnostic, not random. Cross-article story overlap has not been established.",
+  "baseline_script_sha256": "9c393ef4efa5089873f305718ed19cc635c5013993bb1bdacf8f6f4e017219f6",
+  "topic_patterns_sha256": "471188a5fc5106ecd34e63870cd9603c970e3c5010fa05e2206c616c1312324f",
+  "collection": [
+    {
+      "title": "[AINews] OpenAI DevDay 2026: Dots, 6.1 Sol, Ultrafast, Decisions API, Agents API, Spaces, Marketplace, and 1.2 Billion ChatGPT WAU",
+      "url": "https://www.latent.space/p/ainews-openai-devday-2026-dots-61",
+      "source": "Latent Space",
+      "publisher": "Latent Space",
+      "category": "commentary",
+      "published": "2026-09-30T05:53:10+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": ""
+    },
+    {
+      "title": "He Built This City",
+      "url": "https://simonwillison.net/2026/Sep/30/he-built-this-city/",
+      "source": "Simon Willison",
+      "publisher": "Simon Willison",
+      "category": "commentary",
+      "published": "2026-09-30T21:54:19+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "OpenAI connects the dots on always-on agents",
+      "url": "https://www.therundown.ai/articles/openai-connects-the-dots-on-always-on-agents",
+      "source": "The Rundown AI",
+      "publisher": "The Rundown AI",
+      "category": "commentary",
+      "published": "2026-09-30T09:00:00+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Gemini 4 Argon: our next era of frontier intelligence",
+      "url": "https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/",
+      "source": "Google DeepMind",
+      "publisher": "Google DeepMind",
+      "category": "frontier_lab",
+      "published": "2026-09-30T20:01:45+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Introducing SynthID Bio",
+      "url": "https://deepmind.google/blog/introducing-synthid-bio/",
+      "source": "Google DeepMind",
+      "publisher": "Google DeepMind",
+      "category": "frontier_lab",
+      "published": "2026-09-30T15:03:07+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Open TTS Leaderboard: Scalable Evaluation for Multilingual Text-to-Speech and Voice Cloning",
+      "url": "https://huggingface.co/blog/open-tts-leaderboard",
+      "source": "Hugging Face",
+      "publisher": "Hugging Face",
+      "category": "engineering",
+      "published": "2026-09-30T00:00:00+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "A Ray-Focused Guide to PyTorch Conference North America",
+      "url": "https://pytorch.org/blog/a-ray-focused-guide-to-pytorch-conference-north-america/",
+      "source": "PyTorch",
+      "publisher": "PyTorch",
+      "category": "engineering",
+      "published": "2026-09-30T16:45:20+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "From Upstream Changes to Downstream Confidence: Inside Torch Spyre’s Integration with PyTorch CRCR",
+      "url": "https://pytorch.org/blog/from-upstream-changes-to-downstream-confidence-inside-torch-spyres-integration-with-pytorch-crcr/",
+      "source": "PyTorch",
+      "publisher": "PyTorch",
+      "category": "engineering",
+      "published": "2026-09-30T13:40:56+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Forecasting space weather risks on power grids",
+      "url": "https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/",
+      "source": "Microsoft Research",
+      "publisher": "Microsoft Research",
+      "category": "research",
+      "published": "2026-09-30T16:00:00+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Disrupting a coordinated model-distillation campaign",
+      "url": "https://openai.com/index/disrupting-a-coordinated-model-distillation-campaign",
+      "source": "OpenAI",
+      "publisher": "OpenAI",
+      "category": "frontier_lab",
+      "published": "2026-09-30T10:30:00+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Helping small businesses put AI to work",
+      "url": "https://openai.com/index/helping-small-businesses-put-ai-to-work",
+      "source": "OpenAI",
+      "publisher": "OpenAI",
+      "category": "frontier_lab",
+      "published": "2026-09-30T10:00:00+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": ""
+    },
+    {
+      "title": "What work can robots do?",
+      "url": "https://www.anthropic.com/research/what-work-can-robots-do",
+      "source": "Anthropic Research",
+      "publisher": "Anthropic",
+      "category": "frontier_lab",
+      "published": "2026-09-30T00:00:00+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Running MolmoAct2 Robot Policy on an AMD Ryzen AI Max+ 395 Mini PC",
+      "url": "https://rocm.blogs.amd.com/artificial-intelligence/molmoact2-ryzers-strix/README.html",
+      "source": "AMD ROCm",
+      "publisher": "AMD ROCm",
+      "category": "engineering",
+      "published": "2026-09-30T00:00:00+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Automating Performance Bottleneck Identification with the TraceLens Agent",
+      "url": "https://rocm.blogs.amd.com/software-tools-optimization/tracelens-analysis-agent/README.html",
+      "source": "AMD ROCm",
+      "publisher": "AMD ROCm",
+      "category": "engineering",
+      "published": "2026-09-30T00:00:00+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": ""
+    },
+    {
+      "title": "AIM: Unified User Experience from Profile Discovery to Deployment",
+      "url": "https://rocm.blogs.amd.com/artificial-intelligence/aims-deployment-exp/README.html",
+      "source": "AMD ROCm",
+      "publisher": "AMD ROCm",
+      "category": "engineering",
+      "published": "2026-09-30T00:00:00+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Deploying an HSTU Generative Recommender with NVIDIA Dynamo-Triton",
+      "url": "https://developer.nvidia.com/blog/deploying-an-hstu-generative-recommender-with-nvidia-dynamo-triton/",
+      "source": "NVIDIA Developer",
+      "publisher": "NVIDIA Developer",
+      "category": "engineering",
+      "published": "2026-09-30T20:54:59+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Expanding AI Storage Access with NVIDIA cuObject and the NVIDIA SCADA Server SDK",
+      "url": "https://developer.nvidia.com/blog/expanding-ai-storage-access-with-nvidia-cuobject-and-the-nvidia-scada-server-sdk/",
+      "source": "NVIDIA Developer",
+      "publisher": "NVIDIA Developer",
+      "category": "engineering",
+      "published": "2026-09-30T19:13:02+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Tracing Agent Harness Behavior with NVIDIA NeMo Relay",
+      "url": "https://developer.nvidia.com/blog/tracing-agent-harness-behavior-with-nvidia-nemo-relay/",
+      "source": "NVIDIA Developer",
+      "publisher": "NVIDIA Developer",
+      "category": "engineering",
+      "published": "2026-09-30T16:00:00+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Vercel Agent now installs private packages from npm and custom registries",
+      "url": "https://vercel.com/changelog/vercel-agent-now-installs-private-packages-from-npm-and-custom-registries",
+      "source": "Vercel",
+      "publisher": "Vercel",
+      "category": "engineering",
+      "published": "2026-09-30T23:22:00+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Edge Requests are now called CDN Requests",
+      "url": "https://vercel.com/changelog/edge-requests-are-now-called-cdn-requests",
+      "source": "Vercel",
+      "publisher": "Vercel",
+      "category": "engineering",
+      "published": "2026-09-30T20:00:00+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Voyage Rerank 3 and Rerank 3 Lite are now available on AI Gateway",
+      "url": "https://vercel.com/changelog/voyage-rerank-3-and-rerank-3-lite-are-now-available-on-ai-gateway",
+      "source": "Vercel",
+      "publisher": "Vercel",
+      "category": "engineering",
+      "published": "2026-09-30T00:00:00+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Vercel Sandbox now supports Secure Compute",
+      "url": "https://vercel.com/changelog/vercel-sandbox-now-supports-secure-compute",
+      "source": "Vercel",
+      "publisher": "Vercel",
+      "category": "engineering",
+      "published": "2026-09-30T00:00:00+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": "title relevance filter"
+    },
+    {
+      "title": "Ling 3.1 Flash is now available on AI Gateway",
+      "url": "https://vercel.com/changelog/ling-3-1-flash-is-now-available-on-ai-gateway",
+      "source": "Vercel",
+      "publisher": "Vercel",
+      "category": "engineering",
+      "published": "2026-09-30T00:00:00+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": ""
+    },
+    {
+      "title": "Vercel CDN no longer caches responses with Vary: Cookie",
+      "url": "https://vercel.com/changelog/vary-cookie-responses-no-longer-cached",
+      "source": "Vercel",
+      "publisher": "Vercel",
+      "category": "engineering",
+      "published": "2026-09-30T00:00:00+00:00",
+      "original_rejection_reason": "older than coverage window",
+      "rejection_reason": "title relevance filter"
+    }
+  ],
+  "selected_representatives": [],
+  "link_outcomes": {}
+}

@@ -1,0 +1,108 @@
+{
+  "publication_date_utc": "2026-09-30",
+  "source_captured_at": "2026-10-06T17:57:42.282185+00:00",
+  "reviewer": "repository owner",
+  "items": [
+    {
+      "id": "061338e668ed6974",
+      "url": "https://openai.com/index/helping-small-businesses-put-ai-to-work",
+      "title": "Helping small businesses put AI to work",
+      "source": "OpenAI",
+      "published": "2026-09-30T10:00:00+00:00",
+      "include": "yes",
+      "importance": 2,
+      "inspection_evidence": "article",
+      "evidence": "user_feedback",
+      "reviewer_note": "Explains OpenAI direction and includes testimonials, which the owner values."
+    },
+    {
+      "id": "63e9a822faf54946",
+      "url": "https://www.microsoft.com/en-us/research/blog/forecasting-space-weather-risks-on-power-grids/",
+      "title": "Forecasting space weather risks on power grids",
+      "source": "Microsoft Research",
+      "published": "2026-09-30T16:00:00+00:00",
+      "include": "no",
+      "importance": null,
+      "inspection_evidence": "article",
+      "evidence": "user_feedback",
+      "reviewer_note": "The owner considers this an ordinary ML application without a groundbreaking contribution; the comment about the author being an intern is an owner impression, not independently verified."
+    },
+    {
+      "id": "74c2ff7e2707d1f6",
+      "url": "https://huggingface.co/blog/open-tts-leaderboard",
+      "title": "Open TTS Leaderboard: Scalable Evaluation for Multilingual Text-to-Speech and Voice Cloning",
+      "source": "Hugging Face",
+      "published": "2026-09-30T00:00:00+00:00",
+      "include": "yes",
+      "importance": 2,
+      "inspection_evidence": "article",
+      "evidence": "user_feedback",
+      "reviewer_note": "Useful evaluation that supports competition."
+    },
+    {
+      "id": "855f5ee592204ed7",
+      "url": "https://pytorch.org/blog/from-upstream-changes-to-downstream-confidence-inside-torch-spyres-integration-with-pytorch-crcr/",
+      "title": "From Upstream Changes to Downstream Confidence: Inside Torch Spyre’s Integration with PyTorch CRCR",
+      "source": "PyTorch",
+      "published": "2026-09-30T13:40:56+00:00",
+      "include": "yes",
+      "importance": 3,
+      "inspection_evidence": "article",
+      "evidence": "user_feedback",
+      "reviewer_note": "Really useful; the owner loves the technical details."
+    },
+    {
+      "id": "a7a7eb7ce0571e62",
+      "url": "https://pytorch.org/blog/a-ray-focused-guide-to-pytorch-conference-north-america/",
+      "title": "A Ray-Focused Guide to PyTorch Conference North America",
+      "source": "PyTorch",
+      "published": "2026-09-30T16:45:20+00:00",
+      "include": "yes",
+      "importance": 1,
+      "inspection_evidence": "article",
+      "evidence": "user_feedback",
+      "reviewer_note": "Useful discovery of Ray despite an announcement-oriented format. Importance 1 reflects a useful niche introduction, not essential coverage. No claim about project ownership is independently verified."
+    },
+    {
+      "id": "cd3206004eeb5948",
+      "url": "https://developer.nvidia.com/blog/tracing-agent-harness-behavior-with-nvidia-nemo-relay/",
+      "title": "Tracing Agent Harness Behavior with NVIDIA NeMo Relay",
+      "source": "NVIDIA Developer",
+      "published": "2026-09-30T16:00:00+00:00",
+      "include": "yes",
+      "importance": 2,
+      "inspection_evidence": "article",
+      "evidence": "user_feedback",
+      "reviewer_note": "Interesting idea: evaluate whether agents do tasks efficiently; the owner may not follow the exact implementation."
+    },
+    {
+      "id": "ce43ddffc7da364d",
+      "url": "https://www.anthropic.com/research/what-work-can-robots-do",
+      "title": "What work can robots do?",
+      "source": "Anthropic Research",
+      "published": "2026-09-30T00:00:00+00:00",
+      "include": "yes",
+      "importance": 3,
+      "inspection_evidence": "article",
+      "evidence": "user_feedback",
+      "reviewer_note": "The owner highly values Anthropic’s thinking and this robotics research post."
+    },
+    {
+      "id": "ce56aa83d0064ef1",
+      "url": "https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/",
+      "title": "Gemini 4 Argon: our next era of frontier intelligence",
+      "source": "Google DeepMind",
+      "published": "2026-09-30T20:01:45+00:00",
+      "include": "yes",
+      "importance": 3,
+      "inspection_evidence": "article",
+      "evidence": "user_feedback",
+      "reviewer_note": "The owner wants coverage of the model announcement. Feedback refers to queue item 8 using a different Google URL; both URLs retained without independently verifying redirect/canonical equivalence.",
+      "feedback_url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/?utm_source=deepmind.google&utm_medium=referral&utm_campaign=gdm&utm_content="
+    }
+  ],
+  "snapshot_captured_at": "2026-10-06T17:57:42.282185+00:00",
+  "snapshot_sha256": "754f5da6ecbd556c611bd0d136871ad945330d15e461f7a9d0b3541c8d8b6697",
+  "review_date": "2026-10-08",
+  "provenance": "Direct owner feedback in chat; notes lightly normalized. Owner reports skimming most and reading a couple of the eight articles, without identifying which were read fully. Article evidence reflects that collective inspection report, not independent fact verification. No exact review time was supplied."
+}

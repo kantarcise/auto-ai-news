@@ -45,6 +45,8 @@ The owner has reviewed all 21 selected articles in the latest release. [Recorded
 
 ## Next evaluation steps
 
+The [reviewed title-topic change](apply-reviewed-topics.md) proposes applying the unchanged tested patterns after the owner’s eight additional September 30 reviews. It recovers three wanted titles and still misses TTS/robotics. The older-date comparison separates the actual capture clock from its retrospective assessment clock; it is not a historical report replay.
+
 The [October 6 offline comparison](relevance-comparison-2026-10-06.md) tests extra model/framework/GPU/vector-search title matches against saved gate outcomes and the owner's twelve preferences. It recovers four wanted title-filter misses; the owner subsequently read and approved all four additional matches. Both checks still admit the unwanted event listing. These are same-day development examples, not measured production-quality gains. Test on separate dates and review more negative examples before changing the daily rule.
 
 For new dates, use the [optional broader capture](capture.md) to retain parsed entries rejected before ranking alongside selected stories, source diagnostics and actual link-check outcomes. The existing October 3 snapshot remains unchanged. Broader-pool recall includes operationally ineligible positives and must be distinguished from the older eligible-pool metrics.

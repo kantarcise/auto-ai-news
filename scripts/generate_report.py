@@ -26,6 +26,11 @@ try:
 except ModuleNotFoundError:
     from article_content import MAX_REQUESTS, fetch_body
 
+try:
+    from scripts.relevance_topics import topic_matches
+except ModuleNotFoundError:
+    from relevance_topics import topic_matches
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCES = ROOT / "config" / "sources.json"
 DEFAULT_OUTPUT = ROOT / "README.md"
@@ -497,7 +502,7 @@ def is_ai_related(item: Item) -> bool:
         source=item.source,
         source_priority=item.source_priority,
     )
-    return ai_relevance_score(title_only) > 0
+    return ai_relevance_score(title_only) > 0 or bool(topic_matches(item.title))
 
 
 def is_quiet_day_roundup(item: Item) -> bool:
