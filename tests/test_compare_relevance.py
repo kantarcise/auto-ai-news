@@ -7,6 +7,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts.compare_relevance import compare, topic_matches
+from scripts.generate_report import Item, is_ai_related
 from scripts.review_candidates import candidate_id
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -57,6 +58,73 @@ def inputs():
 
 
 class CompareRelevanceTest(unittest.TestCase):
+    def test_production_admits_tested_topics_without_source_or_summary_shortcuts(self):
+        for title in (
+            "Qwen3.8 27B experiments",
+            "PyTorch conference guide",
+            "GPU cluster setup",
+            "ROCm data movement",
+            "Vector search joins",
+        ):
+            self.assertTrue(
+                is_ai_related(Item(title, "https://example.com", "Example", 3))
+            )
+        for title in ("Gardening tips", "Qwen3.8foo", "GPUish utility"):
+            self.assertFalse(
+                is_ai_related(
+                    Item(
+                        title,
+                        "https://example.com",
+                        "PyTorch",
+                        3,
+                        summary="GPU PyTorch",
+                    )
+                )
+            )
+
+    def test_second_date_preferences_and_frozen_alternative(self):
+        snapshot = json.loads(
+            (ROOT / "docs/evaluation/relevance-input-2026-09-30.json").read_text()
+        )
+        feedback = json.loads(
+            (ROOT / "docs/evaluation/owner-feedback-2026-09-30.json").read_text()
+        )
+        result = compare(snapshot, feedback)
+        self.assertEqual(result["owner_wanted"], 7)
+        self.assertEqual(result["owner_unwanted"], 1)
+        self.assertEqual(result["policies"]["current"]["owner_wanted_admitted"], 2)
+        self.assertEqual(result["policies"]["alternative"]["owner_wanted_admitted"], 5)
+        added = [
+            row for row in result["decisions"] if row["id"] in result["newly_admitted"]
+        ]
+        self.assertEqual(len(added), 3)
+        self.assertTrue(all(row["owner_include"] == "yes" for row in added))
+        saved = json.loads(
+            (ROOT / "docs/evaluation/relevance-results-2026-09-30.json").read_text()
+        )
+        hashes = saved.pop("input_sha256")
+        self.assertEqual(saved, result)
+        for field, filename in (
+            ("snapshot", "relevance-input-2026-09-30.json"),
+            ("feedback", "owner-feedback-2026-09-30.json"),
+        ):
+            self.assertEqual(
+                hashes[field],
+                hashlib.sha256(
+                    (ROOT / "docs/evaluation" / filename).read_bytes()
+                ).hexdigest(),
+            )
+        self.assertEqual(
+            next(row for row in feedback["items"] if row["include"] == "no")[
+                "importance"
+            ],
+            None,
+        )
+        result_without_clock = copy.deepcopy(snapshot)
+        result_without_clock.pop("assessment_at")
+        with self.assertRaises(ValueError):
+            compare(result_without_clock, feedback)
+
     def test_word_boundaries_and_versioned_names(self):
         for title in [
             "Qwen3.8 27B",

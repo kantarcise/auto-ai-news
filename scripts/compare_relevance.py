@@ -6,33 +6,23 @@ import argparse
 import datetime as dt
 import hashlib
 import json
-import re
 from pathlib import Path
 
 from scripts.generate_report import Item, freshness_reason
+from scripts.relevance_topics import TOPICS, topic_matches
 from scripts.review_candidates import candidate_id
-
-# Proposed additions, chosen using the October 6 owner feedback. Not tuned or held out.
-TOPICS = {
-    "versioned model name": r"\b(?:qwen|gpt|llama|claude|gemini|deepseek|mistral)[- ]?\d+(?:\.\d+)*(?![\w]|\.\d)",
-    "framework or GPU term": r"\b(?:pytorch|gpus?|cuda|rocm)\b",
-    "vector search": r"\bvector\s+search\b",
-}
-
-
-def topic_matches(title: str) -> list[str]:
-    return [
-        name
-        for name, pattern in TOPICS.items()
-        if re.search(pattern, title, re.IGNORECASE)
-    ]
 
 
 def compare(snapshot: dict, feedback: dict) -> dict:
     """Compare admission only; never invent link outcomes or run ranking."""
-    now = dt.datetime.fromisoformat(snapshot["captured_at"])
-    if now.tzinfo is None or now.utcoffset() is None:
+    captured = dt.datetime.fromisoformat(snapshot["captured_at"])
+    if captured.tzinfo is None or captured.utcoffset() is None:
         raise ValueError("Capture clock must be timezone-aware.")
+    now = dt.datetime.fromisoformat(
+        snapshot.get("assessment_at", snapshot["captured_at"])
+    )
+    if now.tzinfo is None or now.utcoffset() is None:
+        raise ValueError("Assessment clock must be timezone-aware.")
     if snapshot["lookback_hours"] <= 0:
         raise ValueError("Coverage window must be positive.")
     if feedback["snapshot_captured_at"] != snapshot["captured_at"]:
@@ -58,6 +48,7 @@ def compare(snapshot: dict, feedback: dict) -> dict:
             "",
             "title relevance filter",
             "quiet-day title policy",
+            "event listing without technical topic",
         ):
             raise ValueError("Unsupported recent collection outcome.")
         candidates[row["url"]] = row
@@ -132,7 +123,7 @@ def compare(snapshot: dict, feedback: dict) -> dict:
                 row["owner_include"] not in ("yes", "no") for row in admitted
             ),
         }
-    return {
+    result = {
         "captured_at": snapshot["captured_at"],
         "lookback_hours": snapshot["lookback_hours"],
         "scope": "Recent linked title admission; not final ranking or report selection.",
@@ -151,6 +142,10 @@ def compare(snapshot: dict, feedback: dict) -> dict:
         ],
         "decisions": decisions,
     }
+
+    if "assessment_at" in snapshot:
+        result["assessment_at"] = snapshot["assessment_at"]
+    return result
 
 
 def main() -> None:
