@@ -45,6 +45,8 @@ The owner has reviewed all 21 selected articles in the latest release. [Recorded
 
 ## Next evaluation steps
 
+The [context-admission follow-up](contextual-admission.md) addresses #28/#29: ambiguous generic keywords and ordinary family-name meanings can no longer bypass the new context checks through the old title fallback. All 18 reviewed wanted articles stay eligible. One unreviewed agent/database headline is newly excluded and documented as a potential miss. The original PR #27 comparisons remain frozen.
+
 The [topic-profile implementation](adaptive-relevance.md) revises PR #27 to match future model versions and use stable family/topic context rules for relevance, with fresh-pool similarity scores recorded only as a bounded experimental ranking proposal. On the same development reviews it admits all 18 wanted articles and excludes both unwanted articles, while adding one unreviewed robotics title. These results are not an independent test or measured ranking-quality gain. The [earlier title-only comparison](apply-reviewed-topics.md) remains historical evidence; its older-date assessment is not a historical report replay.
 
 The [October 6 offline comparison](relevance-comparison-2026-10-06.md) tests extra model/framework/GPU/vector-search title matches against saved gate outcomes and the owner's twelve preferences. It recovers four wanted title-filter misses; the owner subsequently read and approved all four additional matches. Both checks still admit the unwanted event listing. These are same-day development examples, not measured production-quality gains. Test on separate dates and review more negative examples before changing the daily rule.

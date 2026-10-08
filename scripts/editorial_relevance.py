@@ -40,17 +40,33 @@ def load_config(path: Path = DEFAULT_CONFIG) -> dict:
 
 
 def tokens(
-    text: str, families: list[str], ambiguous: list[str] | None = None
+    text: str,
+    families: list[str],
+    ambiguous: list[str] | None = None,
+    *,
+    context: str = "",
+    variants: dict | None = None,
+    non_model_phrases: list[str] | None = None,
 ) -> list[str]:
     text = html.unescape(re.sub(r"<[^>]*>", " ", text[:MAX_TEXT_CHARS])).casefold()
     # Require a whole family/version: Qwen99.2 works, Qwen99foo does not.
     family_pattern = "|".join(re.escape(name) for name in families)
 
     def replace_family(match: re.Match) -> str:
+        if any(
+            re.match(re.escape(phrase) + r"\b", text[match.start() :])
+            for phrase in (non_model_phrases or [])
+        ):
+            return match.group()
         if (
             match.group(1) in (ambiguous or [])
             and not re.search(r"\d", match.group())
-            and not re.search(r"\b(?:ai|llm|model|models|reasoning|inference)\b", text)
+            and not (has_ai_context(text) or has_ai_context(context))
+            and not re.match(r"[- ]+models?\b", text[match.end() :])
+            and not any(
+                re.match(rf"[- ]+{re.escape(variant)}\b", text[match.end() :])
+                for variant in (variants or {}).get(match.group(1), [])
+            )
         ):
             return match.group()
         return " model_family "
@@ -65,6 +81,41 @@ def tokens(
     return [aliases.get(word, word) for word in words]
 
 
+def has_ai_context(text: str) -> bool:
+    """Recognizable AI/compute context; a bare model/agent/transformer isn't enough."""
+    text = html.unescape(re.sub(r"<[^>]*>", " ", text[:MAX_TEXT_CHARS])).casefold()
+    return bool(
+        re.search(
+            r"\b(?:ai|agi|llms?|gpt|chatgpt|openai|anthropic|pytorch|cuda|gpus?|rocm|"
+            r"inference|tokenizers?|multimodal|attention|interpretability|recommenders?|"
+            r"triton|tokenization|fine[- ]tuning)\b|"
+            r"\b(?:artificial intelligence|machine learning|language models?|neural networks?|"
+            r"deep learning|natural language|reinforcement learning|computer vision|"
+            r"vector search|model[- ]distillation|reward hacks?|model weights|context window|"
+            r"performance bottleneck|speech synthesis)\b|인공지능|\b(?:npm|registries)\b",
+            text,
+        )
+    )
+
+
+def keyword_admission(title: str, summary: str, keywords: set[str]) -> bool:
+    """Context-check fallback keywords without vetoing all unmatched profiles."""
+    config = load_config()
+    families = set(config["model_families"])
+    ambiguous = set(config["ambiguous_fallback_keywords"])
+    context = has_ai_context(title) or has_ai_context(summary)
+    for keyword in keywords:
+        # Family interpretations belong to assess; the fallback must not undo
+        # rejection of Claude Monet or Gemini astrology.
+        if keyword in families or keyword in {"muse spark", "muse image", "muse video"}:
+            continue
+        if re.search(r"\b" + re.escape(keyword) + r"\b", title, re.IGNORECASE) and (
+            keyword not in ambiguous or context
+        ):
+            return True
+    return False
+
+
 def assess(rows: list[dict], config: dict | None = None) -> list[Relevance]:
     """Use one bounded document per URL to calculate this pool's IDF weights.
 
@@ -74,10 +125,31 @@ def assess(rows: list[dict], config: dict | None = None) -> list[Relevance]:
     config = load_config() if config is None else config
     families = config["model_families"]
     ambiguous = config.get("ambiguous_model_families", [])
-    titles = [set(tokens(row["title"], families, ambiguous)) for row in rows]
+    variants = config.get("model_variants", {})
+    titles = [
+        set(
+            tokens(
+                row["title"],
+                families,
+                ambiguous,
+                context=row.get("summary", "")[:MAX_TEXT_CHARS],
+                variants=variants,
+                non_model_phrases=config.get("non_model_family_phrases", []),
+            )
+        )
+        for row in rows
+    ]
     documents = [
         Counter(
-            tokens(row["title"], families, ambiguous) * 2
+            tokens(
+                row["title"],
+                families,
+                ambiguous,
+                context=row.get("summary", "")[:MAX_TEXT_CHARS],
+                variants=variants,
+                non_model_phrases=config.get("non_model_family_phrases", []),
+            )
+            * 2
             + tokens(row.get("summary", ""), families, ambiguous)
         )
         for row in rows

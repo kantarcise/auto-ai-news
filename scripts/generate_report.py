@@ -27,9 +27,9 @@ except ModuleNotFoundError:
     from article_content import MAX_REQUESTS, fetch_body
 
 try:
-    from scripts.editorial_relevance import Relevance, assess
+    from scripts.editorial_relevance import Relevance, assess, keyword_admission
 except ModuleNotFoundError:
-    from editorial_relevance import Relevance, assess
+    from editorial_relevance import Relevance, assess, keyword_admission
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCES = ROOT / "config" / "sources.json"
@@ -497,20 +497,16 @@ def ai_relevance_score(item: Item) -> int:
 def is_ai_related(item: Item) -> bool:
     assessment = item.editorial_relevance
     if assessment is None:
-        assessment = assess([{"title": item.title, "url": item.url}])[0]
+        assessment = assess(
+            [{"title": item.title, "summary": item.summary, "url": item.url}]
+        )[0]
     if assessment.event_listing:
         return False
     if assessment.admitted:
         return True
     if item.source in {"Latent Space", "smol.ai"}:
         return True
-    title_only = Item(
-        title=item.title,
-        url=item.url,
-        source=item.source,
-        source_priority=item.source_priority,
-    )
-    return ai_relevance_score(title_only) > 0
+    return keyword_admission(item.title, item.summary, AI_KEYWORDS)
 
 
 def is_quiet_day_roundup(item: Item) -> bool:
@@ -607,21 +603,19 @@ def classify_story(item: Item) -> str:
         title,
     ):
         return "lab_research"
-    brand = re.search(
-        r"\b(qwen|grok|gpt|mistral|llama|flux|deepseek|claude|gemini|glm|kimi|minimax|seedance|seedream|muse spark|muse image|muse video)\b",
-        title,
+    assessment = (
+        item.editorial_relevance
+        or assess([{"title": item.title, "summary": item.summary, "url": item.url}])[0]
     )
-    family_match = bool(
-        item.editorial_relevance is not None and item.editorial_relevance.model_family
-    )
+    family_match = assessment.model_family
     model_topic = re.search(
         r"\b(model|llm|multimodal|inference|reasoning|agent|agents|diffusion)\b", title
     )
-    if (brand or family_match or model_topic) and re.search(
+    if (family_match or model_topic) and re.search(
         r"^(introducing|announcing|releasing|unveiling)\b", title
     ):
         return "lab_announcement"
-    if (brand or family_match) and re.search(r"\d|\b(model|reasoning|vision)\b", title):
+    if family_match and re.search(r"\d|\b(model|reasoning|vision)\b", title):
         return "lab_announcement"
     return "other"
 
