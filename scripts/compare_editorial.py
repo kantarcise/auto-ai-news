@@ -1,4 +1,4 @@
-"""Compare adaptive admission with two frozen title checks, without network I/O."""
+"""Compare stable topic admission and shadow scores with frozen title checks."""
 
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ def compare_editorial(
         row["topic"] = assessment.topic
         row["similarity"] = round(assessment.similarity, 6)
         row["matched_terms"] = list(assessment.terms)
-        row["rank_bonus"] = round(assessment.rank_bonus, 6)
+        row["proposed_rank_bonus"] = round(assessment.proposed_rank_bonus, 6)
         row["event_listing"] = assessment.event_listing
     policies = {}
     for name in ("current", "alternative", "profile"):
@@ -61,7 +61,7 @@ def compare_editorial(
         "policies": policies,
         "decisions": decisions,
         "limitations": [
-            "Development set: profiles and threshold were chosen after reading owner feedback.",
+            "Development set: profiles and context rules were chosen after reading owner feedback.",
             "Targeted reviews, not a random sample or held-out evaluation.",
             "Title-only replay: frozen summaries, source priorities and full ranking inputs are unavailable.",
             "Bonus deltas are shown; final selection and quality improvements are not measured.",

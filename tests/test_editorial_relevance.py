@@ -72,7 +72,7 @@ class EditorialRelevanceTest(unittest.TestCase):
         self.assertFalse(second.event_listing)
         self.assertTrue(second.admitted)
 
-    def test_bonus_changes_order_and_is_bounded(self):
+    def test_bonus_is_shadow_only_and_is_bounded(self):
         generic = report.Item(
             "AI update", "https://example.com/ai", "Example", 3, published=NOW
         )
@@ -87,8 +87,82 @@ class EditorialRelevanceTest(unittest.TestCase):
         for item, assessment in zip((generic, technical), assess(rows)):
             item.editorial_relevance = assessment
             report.score_item(item, NOW)
-            self.assertLessEqual(assessment.rank_bonus, 1)
-        self.assertGreater(technical.rank_score, generic.rank_score)
+            self.assertLessEqual(assessment.proposed_rank_bonus, 1)
+        self.assertEqual(technical.rank_score, generic.rank_score)
+        self.assertGreater(
+            technical.rank_score + technical.editorial_relevance.proposed_rank_bonus,
+            generic.rank_score + generic.editorial_relevance.proposed_rank_bonus,
+        )
+
+    def test_ambiguous_topic_anchors_need_supporting_technical_context(self):
+        for title in (
+            "A speech at the wedding",
+            "Vector illustration tips for designers",
+            "Olympic torch arrives in Paris",
+        ):
+            assessment = assess([row(title)])[0]
+            self.assertFalse(assessment.admitted, title)
+            self.assertEqual(assessment.proposed_rank_bonus, 0)
+            self.assertFalse(
+                report.is_ai_related(
+                    report.Item(title, "https://example.com", "Example", 3)
+                )
+            )
+        for title in (
+            "Vector search joins",
+            "Speech voice cloning evaluation",
+            "Torch compiler integration",
+        ):
+            self.assertTrue(assess([row(title)])[0].admitted, title)
+
+    def test_eligibility_survives_cross_url_syndication(self):
+        title = "What work can robots do?"
+        rows = [row(title, url=f"https://example.com/{i}") for i in range(21)]
+        alone = assess(rows[:1])[0]
+        repeated = assess(rows)
+        self.assertTrue(alone.admitted)
+        self.assertTrue(all(assessment.admitted for assessment in repeated))
+        self.assertNotEqual(alone.similarity, repeated[0].similarity)
+
+    def test_technical_events_outside_profiles_preserve_legacy_eligibility(self):
+        for title in (
+            "AI inference optimization workshop",
+            "Machine learning research conference",
+        ):
+            item = report.Item(
+                title, "https://example.com/events/workshop", "Example", 3
+            )
+            item.editorial_relevance = assess([row(title, url=item.url)])[0]
+            self.assertFalse(item.editorial_relevance.event_listing)
+            self.assertTrue(report.is_ai_related(item))
+
+    def test_shadow_capture_records_order_without_changing_selection(self):
+        source = report.Source("Example", "https://example.com", "https://feed", 3)
+        entries = [
+            report.Item(
+                "AI update", "https://example.com/ai", "Example", 3, published=NOW
+            ),
+            report.Item(
+                "GPU cluster runtime configuration",
+                "https://example.com/gpu",
+                "Example",
+                3,
+                published=NOW - dt.timedelta(seconds=1),
+            ),
+        ]
+        snapshot = {}
+        with (
+            patch.object(report, "fetch_url", return_value=(200, "https://feed", "")),
+            patch.object(report, "parse_source", return_value=entries),
+            patch.object(report, "check_url_accessible", return_value=(True, "")),
+        ):
+            selected, _ = report.collect_items([source], NOW, evaluation=snapshot)
+        ranking = snapshot["shadow_ranking"]
+        self.assertEqual([item.url for item in selected], ranking["current_order"])
+        self.assertEqual(ranking["current_order"], [entry.url for entry in entries])
+        self.assertEqual(
+            ranking["proposed_order"], [entry.url for entry in reversed(entries)]
+        )
 
     def test_normalized_future_model_receives_existing_lab_classification(self):
         item = report.Item(
@@ -99,6 +173,13 @@ class EditorialRelevanceTest(unittest.TestCase):
             category="frontier_lab",
         )
         item.editorial_relevance = assess([row(item.title)])[0]
+        self.assertEqual(report.classify_story(item), "lab_announcement")
+        item.title = "Introducing Qwen99.17 GPU cluster runtime performance"
+        item.editorial_relevance = assess([row(item.title)])[0]
+        self.assertEqual(
+            item.editorial_relevance.topic, "GPU and framework engineering"
+        )
+        self.assertTrue(item.editorial_relevance.model_family)
         self.assertEqual(report.classify_story(item), "lab_announcement")
 
     def test_collection_integration_preserves_freshness_and_records_explanations(self):

@@ -1,6 +1,6 @@
 # Topic profiles and future model versions
 
-This revises PR #27 for issue #12: the daily generator compares headlines and feed summaries with short descriptions of the news the owner values. It uses the resulting score for both relevance admission and ranking. The earlier title-only additions are preserved as an offline comparison, not the production implementation.
+This revises PR #27 for issue #12: the daily generator compares headlines and feed summaries with short descriptions of the news the owner values. Eligibility uses stable family/topic rules. Adaptive similarity is recorded as an experimental ranking proposal; it does not change the daily selection order. The earlier title-only additions are preserved as an offline comparison, not the production implementation.
 
 ## What changes
 
@@ -12,9 +12,14 @@ Word weights adapt to each collection's fresh candidate pool. A word appearing i
 
 Implementation uses log term weights, smoothed inverse document frequency and cosine similarity, following the standard vector-space approach described in [Stanford's Introduction to Information Retrieval, chapter 6](https://nlp.stanford.edu/IR-book/pdf/06vect.pdf). This is adaptive lexical matching, not semantic understanding, model training or an LLM call. The descriptions remain editable editorial input.
 
-A similarity of at least 0.04 admits a topic match. It adds `min(1, 2 * similarity)` points to the existing continuous score, before stars are assigned. The threshold and bonus are explicit development choices, selected with these reviews available; they have not been optimized or independently validated. Existing generic title keywords and the Latent Space/smol.ai bypass remain fallbacks. Event-directory URLs without a technical topic are rejected, including the march listing; technical conference guides can qualify. The classifier's existing lab bonus, source priorities, publisher caps, grouping and access checks remain in place.
+Eligibility is independent of similarity and daily word frequencies. A headline anchor qualifies under fixed rules; ambiguous anchors such as speech, vector, torch and agent also need a distinct supporting technical term in the headline or bounded summary. For example, vector plus search qualifies, whereas vector illustration tips does not. Known family matches always qualify. Summaries can support a headline anchor but still cannot admit unrelated or vague headlines without one; broader summary-only recovery needs separate evaluation.
 
-All scoring happens after the same inclusive 72-hour date and quiet-day checks, before grouping and link selection. This adds no requests or runtime dependencies. The evaluation capture records the matched topic, profile terms, similarity and bonus; it does not copy summaries or article bodies.
+Technical context for event-directory URLs is evaluated independently of profile matching. Inference/training/LLM/framework context, machine learning, or AI/model research and optimization can preserve eligibility through the existing title keywords even without a configured topic anchor. Generic AI alone is insufficient. The march listing stays excluded; technical workshops and conference guides remain eligible.
+
+The proposed experimental bonus is `min(1, 2 * similarity)`. It is **shadow-only**: `score_item` does not apply it. Optional captures store the actual and proposed scores and orderings for admitted story groups before publisher caps and access checks. The proposed ordering is not a separately selected report, and it makes no extra requests. Model-family detection used by the existing lab classifier is a stable flag independent of the best-matching profile or pool weights. Generic title keywords and the Latent Space/smol.ai bypass remain fallbacks.
+
+
+All scoring happens after the same inclusive 72-hour date and quiet-day checks, before grouping and link selection. This adds no requests or runtime dependencies. The evaluation capture records the matched topic, profile terms, similarity and proposed bonus; it does not copy summaries or article bodies.
 
 ## Comparison with the earlier checks
 
@@ -30,7 +35,7 @@ The two newly recovered wanted stories are the Open TTS Leaderboard (importance 
 
 There is also **one newly admitted unreviewed title** beyond the earlier alternative: “California crashes robot fight club” from The Rundown AI. It matches robotics but may have little technical substance. It is an unresolved false-positive risk, not a success. The first pool now admits 27 articles, including 16 unreviewed; the second admits 17, including 10 unreviewed. Admission does not guarantee final report placement or accessible links.
 
-These 20 judgments were purposefully selected, and the new profiles were developed after seeing them. The results are development-set evidence, not an independent test or measured overall precision. Frozen captures lack summaries and source priorities; replay therefore uses titles only. It shows admission decisions and new score components, without inventing historical full rankings, link checks or report selections. Controlled offline regression tests demonstrate that the new bonus can change ordering, but **improved ranking quality has not been measured**. A broad unseen pool with negative examples is needed to establish that.
+These 20 judgments were purposefully selected, and the new profiles were developed after seeing them. The results are development-set evidence, not an independent test or measured overall precision. Frozen captures lack summaries and source priorities; replay therefore uses titles only. It shows admission decisions and experimental score components, without inventing historical full rankings, link checks or report selections. Controlled offline regression tests demonstrate that the proposed bonus can change the recorded shadow ordering while leaving actual selection order alone, but **improved ranking quality has not been measured**. A broad unseen pool with negative examples is needed to establish that.
 
 To reproduce without network access:
 
@@ -43,6 +48,12 @@ Each output contains the exact profile configuration and input hashes, per-title
 
 ## Verification and limits
 
-Regression tests exercise unseen version numbers and a new configured family, ambiguous names, word boundaries, summary-only false positives, evolving pool weights, duplicate/order stability, bounded bonuses and changed ordering, complete collection integration, stale rejection, event/conference distinction, deterministic replay and feedback provenance. The existing Markdown escaping, missing dates, empty-report, source-diagnostic, access-fallback and publisher-cap tests also run.
+Regression tests reproduce all three reviewer findings: ambiguous-anchor false positives, technical-event rejection, and eligibility changes under cross-URL syndication. They also exercise unseen version numbers and a new configured family, ambiguous names, word boundaries, summary-only false positives, evolving pool weights, duplicate/order stability, bounded shadow bonuses and recorded order changes, complete collection integration, stale rejection, event/conference distinction, deterministic replay and feedback provenance. The existing Markdown escaping, missing dates, empty-report, source-diagnostic, access-fallback and publisher-cap tests also run.
 
 Remaining limitations include synonym misses, false matches on generic technical words, English-focused tokenization, evolving per-pool scores, short headlines with little context, and the existing publisher bypass. Runtime stars are heuristic ranking buckets, not editorial-quality judgments. This is a substantive relevance/ranking implementation step within issue #12; it does not finish the whole issue. No release publication or live-feed quality validation was performed for this change.
+
+## Review follow-up
+
+The [review at commit 1845703](https://github.com/kantarcise/auto-ai-news/pull/27#issuecomment-6055095762) correctly identified three bugs. Synthetic probes reproduced all three before the fixes: wedding speech/vector illustration/Olympic torch matches; technical-event rejection outside configured profiles; and robotics admission falling below the similarity threshold as syndicated coverage grew. The revised rule removes the eligibility threshold, requires supporting context for ambiguous anchors, evaluates event context independently, and records similarity ranking in shadow mode. It does not claim a measured ranking improvement.
+
+Remaining evaluation work is unchanged: gather independent dates with summaries and complete ranking inputs, compare fixed-topic scoring against the adaptive proposal, and measure reviewed selection usefulness, important-story recall and graded ordering before enabling a ranking bonus. No new review batch is required to verify these bug fixes.

@@ -24,7 +24,6 @@
       "inkling",
       "muse"
     ],
-    "minimum_similarity": 0.04,
     "ambiguous_model_families": [
       "seed",
       "nova",
@@ -40,7 +39,16 @@
           "llm",
           "transformer"
         ],
-        "description": "model_family language models frontier intelligence reasoning training inference weights architecture context tokens benchmark evaluation multimodal transformer llm release research"
+        "description": "model_family language models frontier intelligence reasoning training inference weights architecture context tokens benchmark evaluation multimodal transformer llm release research",
+        "supporting_terms": [
+          "language",
+          "reasoning",
+          "training",
+          "inference",
+          "weights",
+          "transformer",
+          "llm"
+        ]
       },
       {
         "name": "GPU and framework engineering",
@@ -54,7 +62,30 @@
           "compiler",
           "kernel"
         ],
-        "description": "gpu cuda rocm pytorch torch torchcodec hardware cluster runtime memory throughput latency performance compiler kernel decoding encoding integration maintenance deployment training inference data parallel distributed"
+        "description": "gpu cuda rocm pytorch torch torchcodec hardware cluster runtime memory throughput latency performance compiler kernel decoding encoding integration maintenance deployment training inference data parallel distributed",
+        "supporting_terms": [
+          "gpu",
+          "cuda",
+          "rocm",
+          "pytorch",
+          "torchcodec",
+          "cluster",
+          "runtime",
+          "memory",
+          "throughput",
+          "latency",
+          "performance",
+          "compiler",
+          "kernel",
+          "decoding",
+          "encoding",
+          "integration",
+          "deployment",
+          "training",
+          "inference",
+          "parallel",
+          "distributed"
+        ]
       },
       {
         "name": "speech and model evaluation",
@@ -64,7 +95,17 @@
           "leaderboard",
           "benchmark"
         ],
-        "description": "tts speech voice cloning audio leaderboard benchmark evaluation scalable multilingual text speech open comparison reproducible measurements"
+        "description": "tts speech voice cloning audio leaderboard benchmark evaluation scalable multilingual text speech open comparison reproducible measurements",
+        "supporting_terms": [
+          "tts",
+          "voice",
+          "cloning",
+          "audio",
+          "multilingual",
+          "evaluation",
+          "benchmark",
+          "leaderboard"
+        ]
       },
       {
         "name": "robotics research",
@@ -73,7 +114,15 @@
           "robotics",
           "embodied"
         ],
-        "description": "robot robotics embodied manipulation research learning policy control tasks environment simulation"
+        "description": "robot robotics embodied manipulation research learning policy control tasks environment simulation",
+        "supporting_terms": [
+          "robotics",
+          "embodied",
+          "manipulation",
+          "policy",
+          "simulation",
+          "learning"
+        ]
       },
       {
         "name": "retrieval and agent systems",
@@ -83,8 +132,33 @@
           "agent",
           "embedding"
         ],
-        "description": "vector search retrieval nearest join embedding agent harness tracing workflow observability efficiency evaluation inference deployment tools"
+        "description": "vector search retrieval nearest join embedding agent harness tracing workflow observability efficiency evaluation inference deployment tools",
+        "supporting_terms": [
+          "search",
+          "retrieval",
+          "nearest",
+          "join",
+          "embedding",
+          "harness",
+          "tracing",
+          "observability",
+          "inference",
+          "deployment",
+          "evaluation"
+        ]
       }
+    ],
+    "ranking_mode": "shadow",
+    "ambiguous_topic_anchors": [
+      "speech",
+      "vector",
+      "torch",
+      "agent",
+      "embedding",
+      "compiler",
+      "kernel",
+      "leaderboard",
+      "benchmark"
     ]
   },
   "policies": {
@@ -125,7 +199,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -145,7 +219,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -165,7 +239,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -190,7 +264,7 @@
         "cluster",
         "gpu"
       ],
-      "rank_bonus": 0.239859,
+      "proposed_rank_bonus": 0.239859,
       "event_listing": false
     },
     {
@@ -214,7 +288,7 @@
       "matched_terms": [
         "gpu"
       ],
-      "rank_bonus": 0.091445,
+      "proposed_rank_bonus": 0.091445,
       "event_listing": false
     },
     {
@@ -234,12 +308,10 @@
       "owner_importance": null,
       "inspection_evidence": null,
       "profile_admitted": true,
-      "topic": "retrieval and agent systems",
-      "similarity": 0.084323,
-      "matched_terms": [
-        "agent"
-      ],
-      "rank_bonus": 0.168647,
+      "topic": "",
+      "similarity": 0.0,
+      "matched_terms": [],
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -264,7 +336,7 @@
       "matched_terms": [
         "llm"
       ],
-      "rank_bonus": 0.138676,
+      "proposed_rank_bonus": 0.138676,
       "event_listing": false
     },
     {
@@ -289,7 +361,7 @@
       "matched_terms": [
         "model_family"
       ],
-      "rank_bonus": 0.167475,
+      "proposed_rank_bonus": 0.167475,
       "event_listing": false
     },
     {
@@ -312,7 +384,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -332,7 +404,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -355,7 +427,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -379,7 +451,7 @@
       "matched_terms": [
         "pytorch"
       ],
-      "rank_bonus": 0.127856,
+      "proposed_rank_bonus": 0.127856,
       "event_listing": false
     },
     {
@@ -405,7 +477,7 @@
         "integration",
         "pytorch"
       ],
-      "rank_bonus": 0.345634,
+      "proposed_rank_bonus": 0.345634,
       "event_listing": false
     },
     {
@@ -428,7 +500,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -451,7 +523,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -476,7 +548,7 @@
         "gpu",
         "performance"
       ],
-      "rank_bonus": 0.161714,
+      "proposed_rank_bonus": 0.161714,
       "event_listing": false
     },
     {
@@ -501,7 +573,7 @@
         "data",
         "rocm"
       ],
-      "rank_bonus": 0.282006,
+      "proposed_rank_bonus": 0.282006,
       "event_listing": false
     },
     {
@@ -521,7 +593,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -541,7 +613,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -565,7 +637,7 @@
       "matched_terms": [
         "model_family"
       ],
-      "rank_bonus": 0.143178,
+      "proposed_rank_bonus": 0.143178,
       "event_listing": false
     },
     {
@@ -585,7 +657,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -605,7 +677,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -628,7 +700,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -653,7 +725,7 @@
       "matched_terms": [
         "model_family"
       ],
-      "rank_bonus": 0.122035,
+      "proposed_rank_bonus": 0.122035,
       "event_listing": false
     },
     {
@@ -676,7 +748,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -696,7 +768,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -716,7 +788,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -743,7 +815,7 @@
         "search",
         "vector"
       ],
-      "rank_bonus": 0.634149,
+      "proposed_rank_bonus": 0.634149,
       "event_listing": false
     },
     {
@@ -763,7 +835,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -783,7 +855,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -806,7 +878,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -829,7 +901,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": true
     },
     {
@@ -849,7 +921,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -869,7 +941,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -889,7 +961,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -912,7 +984,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -935,7 +1007,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -955,7 +1027,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -978,7 +1050,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -998,7 +1070,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -1018,7 +1090,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -1041,7 +1113,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -1064,7 +1136,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -1086,7 +1158,7 @@
       "matched_terms": [
         "robot"
       ],
-      "rank_bonus": 0.239848,
+      "proposed_rank_bonus": 0.239848,
       "event_listing": false
     },
     {
@@ -1111,12 +1183,12 @@
       "matched_terms": [
         "model_family"
       ],
-      "rank_bonus": 0.113508,
+      "proposed_rank_bonus": 0.113508,
       "event_listing": false
     }
   ],
   "limitations": [
-    "Development set: profiles and threshold were chosen after reading owner feedback.",
+    "Development set: profiles and context rules were chosen after reading owner feedback.",
     "Targeted reviews, not a random sample or held-out evaluation.",
     "Title-only replay: frozen summaries, source priorities and full ranking inputs are unavailable.",
     "Bonus deltas are shown; final selection and quality improvements are not measured.",

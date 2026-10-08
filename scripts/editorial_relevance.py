@@ -22,15 +22,16 @@ class Relevance:
     terms: tuple[str, ...] = ()
     admitted: bool = False
     event_listing: bool = False
-    rank_bonus: float = 0.0
+    proposed_rank_bonus: float = 0.0
+    model_family: bool = False
 
 
 def load_config(path: Path = DEFAULT_CONFIG) -> dict:
     config = json.loads(path.read_text(encoding="utf-8"))
     if config["schema_version"] != 1:
         raise ValueError("Unsupported editorial profile schema")
-    if not 0 < config["minimum_similarity"] <= 1:
-        raise ValueError("Similarity threshold must be between zero and one")
+    if config["ranking_mode"] != "shadow":
+        raise ValueError("Editorial ranking is currently supported only in shadow mode")
     if not 0 <= config["maximum_rank_bonus"] <= 1:
         raise ValueError("Editorial bonus must be bounded by one point")
     if not config["profiles"] or not config["model_families"]:
@@ -67,8 +68,8 @@ def tokens(
 def assess(rows: list[dict], config: dict | None = None) -> list[Relevance]:
     """Use one bounded document per URL to calculate this pool's IDF weights.
 
-    Profile matching requires a headline anchor: summaries alone cannot admit
-    unrelated headlines. Duplicate URLs do not change document frequencies.
+    Eligibility is a fixed anchor/context rule, independent of pool frequency.
+    Adaptive similarities are recorded only as experimental ranking features.
     """
     config = load_config() if config is None else config
     families = config["model_families"]
@@ -106,9 +107,18 @@ def assess(rows: list[dict], config: dict | None = None) -> list[Relevance]:
         # A long or noisy summary must not erase a useful headline match.
         evidence_vectors = [vector(document), vector(Counter(title))]
         best = Relevance()
+        admitted = "model_family" in title
         for profile, reference in profiles:
-            if not title.intersection(profile["anchors"]):
+            anchors = title.intersection(profile["anchors"])
+            supported_anchors = {
+                anchor
+                for anchor in anchors
+                if anchor not in config["ambiguous_topic_anchors"]
+                or (document.keys() & set(profile["supporting_terms"])) - {anchor}
+            }
+            if not supported_anchors:
                 continue
+            admitted = True
             for weighted in evidence_vectors:
                 overlap = tuple(sorted(weighted.keys() & reference.keys()))
                 length = norm(weighted)
@@ -120,11 +130,20 @@ def assess(rows: list[dict], config: dict | None = None) -> list[Relevance]:
                 )
                 if similarity > best.similarity:
                     best = Relevance(similarity, profile["name"], overlap)
-        admitted = (
-            best.similarity >= config["minimum_similarity"] or "model_family" in title
+        # Technical context is independent of configured topic admission.
+        # Generic "AI" alone cannot distinguish a protest from a workshop.
+        technical_context = (
+            admitted
+            or bool(
+                title
+                & {"inference", "training", "llm", "cuda", "gpu", "pytorch", "rocm"}
+            )
+            or {"machine", "learning"} <= title
+            or bool(
+                title & {"ai", "model", "models"}
+                and title & {"research", "optimization", "evaluation", "engineering"}
+            )
         )
-        # An event-directory URL with no technical topic is a listing, not a
-        # useful technical announcement. Conference guides can still qualify.
         event = bool(re.search(r"/(?:events?|meetups?)/", urlsplit(row["url"]).path))
         results.append(
             Relevance(
@@ -132,10 +151,11 @@ def assess(rows: list[dict], config: dict | None = None) -> list[Relevance]:
                 best.topic,
                 best.terms,
                 admitted,
-                event and not admitted,
+                event and not technical_context,
                 min(config["maximum_rank_bonus"], 2 * best.similarity)
                 if admitted
                 else 0.0,
+                model_family="model_family" in title,
             )
         )
     return results

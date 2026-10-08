@@ -612,8 +612,7 @@ def classify_story(item: Item) -> str:
         title,
     )
     family_match = bool(
-        item.editorial_relevance is not None
-        and "model_family" in item.editorial_relevance.terms
+        item.editorial_relevance is not None and item.editorial_relevance.model_family
     )
     model_topic = re.search(
         r"\b(model|llm|multimodal|inference|reasoning|agent|agents|diffusion)\b", title
@@ -644,8 +643,6 @@ def score_item(item: Item, now: dt.datetime) -> int:
     item.story_kind = classify_story(item)
     if item.story_kind in {"lab_research", "lab_announcement"}:
         score += LAB_ANNOUNCEMENT_BONUS
-    if item.editorial_relevance is not None:
-        score += item.editorial_relevance.rank_bonus
     item.rank_score = score
     item.stars = max(1, min(5, math.ceil(score)))
     return item.stars
@@ -780,7 +777,7 @@ def collect_items(
                 "similarity": round(assessment.similarity, 6),
                 "topic": assessment.topic,
                 "matched_terms": list(assessment.terms),
-                "rank_bonus": round(assessment.rank_bonus, 6),
+                "proposed_rank_bonus": round(assessment.proposed_rank_bonus, 6),
             }
         if is_ai_related(item):
             estimate_reading_time(item)
@@ -793,6 +790,38 @@ def collect_items(
                 else "title relevance filter"
             )
     candidates = group_stories(dedupe_items(items))
+    if evaluation is not None:
+        ranking_rows = []
+        for item in candidates:
+            members = [item, *item.related_coverage]
+            current_score = max(member.rank_score for member in members)
+            proposed_score = max(
+                member.rank_score + member.editorial_relevance.proposed_rank_bonus
+                for member in members
+            )
+            ranking_rows.append(
+                {
+                    "url": item.url,
+                    "current_score": current_score,
+                    "proposed_score": proposed_score,
+                }
+            )
+        evaluation["shadow_ranking"] = {
+            "scope": "admitted story groups before publisher caps and access checks; not selected reports",
+            "current_order": [
+                row["url"]
+                for row in sorted(
+                    ranking_rows, key=lambda row: row["current_score"], reverse=True
+                )
+            ],
+            "proposed_order": [
+                row["url"]
+                for row in sorted(
+                    ranking_rows, key=lambda row: row["proposed_score"], reverse=True
+                )
+            ],
+            "scores": ranking_rows,
+        }
     # Freeze group membership before selection mutates related coverage on fallback.
     groups = (
         [
@@ -1214,7 +1243,7 @@ def render_report(
             "",
             "Articles with missing/invalid or future dates are excluded. Older articles never backfill a short report. Date-only HTML listings use midnight UTC; boundary decisions are conservative. A story may recur across consecutive reports within the window.",
             "",
-            "Selection uses a continuous score before mapping to stars. Source bonuses are 1.25 for priority 5 and 1 for priorities 3–4; qualifying frontier-lab research/model announcements add 0.75. Topic descriptions matched against headlines and feed summaries add up to 1 point, with word weights calculated from the fresh candidate pool. Known model families accept future version numbers. Matching is lexical, not content understanding; event-directory listings without a technical topic are excluded. Headline classification is heuristic; corporate posts receive no lab bonus. At most four story headlines per representative publisher are selected, with shared lab channels grouped together. Detailed identical titles within 24 hours are grouped, preferring research/lab representatives when available; other accessible source links appear as alternate coverage. This is a conservative title rule, not semantic story matching. No older articles fill excluded slots.",
+            "Selection uses a continuous score before mapping to stars. Source bonuses are 1.25 for priority 5 and 1 for priorities 3–4; qualifying frontier-lab research/model announcements add 0.75. Stable topic/context rules use headlines and feed summaries; known model families accept future version numbers. Experimental topic similarity scores are recorded only in optional evaluation captures and do not change selection order. Matching is lexical, not content understanding; event-directory listings without technical context are excluded. Headline classification is heuristic; corporate posts receive no lab bonus. At most four story headlines per representative publisher are selected, with shared lab channels grouped together. Detailed identical titles within 24 hours are grouped, preferring research/lab representatives when available; other accessible source links appear as alternate coverage. This is a conservative title rule, not semantic story matching. No older articles fill excluded slots.",
             "",
             "## Source policy",
             "",

@@ -24,7 +24,6 @@
       "inkling",
       "muse"
     ],
-    "minimum_similarity": 0.04,
     "ambiguous_model_families": [
       "seed",
       "nova",
@@ -40,7 +39,16 @@
           "llm",
           "transformer"
         ],
-        "description": "model_family language models frontier intelligence reasoning training inference weights architecture context tokens benchmark evaluation multimodal transformer llm release research"
+        "description": "model_family language models frontier intelligence reasoning training inference weights architecture context tokens benchmark evaluation multimodal transformer llm release research",
+        "supporting_terms": [
+          "language",
+          "reasoning",
+          "training",
+          "inference",
+          "weights",
+          "transformer",
+          "llm"
+        ]
       },
       {
         "name": "GPU and framework engineering",
@@ -54,7 +62,30 @@
           "compiler",
           "kernel"
         ],
-        "description": "gpu cuda rocm pytorch torch torchcodec hardware cluster runtime memory throughput latency performance compiler kernel decoding encoding integration maintenance deployment training inference data parallel distributed"
+        "description": "gpu cuda rocm pytorch torch torchcodec hardware cluster runtime memory throughput latency performance compiler kernel decoding encoding integration maintenance deployment training inference data parallel distributed",
+        "supporting_terms": [
+          "gpu",
+          "cuda",
+          "rocm",
+          "pytorch",
+          "torchcodec",
+          "cluster",
+          "runtime",
+          "memory",
+          "throughput",
+          "latency",
+          "performance",
+          "compiler",
+          "kernel",
+          "decoding",
+          "encoding",
+          "integration",
+          "deployment",
+          "training",
+          "inference",
+          "parallel",
+          "distributed"
+        ]
       },
       {
         "name": "speech and model evaluation",
@@ -64,7 +95,17 @@
           "leaderboard",
           "benchmark"
         ],
-        "description": "tts speech voice cloning audio leaderboard benchmark evaluation scalable multilingual text speech open comparison reproducible measurements"
+        "description": "tts speech voice cloning audio leaderboard benchmark evaluation scalable multilingual text speech open comparison reproducible measurements",
+        "supporting_terms": [
+          "tts",
+          "voice",
+          "cloning",
+          "audio",
+          "multilingual",
+          "evaluation",
+          "benchmark",
+          "leaderboard"
+        ]
       },
       {
         "name": "robotics research",
@@ -73,7 +114,15 @@
           "robotics",
           "embodied"
         ],
-        "description": "robot robotics embodied manipulation research learning policy control tasks environment simulation"
+        "description": "robot robotics embodied manipulation research learning policy control tasks environment simulation",
+        "supporting_terms": [
+          "robotics",
+          "embodied",
+          "manipulation",
+          "policy",
+          "simulation",
+          "learning"
+        ]
       },
       {
         "name": "retrieval and agent systems",
@@ -83,8 +132,33 @@
           "agent",
           "embedding"
         ],
-        "description": "vector search retrieval nearest join embedding agent harness tracing workflow observability efficiency evaluation inference deployment tools"
+        "description": "vector search retrieval nearest join embedding agent harness tracing workflow observability efficiency evaluation inference deployment tools",
+        "supporting_terms": [
+          "search",
+          "retrieval",
+          "nearest",
+          "join",
+          "embedding",
+          "harness",
+          "tracing",
+          "observability",
+          "inference",
+          "deployment",
+          "evaluation"
+        ]
       }
+    ],
+    "ranking_mode": "shadow",
+    "ambiguous_topic_anchors": [
+      "speech",
+      "vector",
+      "torch",
+      "agent",
+      "embedding",
+      "compiler",
+      "kernel",
+      "leaderboard",
+      "benchmark"
     ]
   },
   "policies": {
@@ -131,7 +205,7 @@
         "intelligence",
         "model_family"
       ],
-      "rank_bonus": 0.396985,
+      "proposed_rank_bonus": 0.396985,
       "event_listing": false
     },
     {
@@ -151,7 +225,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -171,7 +245,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -191,7 +265,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -215,7 +289,7 @@
         "harness",
         "tracing"
       ],
-      "rank_bonus": 0.430382,
+      "proposed_rank_bonus": 0.430382,
       "event_listing": false
     },
     {
@@ -246,7 +320,7 @@
         "tts",
         "voice"
       ],
-      "rank_bonus": 1.0,
+      "proposed_rank_bonus": 1.0,
       "event_listing": false
     },
     {
@@ -266,7 +340,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -286,7 +360,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -310,7 +384,7 @@
       "matched_terms": [
         "pytorch"
       ],
-      "rank_bonus": 0.100584,
+      "proposed_rank_bonus": 0.100584,
       "event_listing": false
     },
     {
@@ -336,7 +410,7 @@
         "pytorch",
         "torch"
       ],
-      "rank_bonus": 0.28621,
+      "proposed_rank_bonus": 0.28621,
       "event_listing": false
     },
     {
@@ -356,7 +430,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -379,7 +453,7 @@
         "policy",
         "robot"
       ],
-      "rank_bonus": 0.287167,
+      "proposed_rank_bonus": 0.287167,
       "event_listing": false
     },
     {
@@ -396,12 +470,10 @@
       "owner_importance": null,
       "inspection_evidence": null,
       "profile_admitted": true,
-      "topic": "retrieval and agent systems",
-      "similarity": 0.041222,
-      "matched_terms": [
-        "agent"
-      ],
-      "rank_bonus": 0.082443,
+      "topic": "",
+      "similarity": 0.0,
+      "matched_terms": [],
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -421,7 +493,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -441,7 +513,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -461,7 +533,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -481,7 +553,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -498,12 +570,10 @@
       "owner_importance": null,
       "inspection_evidence": null,
       "profile_admitted": true,
-      "topic": "retrieval and agent systems",
-      "similarity": 0.0357,
-      "matched_terms": [
-        "agent"
-      ],
-      "rank_bonus": 0.0,
+      "topic": "",
+      "similarity": 0.0,
+      "matched_terms": [],
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -523,7 +593,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -543,7 +613,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -565,7 +635,7 @@
       "matched_terms": [
         "robot"
       ],
-      "rank_bonus": 0.191387,
+      "proposed_rank_bonus": 0.191387,
       "event_listing": false
     },
     {
@@ -587,7 +657,7 @@
       "matched_terms": [
         "model_family"
       ],
-      "rank_bonus": 0.085469,
+      "proposed_rank_bonus": 0.085469,
       "event_listing": false
     },
     {
@@ -607,7 +677,7 @@
       "topic": "",
       "similarity": 0.0,
       "matched_terms": [],
-      "rank_bonus": 0.0,
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     },
     {
@@ -624,17 +694,15 @@
       "owner_importance": null,
       "inspection_evidence": null,
       "profile_admitted": true,
-      "topic": "retrieval and agent systems",
-      "similarity": 0.046391,
-      "matched_terms": [
-        "agent"
-      ],
-      "rank_bonus": 0.092782,
+      "topic": "",
+      "similarity": 0.0,
+      "matched_terms": [],
+      "proposed_rank_bonus": 0.0,
       "event_listing": false
     }
   ],
   "limitations": [
-    "Development set: profiles and threshold were chosen after reading owner feedback.",
+    "Development set: profiles and context rules were chosen after reading owner feedback.",
     "Targeted reviews, not a random sample or held-out evaluation.",
     "Title-only replay: frozen summaries, source priorities and full ranking inputs are unavailable.",
     "Bonus deltas are shown; final selection and quality improvements are not measured.",
