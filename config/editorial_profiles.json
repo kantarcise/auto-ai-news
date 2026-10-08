@@ -215,5 +215,13 @@
     "claude monet",
     "gemini horoscope",
     "gemini zodiac"
-  ]
+  ],
+  "family_version_formats": {
+    "flux": [
+      "\\.\\d+(?:\\.\\d+)*"
+    ],
+    "minimax": [
+      "[- ]m\\d+(?:\\.\\d+)*"
+    ]
+  }
 }

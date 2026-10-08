@@ -21,6 +21,8 @@ NEGATIVES = [
     "Flux capacitor repairs",
     "Perfume diffusion measurements",
     "A neural anatomy exhibit",
+    "Insurance agent pays attention to customers",
+    "Claude exhibition attracts attention",
 ]
 POSITIVES = [
     ("An agent for code review", "Uses a language model to inspect patches."),
@@ -34,6 +36,11 @@ POSITIVES = [
     ("Introducing Gemini model", ""),
     ("Introducing Mistral Large 4", ""),
     ("Introducing FLUX 99", ""),
+    ("Introducing FLUX.1 Tools", ""),
+    ("Introducing MiniMax-M2", ""),
+    ("Transformer self-attention architecture", ""),
+    ("Claude update", "Implements self-attention with improved inference."),
+    ("An agent update", "A self-attention language model."),
     ("Disrupting a model-distillation campaign", ""),
     ("Training a model to grade reward hacks", ""),
     ("Deploying a generative recommender", ""),
@@ -44,6 +51,69 @@ POSITIVES = [
 
 
 class ContextualAdmissionTest(unittest.TestCase):
+    def test_reviewed_version_formats_survive_lab_collection(self):
+        for name, title in (
+            ("Black Forest Labs", "Introducing FLUX.1 Tools"),
+            ("MiniMax", "Introducing MiniMax-M2"),
+        ):
+            source = report.Source(
+                name,
+                "https://example.com",
+                "https://feed",
+                4,
+                category="frontier_lab",
+                publisher=name,
+            )
+            item = self.item(title)
+            with (
+                patch.object(
+                    report, "fetch_url", return_value=(200, "https://feed", "")
+                ),
+                patch.object(report, "parse_source", return_value=[item]),
+                patch.object(report, "check_url_accessible", return_value=(True, "")),
+            ):
+                selected, _ = report.collect_items([source], NOW)
+            self.assertEqual(len(selected), 1, title)
+            self.assertTrue(selected[0].editorial_relevance.model_family)
+            self.assertEqual(selected[0].story_kind, "lab_announcement")
+
+    def test_technical_attention_context_and_ordinary_attention_in_summaries(self):
+        for title in ("Claude exhibition", "Insurance agent opens an office"):
+            self.assertFalse(
+                report.is_ai_related(
+                    self.item(title, "Pays attention to visitors and customers.")
+                )
+            )
+        self.assertTrue(
+            report.is_ai_related(
+                self.item("Claude update", "An improved self-attention mechanism.")
+            )
+        )
+        self.assertTrue(
+            report.is_ai_related(self.item("An agent update", "Uses cross-attention."))
+        )
+
+    def test_family_specific_formats_preserve_versions_and_boundaries(self):
+        for title in (
+            "FLUX.1 Tools",
+            "FLUX.99.17 Tools",
+            "MiniMax-M2",
+            "MiniMax-M99.17",
+        ):
+            assessment = assess([{"title": title, "url": "https://example.com"}])[0]
+            self.assertTrue(assessment.model_family, title)
+            self.assertTrue(report.is_ai_related(self.item(title)))
+        for title in (
+            "FLUX.1foo",
+            "MiniMax-M2foo",
+            "FLUX-M2",
+            "MiniMax.1",
+            "Qwen3.8foo",
+        ):
+            assessment = assess([{"title": title, "url": "https://example.com"}])[0]
+            self.assertFalse(assessment.model_family, title)
+            self.assertFalse(report.is_ai_related(self.item(title)))
+
     def item(self, title, summary="", index=0):
         return report.Item(
             title, f"https://example.com/{index}", "Example", 3, summary, NOW

@@ -47,12 +47,23 @@ def tokens(
     context: str = "",
     variants: dict | None = None,
     non_model_phrases: list[str] | None = None,
+    version_formats: dict | None = None,
 ) -> list[str]:
     text = html.unescape(re.sub(r"<[^>]*>", " ", text[:MAX_TEXT_CHARS])).casefold()
     # Require a whole family/version: Qwen99.2 works, Qwen99foo does not.
     family_pattern = "|".join(re.escape(name) for name in families)
 
     def replace_family(match: re.Match) -> str:
+        extra = match.group("extra")
+        if not (match.group("number") or extra) and re.match(
+            r"[- ]m?\d", text[match.end() :]
+        ):
+            return match.group()
+        if extra and not any(
+            re.fullmatch(pattern, extra)
+            for pattern in (version_formats or {}).get(match.group(1), [])
+        ):
+            return match.group()
         if any(
             re.match(re.escape(phrase) + r"\b", text[match.start() :])
             for phrase in (non_model_phrases or [])
@@ -72,7 +83,9 @@ def tokens(
         return " model_family "
 
     text = re.sub(
-        rf"\b({family_pattern})(?:[- ]?\d+(?:\.\d+)*)?(?![\w]|\.\d)",
+        rf"\b({family_pattern})(?:(?P<number>[- ]?\d+(?:\.\d+)*)|"
+        rf"(?P<extra>\.\d+(?:\.\d+)*|[- ]m\d+(?:\.\d+)*))?"
+        rf"(?![\w]|\.\d)",
         replace_family,
         text,
     )
@@ -87,12 +100,13 @@ def has_ai_context(text: str) -> bool:
     return bool(
         re.search(
             r"\b(?:ai|agi|llms?|gpt|chatgpt|openai|anthropic|pytorch|cuda|gpus?|rocm|"
-            r"inference|tokenizers?|multimodal|attention|interpretability|recommenders?|"
+            r"inference|tokenizers?|multimodal|interpretability|recommenders?|"
             r"triton|tokenization|fine[- ]tuning)\b|"
             r"\b(?:artificial intelligence|machine learning|language models?|neural networks?|"
             r"deep learning|natural language|reinforcement learning|computer vision|"
             r"vector search|model[- ]distillation|reward hacks?|model weights|context window|"
-            r"performance bottleneck|speech synthesis)\b|인공지능|\b(?:npm|registries)\b",
+            r"performance bottleneck|speech synthesis|self[- ]attention|"
+            r"cross[- ]attention|attention mechanism)\b|인공지능|\b(?:npm|registries)\b",
             text,
         )
     )
@@ -135,6 +149,7 @@ def assess(rows: list[dict], config: dict | None = None) -> list[Relevance]:
                 context=row.get("summary", "")[:MAX_TEXT_CHARS],
                 variants=variants,
                 non_model_phrases=config.get("non_model_family_phrases", []),
+                version_formats=config.get("family_version_formats", {}),
             )
         )
         for row in rows
@@ -148,6 +163,7 @@ def assess(rows: list[dict], config: dict | None = None) -> list[Relevance]:
                 context=row.get("summary", "")[:MAX_TEXT_CHARS],
                 variants=variants,
                 non_model_phrases=config.get("non_model_family_phrases", []),
+                version_formats=config.get("family_version_formats", {}),
             )
             * 2
             + tokens(row.get("summary", ""), families, ambiguous)
