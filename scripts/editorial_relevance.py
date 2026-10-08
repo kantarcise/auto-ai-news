@@ -40,29 +40,94 @@ def load_config(path: Path = DEFAULT_CONFIG) -> dict:
 
 
 def tokens(
-    text: str, families: list[str], ambiguous: list[str] | None = None
+    text: str,
+    families: list[str],
+    ambiguous: list[str] | None = None,
+    *,
+    context: str = "",
+    variants: dict | None = None,
+    non_model_phrases: list[str] | None = None,
+    version_formats: dict | None = None,
 ) -> list[str]:
     text = html.unescape(re.sub(r"<[^>]*>", " ", text[:MAX_TEXT_CHARS])).casefold()
     # Require a whole family/version: Qwen99.2 works, Qwen99foo does not.
     family_pattern = "|".join(re.escape(name) for name in families)
 
     def replace_family(match: re.Match) -> str:
+        extra = match.group("extra")
+        if not (match.group("number") or extra) and re.match(
+            r"[- ]m?\d", text[match.end() :]
+        ):
+            return match.group()
+        if extra and not any(
+            re.fullmatch(pattern, extra)
+            for pattern in (version_formats or {}).get(match.group(1), [])
+        ):
+            return match.group()
+        if any(
+            re.match(re.escape(phrase) + r"\b", text[match.start() :])
+            for phrase in (non_model_phrases or [])
+        ):
+            return match.group()
         if (
             match.group(1) in (ambiguous or [])
             and not re.search(r"\d", match.group())
-            and not re.search(r"\b(?:ai|llm|model|models|reasoning|inference)\b", text)
+            and not (has_ai_context(text) or has_ai_context(context))
+            and not re.match(r"[- ]+models?\b", text[match.end() :])
+            and not any(
+                re.match(rf"[- ]+{re.escape(variant)}\b", text[match.end() :])
+                for variant in (variants or {}).get(match.group(1), [])
+            )
         ):
             return match.group()
         return " model_family "
 
     text = re.sub(
-        rf"\b({family_pattern})(?:[- ]?\d+(?:\.\d+)*)?(?![\w]|\.\d)",
+        rf"\b({family_pattern})(?:(?P<number>[- ]?\d+(?:\.\d+)*)|"
+        rf"(?P<extra>\.\d+(?:\.\d+)*|[- ]m\d+(?:\.\d+)*))?"
+        rf"(?![\w]|\.\d)",
         replace_family,
         text,
     )
     words = re.findall(r"[a-z][a-z_]+", text)
     aliases = {"gpus": "gpu", "robots": "robot", "agents": "agent"}
     return [aliases.get(word, word) for word in words]
+
+
+def has_ai_context(text: str) -> bool:
+    """Recognizable AI/compute context; a bare model/agent/transformer isn't enough."""
+    text = html.unescape(re.sub(r"<[^>]*>", " ", text[:MAX_TEXT_CHARS])).casefold()
+    return bool(
+        re.search(
+            r"\b(?:ai|agi|llms?|gpt|chatgpt|openai|anthropic|pytorch|cuda|gpus?|rocm|"
+            r"inference|tokenizers?|multimodal|interpretability|recommenders?|"
+            r"triton|tokenization|fine[- ]tuning)\b|"
+            r"\b(?:artificial intelligence|machine learning|language models?|neural networks?|"
+            r"deep learning|natural language|reinforcement learning|computer vision|"
+            r"vector search|model[- ]distillation|reward hacks?|model weights|context window|"
+            r"performance bottleneck|speech synthesis|self[- ]attention|"
+            r"cross[- ]attention|attention mechanism)\b|인공지능|\b(?:npm|registries)\b",
+            text,
+        )
+    )
+
+
+def keyword_admission(title: str, summary: str, keywords: set[str]) -> bool:
+    """Context-check fallback keywords without vetoing all unmatched profiles."""
+    config = load_config()
+    families = set(config["model_families"])
+    ambiguous = set(config["ambiguous_fallback_keywords"])
+    context = has_ai_context(title) or has_ai_context(summary)
+    for keyword in keywords:
+        # Family interpretations belong to assess; the fallback must not undo
+        # rejection of Claude Monet or Gemini astrology.
+        if keyword in families or keyword in {"muse spark", "muse image", "muse video"}:
+            continue
+        if re.search(r"\b" + re.escape(keyword) + r"\b", title, re.IGNORECASE) and (
+            keyword not in ambiguous or context
+        ):
+            return True
+    return False
 
 
 def assess(rows: list[dict], config: dict | None = None) -> list[Relevance]:
@@ -74,10 +139,33 @@ def assess(rows: list[dict], config: dict | None = None) -> list[Relevance]:
     config = load_config() if config is None else config
     families = config["model_families"]
     ambiguous = config.get("ambiguous_model_families", [])
-    titles = [set(tokens(row["title"], families, ambiguous)) for row in rows]
+    variants = config.get("model_variants", {})
+    titles = [
+        set(
+            tokens(
+                row["title"],
+                families,
+                ambiguous,
+                context=row.get("summary", "")[:MAX_TEXT_CHARS],
+                variants=variants,
+                non_model_phrases=config.get("non_model_family_phrases", []),
+                version_formats=config.get("family_version_formats", {}),
+            )
+        )
+        for row in rows
+    ]
     documents = [
         Counter(
-            tokens(row["title"], families, ambiguous) * 2
+            tokens(
+                row["title"],
+                families,
+                ambiguous,
+                context=row.get("summary", "")[:MAX_TEXT_CHARS],
+                variants=variants,
+                non_model_phrases=config.get("non_model_family_phrases", []),
+                version_formats=config.get("family_version_formats", {}),
+            )
+            * 2
             + tokens(row.get("summary", ""), families, ambiguous)
         )
         for row in rows

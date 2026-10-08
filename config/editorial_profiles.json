@@ -18,13 +18,25 @@
     "mimo",
     "seed",
     "inkling",
-    "muse"
+    "muse",
+    "flux",
+    "seedance",
+    "seedream"
   ],
   "ambiguous_model_families": [
     "seed",
     "nova",
     "muse",
-    "inkling"
+    "inkling",
+    "claude",
+    "gemini",
+    "llama",
+    "mistral",
+    "minimax",
+    "grok",
+    "kimi",
+    "mimo",
+    "flux"
   ],
   "maximum_rank_bonus": 1.0,
   "profiles": [
@@ -154,6 +166,62 @@
     "compiler",
     "kernel",
     "leaderboard",
-    "benchmark"
-  ]
+    "benchmark",
+    "transformer"
+  ],
+  "model_variants": {
+    "claude": [
+      "opus",
+      "sonnet",
+      "haiku"
+    ],
+    "gemini": [
+      "flash",
+      "pro",
+      "ultra"
+    ],
+    "mistral": [
+      "large",
+      "medium",
+      "small"
+    ],
+    "muse": [
+      "spark",
+      "image",
+      "video"
+    ],
+    "minimax": [
+      "music"
+    ],
+    "grok": [
+      "bot"
+    ]
+  },
+  "ambiguous_fallback_keywords": [
+    "agent",
+    "agents",
+    "model",
+    "transformer",
+    "diffusion",
+    "embedding",
+    "neural",
+    "generative",
+    "prompt",
+    "eval",
+    "evals",
+    "flux"
+  ],
+  "non_model_family_phrases": [
+    "claude monet",
+    "gemini horoscope",
+    "gemini zodiac"
+  ],
+  "family_version_formats": {
+    "flux": [
+      "\\.\\d+(?:\\.\\d+)*"
+    ],
+    "minimax": [
+      "[- ]m\\d+(?:\\.\\d+)*"
+    ]
+  }
 }

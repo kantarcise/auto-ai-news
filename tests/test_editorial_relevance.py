@@ -7,6 +7,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts import generate_report as report
+from scripts.compare_contextual_admission import compare_context
 from scripts.compare_editorial import compare_editorial
 from scripts.editorial_relevance import assess, load_config, tokens
 
@@ -262,7 +263,20 @@ class EditorialRelevanceTest(unittest.TestCase):
                     )
                 ),
             )
-            self.assertEqual(result, saved)
+            # Keep PR #27 results frozen; compare new behavior in a separate
+            # artifact instead of rewriting historical admission decisions.
+            delta = compare_context(snapshot, feedback, saved)
+            followup = json.loads(
+                (directory / f"context-results-{date}.json").read_text()
+            )
+            followup_hashes = followup.pop("input_sha256")
+            self.assertEqual(
+                followup_hashes["previous"],
+                hashlib.sha256(
+                    (directory / f"editorial-results-{date}.json").read_bytes()
+                ).hexdigest(),
+            )
+            self.assertEqual(delta, followup)
             totals[0] += result["policies"]["profile"]["owner_wanted_admitted"]
             totals[1] += result["policies"]["profile"]["owner_unwanted_admitted"]
             self.assertTrue(
