@@ -24,6 +24,8 @@ class Relevance:
     event_listing: bool = False
     proposed_rank_bonus: float = 0.0
     model_family: bool = False
+    fixed_similarity: float = 0.0
+    proposed_fixed_bonus: float = 0.0
 
 
 def load_config(path: Path = DEFAULT_CONFIG) -> dict:
@@ -130,7 +132,9 @@ def keyword_admission(title: str, summary: str, keywords: set[str]) -> bool:
     return False
 
 
-def assess(rows: list[dict], config: dict | None = None) -> list[Relevance]:
+def assess(
+    rows: list[dict], config: dict | None = None, *, features: list[dict] | None = None
+) -> list[Relevance]:
     """Use one bounded document per URL to calculate this pool's IDF weights.
 
     Eligibility is a fixed anchor/context rule, independent of pool frequency.
@@ -190,11 +194,20 @@ def assess(rows: list[dict], config: dict | None = None) -> list[Relevance]:
         (profile, vector(Counter(profile["description"].split())))
         for profile in config["profiles"]
     ]
+    fixed_profiles = {
+        profile["name"]: {
+            term: 1 + math.log(min(count, 3))
+            for term, count in Counter(profile["description"].split()).items()
+        }
+        for profile in config["profiles"]
+    }
     results = []
     for row, title, document in zip(rows, titles, documents):
         # A long or noisy summary must not erase a useful headline match.
         evidence_vectors = [vector(document), vector(Counter(title))]
         best = Relevance()
+        fixed_similarity = 0.0
+        eligible_profiles = []
         admitted = "model_family" in title
         for profile, reference in profiles:
             anchors = title.intersection(profile["anchors"])
@@ -207,6 +220,22 @@ def assess(rows: list[dict], config: dict | None = None) -> list[Relevance]:
             if not supported_anchors:
                 continue
             admitted = True
+            eligible_profiles.append(profile["name"])
+            fixed_reference = fixed_profiles[profile["name"]]
+            for counts in (document, Counter(title)):
+                fixed = {
+                    term: 1 + math.log(min(count, 3)) for term, count in counts.items()
+                }
+                fixed_similarity = max(
+                    fixed_similarity,
+                    sum(
+                        fixed[term] * fixed_reference[term]
+                        for term in fixed.keys() & fixed_reference.keys()
+                    )
+                    / (norm(fixed) * norm(fixed_reference))
+                    if fixed
+                    else 0.0,
+                )
             for weighted in evidence_vectors:
                 overlap = tuple(sorted(weighted.keys() & reference.keys()))
                 length = norm(weighted)
@@ -244,6 +273,20 @@ def assess(rows: list[dict], config: dict | None = None) -> list[Relevance]:
                 if admitted
                 else 0.0,
                 model_family="model_family" in title,
+                fixed_similarity=fixed_similarity,
+                proposed_fixed_bonus=min(
+                    config["maximum_rank_bonus"], 2 * fixed_similarity
+                )
+                if admitted
+                else 0.0,
             )
         )
+        if features is not None:
+            features.append(
+                {
+                    "title_terms": sorted(title),
+                    "document_counts": dict(sorted(document.items())),
+                    "eligible_profiles": eligible_profiles,
+                }
+            )
     return results

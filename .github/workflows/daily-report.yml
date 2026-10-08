@@ -25,7 +25,32 @@ jobs:
         run: python -m unittest discover -s tests
 
       - name: Generate report
-        run: python scripts/generate_report.py --output "$RUNNER_TEMP/daily-ai-news.md"
+        id: generate
+        run: |
+          mkdir -p "$RUNNER_TEMP/ranking-evaluation"
+          python scripts/generate_report.py \
+            --output "$RUNNER_TEMP/daily-ai-news.md" \
+            --evaluation-output "$RUNNER_TEMP/ranking-evaluation/candidates.json" \
+            --evaluation-excerpts
+
+      - name: Compare ranking proposals
+        continue-on-error: true
+        run: |
+          python -m scripts.compare_rankings \
+            "$RUNNER_TEMP/ranking-evaluation/candidates.json" \
+            --output "$RUNNER_TEMP/ranking-evaluation/comparison.md" \
+            --json-output "$RUNNER_TEMP/ranking-evaluation/comparison.json" \
+            --revision "$GITHUB_SHA"
+
+      - name: Save ranking evaluation
+        if: always() && steps.generate.outcome == 'success'
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: ranking-evaluation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ranking-evaluation/
+          retention-days: 30
+          if-no-files-found: error
 
       - name: Publish daily release
         env:

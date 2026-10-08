@@ -38,3 +38,7 @@ The evaluator echoes `candidate_scope`. Recall now covers reviewed positives any
 This export preserves observed metadata and outcomes, not raw feed responses, summaries, ranking features or complete source configuration. It supports reproducible offline labeling against the saved selection, but cannot rerun the ranking pipeline or evaluate alternative algorithms from this file alone. The older `evaluate_selection` replay command expects the October 3 comparison format and must not be used on these exports. Candidate generation misses from inaccessible/disabled/unconfigured sources remain source-level diagnostics; absent articles cannot be reviewed from this snapshot.
 
 Next, collect several dated pools with representative publishers, regions and modalities; agree on explicit labels and keep shared stories together in chronological evaluation splits. Set ranking acceptance targets from those results. No new weights, dependency, content-length exclusion or unconditional practitioner bonus is introduced here.
+
+## Optional scoring inputs and daily comparisons
+
+`--evaluation-excerpts` requires `--evaluation-output` and adds bounded fresh feed-summary excerpts plus normalized scoring inputs for exact current/fixed/adaptive score replay. Default capture remains metadata-only. The daily workflow opts in and saves an expiring artifact rather than putting these inputs in release notes. See [daily comparison usage, text limits and scope](daily-ranking-comparison.md).
