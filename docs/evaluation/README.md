@@ -45,6 +45,8 @@ The owner has reviewed all 21 selected articles in the latest release. [Recorded
 
 ## Next evaluation steps
 
+The [daily ranking comparison](daily-ranking-comparison.md) saves independent future runs and compares the current score with fixed-weight and adaptive topic scoring. The workflow artifact contains bounded feed excerpts, replay features and a readable disagreement list. Both alternatives remain shadow-only; quality improvement still needs human judgments on independent dates.
+
 The [context-admission follow-up](contextual-admission.md) addresses #28/#29: ambiguous generic keywords and ordinary family-name meanings can no longer bypass the new context checks through the old title fallback. All 18 reviewed wanted articles stay eligible. One unreviewed agent/database headline is newly excluded and documented as a potential miss. The original PR #27 comparisons remain frozen.
 
 The [topic-profile implementation](adaptive-relevance.md) revises PR #27 to match future model versions and use stable family/topic context rules for relevance, with fresh-pool similarity scores recorded only as a bounded experimental ranking proposal. On the same development reviews it admits all 18 wanted articles and excludes both unwanted articles, while adding one unreviewed robotics title. These results are not an independent test or measured ranking-quality gain. The [earlier title-only comparison](apply-reviewed-topics.md) remains historical evidence; its older-date assessment is not a historical report replay.

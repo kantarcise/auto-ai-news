@@ -27,9 +27,14 @@ except ModuleNotFoundError:
     from article_content import MAX_REQUESTS, fetch_body
 
 try:
-    from scripts.editorial_relevance import Relevance, assess, keyword_admission
+    from scripts.editorial_relevance import (
+        Relevance,
+        assess,
+        keyword_admission,
+        load_config,
+    )
 except ModuleNotFoundError:
-    from editorial_relevance import Relevance, assess, keyword_admission
+    from editorial_relevance import Relevance, assess, keyword_admission, load_config
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCES = ROOT / "config" / "sources.json"
@@ -678,9 +683,12 @@ def collect_items(
     lookback_hours: int = DEFAULT_LOOKBACK_HOURS,
     *,
     evaluation: dict | None = None,
+    evaluation_excerpts: bool = False,
 ) -> tuple[list[Item], list[tuple[str, str]]]:
     if lookback_hours <= 0:
         raise ValueError("lookback_hours must be positive")
+    if evaluation_excerpts and evaluation is None:
+        raise ValueError("Evaluation excerpts require evaluation capture")
     if evaluation is not None and (now.tzinfo is None or now.utcoffset() is None):
         raise ValueError("Evaluation capture requires a timezone-aware clock")
     collection = []
@@ -758,11 +766,15 @@ def collect_items(
             unavailable.append(
                 (source.name, f"Freshness: {count} entries excluded: {reason}.")
             )
+    editorial_config = load_config()
+    features = [] if evaluation_excerpts else None
     relevance = assess(
         [
             {"title": item.title, "summary": item.summary, "url": item.canonical_url}
             for item, _ in pending
-        ]
+        ],
+        editorial_config,
+        features=features,
     )
     for (item, record), assessment in zip(pending, relevance):
         item.editorial_relevance = assessment
@@ -785,6 +797,39 @@ def collect_items(
             )
     candidates = group_stories(dedupe_items(items))
     if evaluation is not None:
+        evaluation["editorial_config"] = editorial_config
+        evaluation["scoring_parameters"] = {
+            "base": 1.0,
+            "priority_5": 1.25,
+            "priority_3": 1.0,
+            "keyword_threshold": 3,
+            "keyword_bonus": 1.0,
+            "recent_hours": 24,
+            "recent_bonus": 1.0,
+            "lab_bonus": LAB_ANNOUNCEMENT_BONUS,
+            "old_hours": 168,
+            "old_penalty": 1.0,
+        }
+        if features is not None:
+            evaluation["ranking_inputs"] = [
+                {
+                    "id": index,
+                    **evaluation_metadata(item),
+                    **feature,
+                    "canonical_url": item.canonical_url,
+                    "summary_excerpt": extract_text_from_html(item.summary)[:1000],
+                    "source_priority": item.source_priority,
+                    "coverage": item.coverage,
+                    "legacy_keyword_score": ai_relevance_score(item),
+                    "story_kind": item.story_kind,
+                    "current_score": item.rank_score,
+                    "admitted": is_ai_related(item),
+                    "adaptive_bonus": item.editorial_relevance.proposed_rank_bonus,
+                    "fixed_bonus": item.editorial_relevance.proposed_fixed_bonus,
+                }
+                for index, ((item, _), feature) in enumerate(zip(pending, features))
+            ]
+        input_ids = {id(item): index for index, (item, _) in enumerate(pending)}
         ranking_rows = []
         for item in candidates:
             members = [item, *item.related_coverage]
@@ -793,11 +838,18 @@ def collect_items(
                 member.rank_score + member.editorial_relevance.proposed_rank_bonus
                 for member in members
             )
+            fixed_score = max(
+                member.rank_score + member.editorial_relevance.proposed_fixed_bonus
+                for member in members
+            )
             ranking_rows.append(
                 {
                     "url": item.url,
                     "current_score": current_score,
                     "proposed_score": proposed_score,
+                    "fixed_score": fixed_score,
+                    "title": item.title,
+                    "member_ids": [input_ids[id(member)] for member in members],
                 }
             )
         evaluation["shadow_ranking"] = {
@@ -812,6 +864,12 @@ def collect_items(
                 row["url"]
                 for row in sorted(
                     ranking_rows, key=lambda row: row["proposed_score"], reverse=True
+                )
+            ],
+            "fixed_order": [
+                row["url"]
+                for row in sorted(
+                    ranking_rows, key=lambda row: row["fixed_score"], reverse=True
                 )
             ],
             "scores": ranking_rows,
@@ -1266,6 +1324,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--sources", type=Path, default=DEFAULT_SOURCES)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument(
+        "--evaluation-excerpts",
+        action="store_true",
+        help="Include bounded feed-summary excerpts and normalized scoring inputs in the evaluation snapshot.",
+    )
+    parser.add_argument(
         "--evaluation-output",
         type=Path,
         help="Optional metadata-only review snapshot including pre-ranking rejects.",
@@ -1284,6 +1347,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     args = parser.parse_args(argv)
     if args.lookback_hours <= 0:
         parser.error("--lookback-hours must be positive")
+    if args.evaluation_excerpts and args.evaluation_output is None:
+        parser.error("--evaluation-excerpts requires --evaluation-output")
     if (
         args.evaluation_output is not None
         and args.evaluation_output.resolve() == args.output.resolve()
@@ -1298,7 +1363,11 @@ def main(argv: list[str] | None = None) -> int:
     sources = load_sources(args.sources)
     evaluation = {} if args.evaluation_output is not None else None
     items, unavailable = collect_items(
-        sources, now, args.lookback_hours, evaluation=evaluation
+        sources,
+        now,
+        args.lookback_hours,
+        evaluation=evaluation,
+        evaluation_excerpts=args.evaluation_excerpts,
     )
     if args.evaluation_output is not None:
         args.evaluation_output.write_text(
