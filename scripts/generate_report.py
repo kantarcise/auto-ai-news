@@ -36,6 +36,11 @@ try:
 except ModuleNotFoundError:
     from editorial_relevance import Relevance, assess, keyword_admission, load_config
 
+try:
+    from scripts.publication_history import load_history, receipt_comment
+except ModuleNotFoundError:
+    from publication_history import load_history, receipt_comment
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCES = ROOT / "config" / "sources.json"
 DEFAULT_OUTPUT = ROOT / "README.md"
@@ -684,6 +689,7 @@ def collect_items(
     *,
     evaluation: dict | None = None,
     evaluation_excerpts: bool = False,
+    published_urls: dict[str, str] | None = None,
 ) -> tuple[list[Item], list[tuple[str, str]]]:
     if lookback_hours <= 0:
         raise ValueError("lookback_hours must be positive")
@@ -747,6 +753,18 @@ def collect_items(
                 continue
             item.url = urllib.parse.urljoin(final_url, item.url)
             item.canonical_url = canonicalize_url(item.url)
+            previous_date = (published_urls or {}).get(item.canonical_url)
+            if previous_date:
+                if record is not None:
+                    record["rejection_reason"] = "previously published"
+                    record["previous_report_date"] = previous_date
+                unavailable.append(
+                    (
+                        f"{item.source}: {item.title}",
+                        f"Selection: Previously published on {previous_date}; repeated URL excluded.",
+                    )
+                )
+                continue
             if is_quiet_day_roundup(item):
                 if record is not None:
                     record["rejection_reason"] = "quiet-day title policy"
@@ -1130,6 +1148,9 @@ def render_report(
     unavailable: list[tuple[str, str]],
     now: dt.datetime,
     lookback_hours: int = DEFAULT_LOOKBACK_HOURS,
+    *,
+    history_enabled: bool = False,
+    legacy_release_count: int = 0,
 ) -> str:
     generated = now.astimezone(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     selection = [
@@ -1173,9 +1194,18 @@ def render_report(
         "",
         f"Coverage: last {lookback_hours} hours ({start} through {generated}, inclusive).",
         "",
-        "## Articles",
-        "",
     ]
+    if history_enabled:
+        lines.extend(
+            [
+                (
+                    "Previously published links are skipped. "
+                    f"Repeat checks do not cover {legacy_release_count} older daily reports."
+                ),
+                "",
+            ]
+        )
+    lines.extend(["## Articles", ""])
     if items:
         for index, item in enumerate(items, start=1):
             indent = " " * (len(str(index)) + 2)
@@ -1293,7 +1323,12 @@ def render_report(
                 "full articles may take longer. Selected stories with insufficient feed text receive bounded HTML body retrieval; estimates are labeled extracted body when successful, and failures remain unknown. Publication dates are shown in UTC."
             ),
             "",
-            "Articles with missing/invalid or future dates are excluded. Older articles never backfill a short report. Date-only HTML listings use midnight UTC; boundary decisions are conservative. A story may recur across consecutive reports within the window.",
+            "Articles with missing/invalid or future dates are excluded. Older articles never backfill a short report. Date-only HTML listings use midnight UTC; boundary decisions are conservative. "
+            + (
+                "URLs recorded in earlier published reports are excluded; same-day reruns keep today’s articles. New URLs remain eligible, even for related stories."
+                if history_enabled
+                else "A story may recur across consecutive reports within the window; publication history is disabled."
+            ),
             "",
             "Selection uses a continuous score before mapping to stars. Source bonuses are 1.25 for priority 5 and 1 for priorities 3–4; qualifying frontier-lab research/model announcements add 0.75. Stable topic/context rules use headlines and feed summaries; known model families accept future version numbers. Experimental topic similarity scores are recorded only in optional evaluation captures and do not change selection order. Matching is lexical, not content understanding; event-directory listings without technical context are excluded. Headline classification is heuristic; corporate posts receive no lab bonus. At most four story headlines per representative publisher are selected, with shared lab channels grouped together. Detailed identical titles within 24 hours are grouped, preferring research/lab representatives when available; other accessible source links appear as alternate coverage. This is a conservative title rule, not semantic story matching. No older articles fill excluded slots.",
             "",
@@ -1323,6 +1358,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sources", type=Path, default=DEFAULT_SOURCES)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument(
+        "--publication-history",
+        type=Path,
+        help="History captured from published daily releases; local runs omit it by default.",
+    )
     parser.add_argument(
         "--evaluation-excerpts",
         action="store_true",
@@ -1354,12 +1394,35 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         and args.evaluation_output.resolve() == args.output.resolve()
     ):
         parser.error("--evaluation-output must differ from --output")
+    if args.publication_history is not None and args.publication_history.resolve() in {
+        args.output.resolve(),
+        args.evaluation_output.resolve()
+        if args.evaluation_output
+        else args.output.resolve(),
+    }:
+        parser.error("--publication-history must differ from output paths")
     return args
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
     now = dt.datetime.now(dt.timezone.utc)
+    today = now.date().isoformat()
+    history = (
+        load_history(args.publication_history, today)
+        if args.publication_history
+        else None
+    )
+    published_urls = (
+        {
+            canonicalize_url(url): date
+            for date, urls in sorted(history["published"].items())
+            if date < today
+            for url in urls
+        }
+        if history
+        else None
+    )
     sources = load_sources(args.sources)
     evaluation = {} if args.evaluation_output is not None else None
     items, unavailable = collect_items(
@@ -1368,7 +1431,10 @@ def main(argv: list[str] | None = None) -> int:
         args.lookback_hours,
         evaluation=evaluation,
         evaluation_excerpts=args.evaluation_excerpts,
+        published_urls=published_urls,
     )
+    if evaluation is not None and history is not None:
+        evaluation["publication_history"] = history
     if args.evaluation_output is not None:
         args.evaluation_output.write_text(
             json.dumps(evaluation, ensure_ascii=False, indent=2) + "\n",
@@ -1376,9 +1442,23 @@ def main(argv: list[str] | None = None) -> int:
         )
     if not args.no_article_bodies:
         unavailable.extend(enrich_article_bodies(items))
-    args.output.write_text(
-        render_report(items, unavailable, now, args.lookback_hours), encoding="utf-8"
+    report = render_report(
+        items,
+        unavailable,
+        now,
+        args.lookback_hours,
+        history_enabled=history is not None,
+        legacy_release_count=history.get("legacy_release_count", 0) if history else 0,
     )
+    if history is not None:
+        urls = [canonicalize_url(url) for url in history["published"].get(today, [])]
+        urls.extend(
+            canonicalize_url(member.url)
+            for item in items
+            for member in [item, *item.related_coverage]
+        )
+        report += "\n" + receipt_comment(today, urls)
+    args.output.write_text(report, encoding="utf-8")
     print(
         f"Wrote {args.output} with {len(items)} stories and {len(unavailable)} diagnostics."
     )
