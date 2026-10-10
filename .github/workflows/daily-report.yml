@@ -5,6 +5,10 @@ on:
   schedule:
     - cron: "15 6 * * *"
 
+concurrency:
+  group: daily-ai-news-publication
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -24,12 +28,18 @@ jobs:
       - name: Run tests
         run: python -m unittest discover -s tests
 
+      - name: Read publication history
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m scripts.publication_history --output "$RUNNER_TEMP/publication-history.json"
+
       - name: Generate report
         id: generate
         run: |
           mkdir -p "$RUNNER_TEMP/ranking-evaluation"
           python scripts/generate_report.py \
             --output "$RUNNER_TEMP/daily-ai-news.md" \
+            --publication-history "$RUNNER_TEMP/publication-history.json" \
             --evaluation-output "$RUNNER_TEMP/ranking-evaluation/candidates.json" \
             --evaluation-excerpts
 
@@ -56,7 +66,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          report_date="$(date -u +%F)"
+          report_date="$(python -c 'import json, os; from pathlib import Path; print(json.loads((Path(os.environ["RUNNER_TEMP"]) / "publication-history.json").read_text())["report_date"])')"
           tag="daily-${report_date}"
           title="Daily AI News - ${report_date}"
           notes_file="$RUNNER_TEMP/daily-ai-news.md"
