@@ -41,6 +41,11 @@ try:
 except ModuleNotFoundError:
     from publication_history import load_history, receipt_comment
 
+try:
+    from scripts.article_labels import label_article
+except ModuleNotFoundError:
+    from article_labels import label_article
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCES = ROOT / "config" / "sources.json"
 DEFAULT_OUTPUT = ROOT / "README.md"
@@ -146,6 +151,7 @@ class Item:
     content: str = ""
     content_format: str = "text"
     content_provenance: str = "missing"
+    content_structure: dict = field(default_factory=dict)
     category: str = "other"
     publisher: str = ""
     coverage: str = "mixed"
@@ -574,23 +580,26 @@ def enrich_article_bodies(
     items: list[Item], request_limit: int = MAX_REQUESTS
 ) -> list[tuple[str, str]]:
     """Enrich selected representatives only; failures never remove a story."""
-    cache: dict[str, tuple[str, str]] = {}
+    cache: dict[str, tuple[str, str, dict]] = {}
     diagnostics = []
     for item in items:
         if estimate_reading_time(item) is not None:
             continue
         key = canonicalize_url(item.url)
         if key not in cache:
-            cache[key] = (
-                fetch_body(item.url, USER_AGENT)
+            structure = {}
+            body, reason = (
+                fetch_body(item.url, USER_AGENT, structure=structure)
                 if len(cache) < request_limit
                 else ("", "Article request budget exhausted.")
             )
-        body, reason = cache[key]
+            cache[key] = (body, reason, structure)
+        body, reason, structure = cache[key]
         if body:
             item.content = body
             item.content_format = "text"
             item.content_provenance = "article_body"
+            item.content_structure = dict(structure)
             estimate_reading_time(item)
         else:
             item.body_status = reason
@@ -668,6 +677,17 @@ def freshness_reason(item: Item, now: dt.datetime, lookback_hours: int) -> str:
     if age > lookback_hours * 3600:
         return "older than coverage window"
     return ""
+
+
+def label_item(item: Item) -> dict:
+    return label_article(
+        item.title,
+        item.summary,
+        content=item.content,
+        content_format=item.content_format,
+        content_provenance=item.content_provenance,
+        content_structure=item.content_structure,
+    )
 
 
 def evaluation_metadata(item: Item) -> dict:
@@ -847,6 +867,7 @@ def collect_items(
                     "admitted": is_ai_related(item),
                     "adaptive_bonus": item.editorial_relevance.proposed_rank_bonus,
                     "fixed_bonus": item.editorial_relevance.proposed_fixed_bonus,
+                    "article_labels": label_item(item),
                 }
                 for index, ((item, _), feature) in enumerate(zip(pending, features))
             ]
@@ -1527,6 +1548,17 @@ def main(argv: list[str] | None = None) -> int:
         )
     if not args.no_article_bodies:
         unavailable.extend(enrich_article_bodies(items))
+    if evaluation is not None and args.evaluation_excerpts:
+        # Ranking inputs remain frozen before body enrichment. Export labels only,
+        # never the selected article text used to derive these annotations.
+        evaluation["selected_article_labels"] = [
+            {**evaluation_metadata(item), "assessment": label_item(item)}
+            for item in items
+        ]
+        args.evaluation_output.write_text(
+            json.dumps(evaluation, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
     report = render_report(
         items,
         unavailable,

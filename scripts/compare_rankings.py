@@ -9,6 +9,7 @@ from collections import Counter
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from scripts.article_labels import LABEL_NAMES
 from scripts.generate_report import markdown_escape, markdown_link
 
 
@@ -165,7 +166,12 @@ def compare(snapshot: dict, *, revision: str = "", limit: int = 20) -> dict:
                 }
             )
     disagreements.sort(key=lambda row: (-row["spread"], row["ranks"]["current"]))
-    return {
+    selected_labels = snapshot.get("selected_article_labels", [])
+    if len({row["url"] for row in selected_labels}) != len(selected_labels) or any(
+        row["url"] not in selected_urls for row in selected_labels
+    ):
+        raise ValueError("Selected article labels must identify actual selected URLs")
+    result = {
         "schema_version": 1,
         "captured_at": snapshot["captured_at"],
         "revision": revision,
@@ -180,9 +186,66 @@ def compare(snapshot: dict, *, revision: str = "", limit: int = 20) -> dict:
             if not row["admitted"]
         ][:limit],
         "fresh_rejected_count": sum(not row["admitted"] for row in inputs),
+        "selected_article_labels": selected_labels,
+        "article_labels": [
+            {
+                "id": row["id"],
+                "url": row["url"],
+                "title": row["title"],
+                "source": row["source"],
+                "selected": row["url"] in selected_urls,
+                "admitted": row["admitted"],
+                "assessment": row["article_labels"],
+            }
+            for row in inputs
+            if "article_labels" in row
+        ],
         "actual_selected": snapshot["policies"]["frontier"]["selected"],
         "link_outcomes": snapshot["link_outcomes"],
     }
+
+    result["article_label_reviews"] = article_label_reviews(result)
+    return result
+
+
+def article_label_reviews(result: dict) -> list[dict]:
+    """Pair stages without discarding feed evidence; retain capture-local identities."""
+    bodies = {row["url"]: row for row in result.get("selected_article_labels", [])}
+    reviews = []
+    seen = set()
+    for row in result.get("article_labels", []):
+        feed = row["assessment"]
+        body = bodies.get(row["url"], {}).get("assessment")
+        reviews.append({**row, "feed_assessment": feed, "selected_assessment": body})
+        seen.add(row["url"])
+    for url, row in bodies.items():
+        if url not in seen:
+            reviews.append(
+                {
+                    **row,
+                    "selected": True,
+                    "feed_assessment": None,
+                    "selected_assessment": row["assessment"],
+                }
+            )
+    for row in reviews:
+        feed, body = row["feed_assessment"], row["selected_assessment"]
+        row["differences"] = (
+            {
+                "added_labels": sorted(set(body["labels"]) - set(feed["labels"])),
+                "removed_labels": sorted(set(feed["labels"]) - set(body["labels"])),
+                "added_signals": sorted(set(body["signals"]) - set(feed["signals"])),
+                "removed_signals": sorted(set(feed["signals"]) - set(body["signals"])),
+            }
+            if feed and body
+            else {}
+        )
+        row["changed"] = any(row["differences"].values())
+        latest = body or feed
+        row["unresolved"] = (
+            not latest["labels"] or latest["technical_depth"] == "uncertain"
+        )
+    return reviews
 
 
 def render(result: dict) -> str:
@@ -225,6 +288,73 @@ def render(result: dict) -> str:
             lines.append(
                 f"- {markdown_link(row['title'], row['url'])} · {markdown_escape(row['source'])}"
             )
+    lines += [
+        "",
+        "## Best-effort article labels — no ranking effect",
+        "",
+        "These are provisional text clues, not content understanding or usefulness grades. Multiple labels can coexist. Signals describe only the available text; missing signals do not mean shallow. Labels do not filter, score or publish articles. Feed content and extracted bodies may be incomplete. Candidate labels use feed evidence; selected-article annotations reuse any text already retrieved, without extra requests.",
+        "",
+    ]
+    reviews = result.get("article_label_reviews", article_label_reviews(result))
+    if reviews:
+        positions = {row["url"]: i for i, row in enumerate(result["actual_selected"])}
+        ordered = sorted(
+            reviews,
+            key=lambda row: (
+                not row["changed"],
+                not row["unresolved"],
+                not row["selected"],
+                positions.get(row["url"], len(positions)),
+            ),
+        )
+        lines += [
+            f"Showing {min(20, len(ordered))} of {len(ordered)} article reviews, changed assessments and unresolved cases first. Feed and selected-stage assessments are shown together; complete assessments and differences remain in JSON.",
+            "",
+            "Technical signals are clues, not verified depth or quality. Experimental aggregate depth categories remain in JSON only.",
+            "",
+            "| Article | Stage | Suggested labels | Technical clues | Evidence | Label explanations |",
+            "| --- | --- | --- | --- | --- | --- |",
+        ]
+        for row in ordered[:20]:
+            for stage, assessment in (
+                ("Feed", row["feed_assessment"]),
+                ("Selected", row["selected_assessment"]),
+            ):
+                if assessment is None:
+                    continue
+                names = (
+                    "; ".join(
+                        LABEL_NAMES.get(name, name) for name in assessment["labels"]
+                    )
+                    or "Unclassified"
+                )
+                explanations = "; ".join(
+                    f"{LABEL_NAMES.get(entry['label'], entry['label'])}: {entry['description']} ({entry['field']})"
+                    for entry in assessment.get("label_evidence", [])
+                ) or (
+                    "No positive label evidence"
+                    if not assessment["labels"]
+                    else "Label explanations not captured in this older assessment"
+                )
+                signal_entries = assessment.get("signal_evidence", [])
+                clues = "; ".join(
+                    f"{entry['description']} ({entry['field']})"
+                    for entry in signal_entries
+                )
+                if not clues:
+                    clues = "; ".join(assessment["reasons"])
+                lines.append(
+                    f"| {markdown_link(row['title'], row['url'])} | {stage} | {markdown_escape(names)} | {markdown_escape(clues)} | {markdown_escape(assessment['evidence'])} | {markdown_escape(explanations)} |"
+                )
+            if row["changed"]:
+                changes = "; ".join(
+                    f"{key.replace('_', ' ')}: {', '.join(values)}"
+                    for key, values in row["differences"].items()
+                    if values
+                )
+                lines += [f"| Change | | {markdown_escape(changes)} | | | |"]
+    else:
+        lines += ["No article labels captured in this snapshot."]
     lines += [
         "",
         "## Review guidance",

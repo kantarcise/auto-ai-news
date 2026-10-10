@@ -1,0 +1,289 @@
+{
+  "scope": "Retrospective diagnostics on five previously reviewed articles using only the saved feed-summary excerpts (at most 1000 characters each), not article-body inspection. Owner grades are not label accuracy judgments. These inputs were visible while designing the rules and are not held-out evaluation.",
+  "original_snapshot_sha256": "6cdad9ead14e81c07f6040520b4ed26933d2795f53f21594978bea5b99430e82",
+  "workflow_run_url": "https://github.com/kantarcise/auto-ai-news/actions/runs/37935426075",
+  "examples": [
+    {
+      "title": "Europe’s leading AI model still can’t reliably follow European law",
+      "url": "https://www.lesswrong.com/posts/XK7qJ3vGjuFuHfxaF/europe-s-leading-ai-model-still-can-t-reliably-follow",
+      "source": "LessWrong AI",
+      "summary_excerpt": "TL;DR: Mistral previously performed the worst of all providers on our human rights scenarios, with their Medium 3.5 model failing on almost every single test. Their newly released model, Mistral Large 4, improves performance by 61 percentage points, showing strong resistance in most scenarios. Likewise, Mistral Large 4 demonstrates large improvements in compliance with European law. Its predecessor, Mistral Large 2512, lagged at the bottom of the leaderboard when we tested 12 frontier models earlier this year on compliance with the EU AI Act and GDPR, reaching only 16% compliance even when explicitly instructed to follow these laws. Mistral Large 4 improves by 37 percentage points, reaching 53% compliance - but still falling behind recent Claude and GPT models. These much needed improvements close the gap between Europe’s leading model and US models. However, legal compliance of 53% means breaking the law in just under half of cases - and while Mistral’s latest model is more robust aga",
+      "owner_include": "yes",
+      "owner_importance": 1,
+      "assessment": {
+        "version": 1,
+        "method": "bounded_text_rules",
+        "provisional": true,
+        "labels": [],
+        "technical_depth": "uncertain",
+        "evidence": "feed_summary",
+        "depth_scope": "available_text_only",
+        "analyzed_characters": 1000,
+        "truncated": false,
+        "signals": [],
+        "reasons": [
+          "Insufficient positive evidence to estimate technical depth"
+        ]
+      },
+      "reassessment_v2": {
+        "version": 2,
+        "method": "bounded_text_rules",
+        "provisional": true,
+        "labels": [
+          "research_evaluation"
+        ],
+        "label_evidence": [
+          {
+            "label": "research_evaluation",
+            "rule_id": "comparative-testing",
+            "field": "summary",
+            "description": "Reported comparative testing"
+          }
+        ],
+        "technical_depth": "uncertain",
+        "depth_experimental": true,
+        "evidence": "feed_summary",
+        "depth_scope": "available_text_only",
+        "fields": {
+          "title": {
+            "analyzed_characters": 66,
+            "truncated": false,
+            "code": false
+          },
+          "summary": {
+            "analyzed_characters": 1000,
+            "truncated": false,
+            "code": false
+          }
+        },
+        "analyzed_characters": 1000,
+        "truncated": false,
+        "signals": [
+          "measurement"
+        ],
+        "signal_evidence": [
+          {
+            "signal": "measurement",
+            "field": "summary",
+            "description": "Evaluation or measurement details"
+          }
+        ],
+        "reasons": [
+          "Evaluation or measurement details"
+        ]
+      }
+    },
+    {
+      "title": "AI Scaling vs Human Scaling",
+      "url": "https://www.lesswrong.com/posts/2J43xbszsuLv4zAk5/ai-scaling-vs-human-scaling",
+      "source": "LessWrong AI",
+      "summary_excerpt": "Do AI models scale as well with more tokens as humans do with more time? That is, does an AI get the same benefit from 10x the number of available tokens as a human does from 10x the amount of time to do the task? Or might the AI require a larger scale-up of tokens (such as 20x or 100x) to match the performance improvement when scaling up the time available to a human by 10x? People often think of giving AIs more tokens to complete a task as akin to giving a human worker more time — especially when those tokens are used to extend the AI’s sequential chain of thought or tool use. It’s a useful analogy, but it isn’t clear whether the AI systems are as efficient as the humans are at turning these extra resources into superior performance. We often lean on this analogy when trying to understand AI’s current capabilities and how they might change. For example, we might think of scaling up AI training as making the AI more knowledgeable and skilled, while scaling up chain-of-thought gives th",
+      "owner_include": "yes",
+      "owner_importance": 1,
+      "assessment": {
+        "version": 1,
+        "method": "bounded_text_rules",
+        "provisional": true,
+        "labels": [],
+        "technical_depth": "uncertain",
+        "evidence": "feed_summary",
+        "depth_scope": "available_text_only",
+        "analyzed_characters": 1000,
+        "truncated": false,
+        "signals": [],
+        "reasons": [
+          "Insufficient positive evidence to estimate technical depth"
+        ]
+      },
+      "reassessment_v2": {
+        "version": 2,
+        "method": "bounded_text_rules",
+        "provisional": true,
+        "labels": [],
+        "label_evidence": [],
+        "technical_depth": "uncertain",
+        "depth_experimental": true,
+        "evidence": "feed_summary",
+        "depth_scope": "available_text_only",
+        "fields": {
+          "title": {
+            "analyzed_characters": 27,
+            "truncated": false,
+            "code": false
+          },
+          "summary": {
+            "analyzed_characters": 1000,
+            "truncated": false,
+            "code": false
+          }
+        },
+        "analyzed_characters": 1000,
+        "truncated": false,
+        "signals": [],
+        "signal_evidence": [],
+        "reasons": [
+          "Insufficient positive evidence to estimate technical depth"
+        ]
+      }
+    },
+    {
+      "title": "Proof of useful work for verifying AI treaties",
+      "url": "https://www.lesswrong.com/posts/xqjDi7oyadqxkmdLS/proof-of-useful-work-for-verifying-ai-treaties",
+      "source": "LessWrong AI",
+      "summary_excerpt": "For full post, see my website . Verifying an international agreement pausing AI development needs evidence of how compute is used. Cryptography can give protocols that run in software on the chips already installed, without trusted hardware checking each computation. This post is a literature review of one such tool, proof of useful work (PoUW), with which a GPU proves that it did a given amount of work, here typically matrix multiplication. In contrast with inference verification, PoUW has been developed almost exclusively in relation to cryptocurrencies in order to use a more useful computation instead of the useless hashing used in Bitcoin. PoUW could be used to show remotely that chips are kept busy on useless tasks during an emergency shutdown, or, together with a zero-knowledge proof of the workload, that they run only declared inference. I describe the two existing constructions, by Komargodski and Weinstein for matrices over a finite field, and by Pearl Research for the FP8 for",
+      "owner_include": "no",
+      "owner_importance": null,
+      "assessment": {
+        "version": 1,
+        "method": "bounded_text_rules",
+        "provisional": true,
+        "labels": [],
+        "technical_depth": "uncertain",
+        "evidence": "feed_summary",
+        "depth_scope": "available_text_only",
+        "analyzed_characters": 1000,
+        "truncated": false,
+        "signals": [],
+        "reasons": [
+          "Insufficient positive evidence to estimate technical depth"
+        ]
+      },
+      "reassessment_v2": {
+        "version": 2,
+        "method": "bounded_text_rules",
+        "provisional": true,
+        "labels": [],
+        "label_evidence": [],
+        "technical_depth": "uncertain",
+        "depth_experimental": true,
+        "evidence": "feed_summary",
+        "depth_scope": "available_text_only",
+        "fields": {
+          "title": {
+            "analyzed_characters": 46,
+            "truncated": false,
+            "code": false
+          },
+          "summary": {
+            "analyzed_characters": 1000,
+            "truncated": false,
+            "code": false
+          }
+        },
+        "analyzed_characters": 1000,
+        "truncated": false,
+        "signals": [],
+        "signal_evidence": [],
+        "reasons": [
+          "Insufficient positive evidence to estimate technical depth"
+        ]
+      }
+    },
+    {
+      "title": "Lakebase and Agentic SDLC: Branching Databases for Coding Agents",
+      "url": "https://www.databricks.com/blog/lakebase-and-agentic-sdlc-branching-databases-coding-agents",
+      "source": "Databricks",
+      "summary_excerpt": "AI has changed how software gets built. As coding agents take on a growing share...",
+      "owner_include": "yes",
+      "owner_importance": 1,
+      "assessment": {
+        "version": 1,
+        "method": "bounded_text_rules",
+        "provisional": true,
+        "labels": [],
+        "technical_depth": "uncertain",
+        "evidence": "feed_summary",
+        "depth_scope": "available_text_only",
+        "analyzed_characters": 83,
+        "truncated": false,
+        "signals": [],
+        "reasons": [
+          "Insufficient positive evidence to estimate technical depth"
+        ]
+      },
+      "reassessment_v2": {
+        "version": 2,
+        "method": "bounded_text_rules",
+        "provisional": true,
+        "labels": [],
+        "label_evidence": [],
+        "technical_depth": "uncertain",
+        "depth_experimental": true,
+        "evidence": "feed_summary",
+        "depth_scope": "available_text_only",
+        "fields": {
+          "title": {
+            "analyzed_characters": 64,
+            "truncated": false,
+            "code": false
+          },
+          "summary": {
+            "analyzed_characters": 83,
+            "truncated": false,
+            "code": false
+          }
+        },
+        "analyzed_characters": 83,
+        "truncated": false,
+        "signals": [],
+        "signal_evidence": [],
+        "reasons": [
+          "Insufficient positive evidence to estimate technical depth"
+        ]
+      }
+    },
+    {
+      "title": "Session-Aware Agentic Inference with NVIDIA Dynamo",
+      "url": "https://pytorch.org/blog/session-aware-agentic-inference-with-nvidia-dynamo/",
+      "source": "PyTorch",
+      "summary_excerpt": "TL;DR Agentic workloads change the traffic an inference server sees. Unlike single-turn chat, an agent session can involve a large initial prefill, repeated model calls, and subagents running in parallel,... The post Session-Aware Agentic Inference with NVIDIA Dynamo appeared first on PyTorch .",
+      "owner_include": "yes",
+      "owner_importance": 3,
+      "assessment": {
+        "version": 1,
+        "method": "bounded_text_rules",
+        "provisional": true,
+        "labels": [],
+        "technical_depth": "uncertain",
+        "evidence": "feed_summary",
+        "depth_scope": "available_text_only",
+        "analyzed_characters": 295,
+        "truncated": false,
+        "signals": [],
+        "reasons": [
+          "Insufficient positive evidence to estimate technical depth"
+        ]
+      },
+      "reassessment_v2": {
+        "version": 2,
+        "method": "bounded_text_rules",
+        "provisional": true,
+        "labels": [],
+        "label_evidence": [],
+        "technical_depth": "uncertain",
+        "depth_experimental": true,
+        "evidence": "feed_summary",
+        "depth_scope": "available_text_only",
+        "fields": {
+          "title": {
+            "analyzed_characters": 50,
+            "truncated": false,
+            "code": false
+          },
+          "summary": {
+            "analyzed_characters": 295,
+            "truncated": false,
+            "code": false
+          }
+        },
+        "analyzed_characters": 295,
+        "truncated": false,
+        "signals": [],
+        "signal_evidence": [],
+        "reasons": [
+          "Insufficient positive evidence to estimate technical depth"
+        ]
+      }
+    }
+  ]
+}

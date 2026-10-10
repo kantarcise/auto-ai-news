@@ -62,6 +62,24 @@ class ArticleContentTests(unittest.TestCase):
         )
 
     @patch("scripts.article_content.urllib.request.build_opener")
+    def test_structure_survives_fetch_and_enrichment_cache(self, opener):
+        document = f"<article><p>Configuration profiling. {BODY}</p><pre>import torch; x = model()</pre></article>"
+        opener.return_value.open.return_value = self.response(document.encode())
+        first = Item("AI guide", "https://example.com/a", "Example", 3)
+        duplicate = Item(
+            "AI guide", "https://example.com/a?utm_source=test", "Example", 3
+        )
+        self.assertEqual(enrich_article_bodies([first, duplicate]), [])
+        opener.return_value.open.assert_called_once()
+        self.assertTrue(first.content_structure["code"])
+        self.assertEqual(first.content_structure, duplicate.content_structure)
+        self.assertIsNot(first.content_structure, duplicate.content_structure)
+        self.assertEqual(first.content, content.extract_body(document)[0])
+        from scripts.generate_report import label_item
+
+        self.assertIn("code", label_item(first)["signals"])
+
+    @patch("scripts.article_content.urllib.request.build_opener")
     def test_fetch_failures_do_not_estimate(self, opener):
         for response in (
             self.response(b"x" * (content.MAX_BYTES + 1)),
