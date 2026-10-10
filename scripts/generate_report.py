@@ -690,6 +690,7 @@ def collect_items(
     evaluation: dict | None = None,
     evaluation_excerpts: bool = False,
     published_urls: dict[str, str] | None = None,
+    previously_included: list[tuple[Item, str]] | None = None,
 ) -> tuple[list[Item], list[tuple[str, str]]]:
     if lookback_hours <= 0:
         raise ValueError("lookback_hours must be positive")
@@ -755,6 +756,8 @@ def collect_items(
             item.canonical_url = canonicalize_url(item.url)
             previous_date = (published_urls or {}).get(item.canonical_url)
             if previous_date:
+                if previously_included is not None:
+                    previously_included.append((item, previous_date))
                 if record is not None:
                     record["rejection_reason"] = "previously published"
                     record["previous_report_date"] = previous_date
@@ -1151,8 +1154,15 @@ def render_report(
     *,
     history_enabled: bool = False,
     legacy_release_count: int = 0,
+    previously_included: list[tuple[Item, str]] | None = None,
 ) -> str:
     generated = now.astimezone(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    if previously_included is not None:
+        unavailable = [
+            (source, reason)
+            for source, reason in unavailable
+            if not reason.startswith("Selection: Previously published on ")
+        ]
     selection = [
         (source, reason.removeprefix("Selection: "))
         for source, reason in unavailable
@@ -1182,6 +1192,8 @@ def render_report(
     source_count = len({member.source for member in coverage})
     publisher_count = len({member.publisher or member.source for member in coverage})
     article_label = "story" if len(items) == 1 else "stories"
+    if history_enabled:
+        article_label = "new " + article_label
     source_label = "source" if source_count == 1 else "sources"
     publisher_label = "publisher" if publisher_count == 1 else "publishers"
     lines = [
@@ -1199,13 +1211,13 @@ def render_report(
         lines.extend(
             [
                 (
-                    "Previously published links are skipped. "
+                    "New articles appear first; repeated links are available in the catch-up section below. "
                     f"Repeat checks do not cover {legacy_release_count} older daily reports."
                 ),
                 "",
             ]
         )
-    lines.extend(["## Articles", ""])
+    lines.extend(["## New articles" if history_enabled else "## Articles", ""])
     if items:
         for index, item in enumerate(items, start=1):
             indent = " " * (len(str(index)) + 2)
@@ -1237,8 +1249,42 @@ def render_report(
                 )
     else:
         lines.extend(
-            ["No accessible AI-related articles found within the coverage window.", ""]
+            [
+                "No new accessible AI-related articles found within the coverage window."
+                if previously_included
+                else "No accessible AI-related articles found within the coverage window.",
+                "",
+            ]
         )
+    if history_enabled:
+        # Keep one original feed link per canonical URL, without refreshing history.
+        repeats = {}
+        for item, date in sorted(
+            previously_included or [], key=lambda row: row[1], reverse=True
+        ):
+            repeats.setdefault(
+                item.canonical_url or canonicalize_url(item.url), (item, date)
+            )
+        lines.extend(
+            [
+                "<details>",
+                f"<summary>Previously included — catch up ({len(repeats)})</summary>",
+                "",
+                f"These articles appeared in earlier reports and are still in the {lookback_hours}-hour coverage window. Links have not been checked again today.",
+                "",
+            ]
+        )
+        for item, date in repeats.values():
+            earlier_report = markdown_link(
+                date,
+                f"https://github.com/kantarcise/auto-ai-news/releases/tag/daily-{date}",
+            )
+            lines.append(
+                f"- {markdown_link(item.title, item.url)} · {markdown_escape(item.source)} · Last included: {earlier_report}"
+            )
+        if not repeats:
+            lines.append("- None today.")
+        lines.extend(["", "</details>", ""])
     lines.extend(
         [
             "<details>",
@@ -1325,7 +1371,7 @@ def render_report(
             "",
             "Articles with missing/invalid or future dates are excluded. Older articles never backfill a short report. Date-only HTML listings use midnight UTC; boundary decisions are conservative. "
             + (
-                "URLs recorded in earlier published reports are excluded; same-day reruns keep today’s articles. New URLs remain eligible, even for related stories."
+                "URLs recorded in earlier published reports move to the catch-up section and do not occupy new-article slots; same-day reruns keep today’s articles. New URLs remain eligible, even for related stories."
                 if history_enabled
                 else "A story may recur across consecutive reports within the window; publication history is disabled."
             ),
@@ -1425,6 +1471,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     sources = load_sources(args.sources)
     evaluation = {} if args.evaluation_output is not None else None
+    previously_included: list[tuple[Item, str]] = []
     items, unavailable = collect_items(
         sources,
         now,
@@ -1432,9 +1479,14 @@ def main(argv: list[str] | None = None) -> int:
         evaluation=evaluation,
         evaluation_excerpts=args.evaluation_excerpts,
         published_urls=published_urls,
+        previously_included=previously_included,
     )
     if evaluation is not None and history is not None:
         evaluation["publication_history"] = history
+        evaluation["previously_included"] = [
+            {**evaluation_metadata(item), "previous_report_date": date}
+            for item, date in previously_included
+        ]
     if args.evaluation_output is not None:
         args.evaluation_output.write_text(
             json.dumps(evaluation, ensure_ascii=False, indent=2) + "\n",
@@ -1449,6 +1501,7 @@ def main(argv: list[str] | None = None) -> int:
         args.lookback_hours,
         history_enabled=history is not None,
         legacy_release_count=history.get("legacy_release_count", 0) if history else 0,
+        previously_included=previously_included if history is not None else None,
     )
     if history is not None:
         urls = [canonicalize_url(url) for url in history["published"].get(today, [])]

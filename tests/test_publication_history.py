@@ -110,6 +110,7 @@ class PublicationHistoryTest(unittest.TestCase):
             ),
         ]
         evaluation = {}
+        catch_up = []
         with (
             patch.object(report, "fetch_url", return_value=(200, source.feed_url, "")),
             patch.object(report, "parse_source", return_value=entries),
@@ -123,6 +124,7 @@ class PublicationHistoryTest(unittest.TestCase):
                 evaluation=evaluation,
                 evaluation_excerpts=True,
                 published_urls={"https://example.com/a": "2026-10-08"},
+                previously_included=catch_up,
             )
         self.assertEqual([item.url for item in items], ["https://example.com/b"])
         check.assert_called_once_with("https://example.com/b")
@@ -131,9 +133,18 @@ class PublicationHistoryTest(unittest.TestCase):
         self.assertEqual(rejected["previous_report_date"], "2026-10-08")
         self.assertEqual(len(evaluation["ranking_inputs"]), 1)
         compare(evaluation)
-        rendered = report.render_report(items, diagnostics, NOW, history_enabled=True)
-        self.assertIn("Previously published on 2026\\-10\\-08", rendered)
-        self.assertIn("repeated URL excluded", rendered)
+        rendered = report.render_report(
+            items, diagnostics, NOW, history_enabled=True, previously_included=catch_up
+        )
+        self.assertEqual(len(catch_up), 1)
+        self.assertIn("Previously included — catch up (1)", rendered)
+        self.assertIn("[AI repeat](https://example.com/a?utm_source=feed)", rendered)
+        self.assertIn(
+            "Last included: [2026\\-10\\-08](https://github.com/kantarcise/auto-ai-news/releases/tag/daily-2026-10-08)",
+            rendered,
+        )
+        self.assertIn("Selection exclusions (0)", rendered)
+        self.assertNotIn("repeated URL excluded", rendered)
 
     def test_generation_rerun_union_alternates_and_next_day(self):
         selected = report.Item(
@@ -202,6 +213,122 @@ class PublicationHistoryTest(unittest.TestCase):
                 ],
             )
             self.assertNotIn("https://example.com/prior", notes)
+
+    def test_catch_up_is_deduplicated_escaped_and_does_not_refresh_history(self):
+        source = report.Source(
+            "Example <lab>", "https://example.com", "https://feed.test", 3
+        )
+        entries = [
+            report.Item(
+                "AI <old> & " + "technical " * 30,
+                "https://example.com/a?utm_source=feed",
+                source.name,
+                3,
+                published=NOW,
+            ),
+            report.Item(
+                "AI duplicate",
+                "https://example.com/a?utm_source=other",
+                source.name,
+                3,
+                published=NOW,
+            ),
+            report.Item(
+                "AI new model", "https://example.com/new", source.name, 3, published=NOW
+            ),
+            report.Item(
+                "AI stale",
+                "https://example.com/stale",
+                source.name,
+                3,
+                published=NOW - dt.timedelta(hours=73),
+            ),
+            report.Item("AI undated", "https://example.com/undated", source.name, 3),
+        ]
+        previous = release(
+            "2026-10-08",
+            [
+                "https://example.com/a",
+                "https://example.com/stale",
+                "https://example.com/undated",
+            ],
+        )
+        original = history.history_from_releases([[previous]], "2026-10-09")
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "history.json"
+            output = Path(directory) / "report.md"
+            snapshot = Path(directory) / "capture.json"
+            path.write_text(json.dumps(original))
+            with (
+                patch.object(report.dt, "datetime", wraps=dt.datetime) as clock,
+                patch.object(report, "load_sources", return_value=[source]),
+                patch.object(
+                    report, "fetch_url", return_value=(200, source.feed_url, "")
+                ),
+                patch.object(report, "parse_source", return_value=entries),
+                patch.object(
+                    report, "check_url_accessible", return_value=(True, "")
+                ) as check,
+            ):
+                clock.now.return_value = NOW
+                report.main(
+                    [
+                        "--publication-history",
+                        str(path),
+                        "--output",
+                        str(output),
+                        "--evaluation-output",
+                        str(snapshot),
+                        "--evaluation-excerpts",
+                        "--no-article-bodies",
+                    ]
+                )
+            notes = output.read_text()
+            check.assert_called_once_with("https://example.com/new")
+            self.assertIn("1 new story", notes)
+            self.assertLess(
+                notes.index("## New articles"),
+                notes.index("Previously included — catch up (1)"),
+            )
+            self.assertIn("https://example.com/a?utm_source=feed", notes)
+            self.assertIn("AI &lt;old&gt; &amp;", notes)
+            self.assertIn("Example &lt;lab&gt;", notes)
+            self.assertNotIn("https://example.com/stale", notes)
+            self.assertNotIn("https://example.com/undated", notes)
+            self.assertEqual(notes.count("<details>"), notes.count("</details>"))
+            current_receipt = history.history_from_releases(
+                [[release("2026-10-09", body=notes)]], "2026-10-10"
+            )
+            self.assertEqual(
+                current_receipt["published"]["2026-10-09"], ["https://example.com/new"]
+            )
+            captured = json.loads(snapshot.read_text())
+            self.assertEqual(len(captured["previously_included"]), 2)
+            self.assertEqual(len(captured["policies"]["frontier"]["selected"]), 1)
+            compare(captured)
+
+    def test_catch_up_only_and_empty_catch_up_reports(self):
+        old = report.Item(
+            "AI yesterday", "https://example.com/a", "Example", 3, published=NOW
+        )
+        notes = report.render_report(
+            [],
+            [("Broken", "HTTP 403.")],
+            NOW,
+            history_enabled=True,
+            previously_included=[(old, "2026-10-08")],
+        )
+        self.assertIn("0 new stories", notes)
+        self.assertIn("No new accessible", notes)
+        self.assertIn("[AI yesterday](https://example.com/a)", notes)
+        self.assertIn("Links have not been checked again today", notes)
+        self.assertIn("Skipped sources and links (1)", notes)
+        empty = report.render_report(
+            [], [], NOW, history_enabled=True, previously_included=[]
+        )
+        self.assertIn("Previously included — catch up (0)", empty)
+        self.assertIn("- None today.", empty)
+        self.assertEqual(empty.count("<details>"), empty.count("</details>"))
 
     def test_empty_selection_records_no_unpublished_candidates(self):
         original = history.history_from_releases([[]], "2026-10-09")
