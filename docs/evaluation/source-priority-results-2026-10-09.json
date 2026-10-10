@@ -1,0 +1,909 @@
+{
+  "captured_at": "2026-10-09T13:14:31.895812+00:00",
+  "original_snapshot_sha256": "6cdad9ead14e81c07f6040520b4ed26933d2795f53f21594978bea5b99430e82",
+  "generator_revision": "7aad45e5a273a7f8ea5c8b13cfd61739b22c3580",
+  "workflow_run_url": "https://github.com/kantarcise/auto-ai-news/actions/runs/37935426075",
+  "priority_changes": {
+    "LessWrong AI": {
+      "before": 5,
+      "after": 2
+    }
+  },
+  "scope": "Frozen eligibility and link outcomes; reruns deduplication, grouping, ranking, publisher caps and selection. No network requests or history changes.",
+  "before": {
+    "candidate_order": [
+      "https://www.lesswrong.com/posts/XK7qJ3vGjuFuHfxaF/europe-s-leading-ai-model-still-can-t-reliably-follow",
+      "https://www.lesswrong.com/posts/2J43xbszsuLv4zAk5/ai-scaling-vs-human-scaling",
+      "https://www.lesswrong.com/posts/xqjDi7oyadqxkmdLS/proof-of-useful-work-for-verifying-ai-treaties",
+      "https://www.databricks.com/blog/lakebase-and-agentic-sdlc-branching-databases-coding-agents",
+      "https://pytorch.org/blog/session-aware-agentic-inference-with-nvidia-dynamo/",
+      "https://www.lesswrong.com/posts/aQTNbqFegfPcJsgmA/using-llm-surprisal-to-highlight-informative-words-2",
+      "https://www.latent.space/p/periodic",
+      "https://www.therundown.ai/articles/fired-openai-safety-researchers-hit-back",
+      "https://openai.com/index/sophos",
+      "https://developer.nvidia.com/blog/5-steps-to-create-simready-assets-for-robotics-with-frontier-ai-models/",
+      "https://developer.nvidia.com/blog/building-reliable-data-analytics-agents-lessons-from-the-kdd-cup/",
+      "https://openai.com/index/oracle",
+      "https://openai.com/index/pollo-ai",
+      "https://simonwillison.net/2026/Oct/7/claude-haiku-5-5/",
+      "https://blog.cloudflare.com/agentic-security-operations/",
+      "https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/",
+      "https://simonwillison.net/2026/Oct/7/openai-rogue-agents-wikimedia/",
+      "https://simonwillison.net/2026/Oct/6/llm-openai-decisions/",
+      "https://simonwillison.net/2026/Oct/6/le-chonk/",
+      "https://simonwillison.net/2026/Oct/6/hn-49982139/",
+      "https://openai.com/index/gpt-6-for-everyone",
+      "https://www.anthropic.com/claude-haiku-5-5",
+      "https://www.latent.space/p/ainews-claude-haiku-55-better-than",
+      "https://www.latent.space/p/stacklok",
+      "https://www.latent.space/p/ainews-quasi-riemann-hypothesis-openai",
+      "https://pytorch.org/blog/building-spyre-as-a-native-pytorch-device/",
+      "https://www.therundown.ai/articles/ai-s-next-frontier-is-the-human-cell",
+      "https://openai.com/index/disrupting-ai-enabled-false-front-operations",
+      "https://rocm.blogs.amd.com/artificial-intelligence/primus-hybrid-llm/README.html",
+      "https://rocm.blogs.amd.com/software-tools-optimization/di-kimi-k3-mxfp4/README.html",
+      "https://rocm.blogs.amd.com/software-tools-optimization/mi455x-vs-mi355x/README.html",
+      "https://vercel.com/changelog/grok-imagine-video-1-5-lite-on-ai-gateway",
+      "https://vercel.com/changelog/step-5-preview-now-available-on-ai-gateway",
+      "https://vercel.com/changelog/openai-ultrafast-mode-now-available-on-ai-gateway",
+      "https://vercel.com/changelog/flux-3-image-now-available-on-ai-gateway",
+      "https://www.anthropic.com/news/anthropic-cyber-mission",
+      "https://huggingface.co/blog/LiquidAI/open-d1",
+      "https://developer.nvidia.com/blog/validate-ai-factory-changes-with-digital-twins-and-ai-agents/",
+      "https://huggingface.co/blog/nvidia/nemotron-ioi-and-imo-2026",
+      "https://openai.com/index/teens-learn-and-plan",
+      "https://www.therundown.ai/articles/openai-math-avalanche-continues",
+      "https://openai.com/index/radisson",
+      "https://vercel.com/changelog/openai-decisions-api-now-available-on-ai-gateway",
+      "https://vercel.com/changelog/claude-haiku-5-5-now-available-on-ai-gateway",
+      "https://vercel.com/changelog/glyph-cluster-is-now-available-in-stealth-for-free-on-ai-gateway",
+      "https://simonwillison.net/2026/Oct/6/llm-mistral/",
+      "https://developer.nvidia.com/blog/doca-gpunetio-gda-ki-unified-gpu-networking/",
+      "https://www.databricks.com/blog/ai-powered-analytics-building-data-visualizations-natural-language-vs-sql",
+      "https://vercel.com/changelog/confidence-based-decision-fallbacks",
+      "https://www.microsoft.com/en-us/research/podcast/what-ai-gets-wrong-and-what-failure-teaches-us/",
+      "https://developer.nvidia.com/blog/aicr-v1-0-open-stable-and-verifiable-gpu-cluster-configuration/",
+      "https://openai.com/index/atlassian-partnership",
+      "https://research.google/blog/earth-ais-planetary-geospatial-foundation-models-for-global-public-health/",
+      "https://developer.nvidia.com/blog/control-how-your-gpu-shares-work-with-green-contexts/",
+      "https://www.therundown.ai/articles/a-breakout-moment-for-ai-medicine"
+    ],
+    "selected": [
+      {
+        "title": "Europe’s leading AI model still can’t reliably follow European law",
+        "url": "https://www.lesswrong.com/posts/XK7qJ3vGjuFuHfxaF/europe-s-leading-ai-model-still-can-t-reliably-follow",
+        "source": "LessWrong AI",
+        "publisher": "LessWrong AI",
+        "category": "commentary",
+        "published": "2026-10-09T12:25:22+00:00",
+        "score": 4.25,
+        "stars": 5
+      },
+      {
+        "title": "AI Scaling vs Human Scaling",
+        "url": "https://www.lesswrong.com/posts/2J43xbszsuLv4zAk5/ai-scaling-vs-human-scaling",
+        "source": "LessWrong AI",
+        "publisher": "LessWrong AI",
+        "category": "commentary",
+        "published": "2026-10-09T12:11:14+00:00",
+        "score": 4.25,
+        "stars": 5
+      },
+      {
+        "title": "Proof of useful work for verifying AI treaties",
+        "url": "https://www.lesswrong.com/posts/xqjDi7oyadqxkmdLS/proof-of-useful-work-for-verifying-ai-treaties",
+        "source": "LessWrong AI",
+        "publisher": "LessWrong AI",
+        "category": "commentary",
+        "published": "2026-10-09T10:36:16+00:00",
+        "score": 4.25,
+        "stars": 5
+      },
+      {
+        "title": "Lakebase and Agentic SDLC: Branching Databases for Coding Agents",
+        "url": "https://www.databricks.com/blog/lakebase-and-agentic-sdlc-branching-databases-coding-agents",
+        "source": "Databricks",
+        "publisher": "Databricks",
+        "category": "engineering",
+        "published": "2026-10-08T22:00:00+00:00",
+        "score": 4.0,
+        "stars": 4
+      },
+      {
+        "title": "Session-Aware Agentic Inference with NVIDIA Dynamo",
+        "url": "https://pytorch.org/blog/session-aware-agentic-inference-with-nvidia-dynamo/",
+        "source": "PyTorch",
+        "publisher": "PyTorch",
+        "category": "engineering",
+        "published": "2026-10-08T18:13:46+00:00",
+        "score": 4.0,
+        "stars": 4
+      },
+      {
+        "title": "Using LLM surprisal to highlight informative words",
+        "url": "https://www.lesswrong.com/posts/aQTNbqFegfPcJsgmA/using-llm-surprisal-to-highlight-informative-words-2",
+        "source": "LessWrong AI",
+        "publisher": "LessWrong AI",
+        "category": "commentary",
+        "published": "2026-10-09T10:51:19+00:00",
+        "score": 3.25,
+        "stars": 4
+      },
+      {
+        "title": "Synthesis Superintelligence: from Semiconductors to Superconductors — Periodic Labs’ Liam Fedus and Ekin Dogus Cubuk",
+        "url": "https://www.latent.space/p/periodic",
+        "source": "Latent Space",
+        "publisher": "Latent Space",
+        "category": "commentary",
+        "published": "2026-10-08T16:27:54+00:00",
+        "score": 3.25,
+        "stars": 4
+      },
+      {
+        "title": "Fired OpenAI safety researchers hit back",
+        "url": "https://www.therundown.ai/articles/fired-openai-safety-researchers-hit-back",
+        "source": "The Rundown AI",
+        "publisher": "The Rundown AI",
+        "category": "commentary",
+        "published": "2026-10-09T09:00:00+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "5 Steps to Create SimReady Assets for Robotics with Frontier AI Models",
+        "url": "https://developer.nvidia.com/blog/5-steps-to-create-simready-assets-for-robotics-with-frontier-ai-models/",
+        "source": "NVIDIA Developer",
+        "publisher": "NVIDIA Developer",
+        "category": "engineering",
+        "published": "2026-10-08T20:57:55+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Building Reliable Data Analytics Agents: Lessons from the KDD Cup",
+        "url": "https://developer.nvidia.com/blog/building-reliable-data-analytics-agents-lessons-from-the-kdd-cup/",
+        "source": "NVIDIA Developer",
+        "publisher": "NVIDIA Developer",
+        "category": "engineering",
+        "published": "2026-10-08T18:30:02+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Claude Haiku 5.5",
+        "url": "https://simonwillison.net/2026/Oct/7/claude-haiku-5-5/",
+        "source": "Simon Willison",
+        "publisher": "Simon Willison",
+        "category": "commentary",
+        "published": "2026-10-07T20:56:21+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Building an evidence-grounded agentic security operations harness on Cloudflare",
+        "url": "https://blog.cloudflare.com/agentic-security-operations/",
+        "source": "Cloudflare",
+        "publisher": "Cloudflare",
+        "category": "engineering",
+        "published": "2026-10-07T16:30:36+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Agent Lightning v1.0: A 3,500-Line Lightweight Agentic RL Framework for Training Agents with Real Harnesses",
+        "url": "https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/",
+        "source": "Microsoft Research",
+        "publisher": "Microsoft Research",
+        "category": "research",
+        "published": "2026-10-07T16:00:00+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "OpenAI “rogue” agent activities found on Wikimedia projects",
+        "url": "https://simonwillison.net/2026/Oct/7/openai-rogue-agents-wikimedia/",
+        "source": "Simon Willison",
+        "publisher": "Simon Willison",
+        "category": "commentary",
+        "published": "2026-10-07T00:16:45+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "llm-openai-decisions 0.1a0",
+        "url": "https://simonwillison.net/2026/Oct/6/llm-openai-decisions/",
+        "source": "Simon Willison",
+        "publisher": "Simon Willison",
+        "category": "commentary",
+        "published": "2026-10-06T23:04:13+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Introducing Mistral Large 4: Le chonk",
+        "url": "https://simonwillison.net/2026/Oct/6/le-chonk/",
+        "source": "Simon Willison",
+        "publisher": "Simon Willison",
+        "category": "commentary",
+        "published": "2026-10-06T20:18:19+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Introducing Claude Haiku 5.5",
+        "url": "https://www.anthropic.com/claude-haiku-5-5",
+        "source": "Anthropic News",
+        "publisher": "Anthropic",
+        "category": "frontier_lab",
+        "published": "2026-10-07T00:00:00+00:00",
+        "score": 2.75,
+        "stars": 3
+      },
+      {
+        "title": "[AINews] Claude Haiku 5.5 — better than GPT-6 Luna at the same pricing",
+        "url": "https://www.latent.space/p/ainews-claude-haiku-55-better-than",
+        "source": "Latent Space",
+        "publisher": "Latent Space",
+        "category": "commentary",
+        "published": "2026-10-08T07:27:51+00:00",
+        "score": 2.25,
+        "stars": 3
+      },
+      {
+        "title": "Can a Cloud-Native Harness Make Agents Reliable Beyond the Desktop?",
+        "url": "https://www.latent.space/p/stacklok",
+        "source": "Latent Space",
+        "publisher": "Latent Space",
+        "category": "commentary",
+        "published": "2026-10-07T14:10:45+00:00",
+        "score": 2.25,
+        "stars": 3
+      },
+      {
+        "title": "[AINews] Quasi-Riemann-Hypothesis: OpenAI publishes 722 math papers solving 90 of the top 500 open math problems; “the most significant moment” in >100 years of mathematics",
+        "url": "https://www.latent.space/p/ainews-quasi-riemann-hypothesis-openai",
+        "source": "Latent Space",
+        "publisher": "Latent Space",
+        "category": "commentary",
+        "published": "2026-10-07T04:55:44+00:00",
+        "score": 2.25,
+        "stars": 3
+      },
+      {
+        "title": "Building Spyre as a Native PyTorch Device",
+        "url": "https://pytorch.org/blog/building-spyre-as-a-native-pytorch-device/",
+        "source": "PyTorch",
+        "publisher": "PyTorch",
+        "category": "engineering",
+        "published": "2026-10-08T12:45:49+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "AI's next frontier is the human cell",
+        "url": "https://www.therundown.ai/articles/ai-s-next-frontier-is-the-human-cell",
+        "source": "The Rundown AI",
+        "publisher": "The Rundown AI",
+        "category": "commentary",
+        "published": "2026-10-08T09:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Pre-Training Hybrid LLMs from Scratch in Primus on AMD Instinct™ GPUs",
+        "url": "https://rocm.blogs.amd.com/artificial-intelligence/primus-hybrid-llm/README.html",
+        "source": "AMD ROCm",
+        "publisher": "AMD ROCm",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "DI Series: Serving Kimi-K3 MXFP4 Wide-EP Disaggregated on AMD Instinct MI300X and MI325X",
+        "url": "https://rocm.blogs.amd.com/software-tools-optimization/di-kimi-k3-mxfp4/README.html",
+        "source": "AMD ROCm",
+        "publisher": "AMD ROCm",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "AMD Instinct MI455X vs MI355X: A Technical Look at the Advancing AI 2026 Inference Numbers",
+        "url": "https://rocm.blogs.amd.com/software-tools-optimization/mi455x-vs-mi355x/README.html",
+        "source": "AMD ROCm",
+        "publisher": "AMD ROCm",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Grok Imagine Video 1.5 Lite on AI Gateway",
+        "url": "https://vercel.com/changelog/grok-imagine-video-1-5-lite-on-ai-gateway",
+        "source": "Vercel",
+        "publisher": "Vercel",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Step 5 Preview now available on AI Gateway",
+        "url": "https://vercel.com/changelog/step-5-preview-now-available-on-ai-gateway",
+        "source": "Vercel",
+        "publisher": "Vercel",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "OpenAI Ultrafast mode now available on AI Gateway",
+        "url": "https://vercel.com/changelog/openai-ultrafast-mode-now-available-on-ai-gateway",
+        "source": "Vercel",
+        "publisher": "Vercel",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "FLUX 3 Image now available on AI Gateway",
+        "url": "https://vercel.com/changelog/flux-3-image-now-available-on-ai-gateway",
+        "source": "Vercel",
+        "publisher": "Vercel",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Introducing the Anthropic Cyber Mission",
+        "url": "https://www.anthropic.com/news/anthropic-cyber-mission",
+        "source": "Anthropic News",
+        "publisher": "Anthropic",
+        "category": "frontier_lab",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      }
+    ],
+    "publisher_counts": {
+      "LessWrong AI": 4,
+      "Databricks": 1,
+      "PyTorch": 2,
+      "Latent Space": 4,
+      "The Rundown AI": 2,
+      "NVIDIA Developer": 2,
+      "Simon Willison": 4,
+      "Cloudflare": 1,
+      "Microsoft Research": 1,
+      "Anthropic": 2,
+      "AMD ROCm": 3,
+      "Vercel": 4
+    }
+  },
+  "after": {
+    "candidate_order": [
+      "https://www.databricks.com/blog/lakebase-and-agentic-sdlc-branching-databases-coding-agents",
+      "https://pytorch.org/blog/session-aware-agentic-inference-with-nvidia-dynamo/",
+      "https://www.latent.space/p/periodic",
+      "https://www.lesswrong.com/posts/XK7qJ3vGjuFuHfxaF/europe-s-leading-ai-model-still-can-t-reliably-follow",
+      "https://www.lesswrong.com/posts/2J43xbszsuLv4zAk5/ai-scaling-vs-human-scaling",
+      "https://www.lesswrong.com/posts/xqjDi7oyadqxkmdLS/proof-of-useful-work-for-verifying-ai-treaties",
+      "https://www.therundown.ai/articles/fired-openai-safety-researchers-hit-back",
+      "https://openai.com/index/sophos",
+      "https://developer.nvidia.com/blog/5-steps-to-create-simready-assets-for-robotics-with-frontier-ai-models/",
+      "https://developer.nvidia.com/blog/building-reliable-data-analytics-agents-lessons-from-the-kdd-cup/",
+      "https://openai.com/index/oracle",
+      "https://openai.com/index/pollo-ai",
+      "https://simonwillison.net/2026/Oct/7/claude-haiku-5-5/",
+      "https://blog.cloudflare.com/agentic-security-operations/",
+      "https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/",
+      "https://simonwillison.net/2026/Oct/7/openai-rogue-agents-wikimedia/",
+      "https://simonwillison.net/2026/Oct/6/llm-openai-decisions/",
+      "https://simonwillison.net/2026/Oct/6/le-chonk/",
+      "https://simonwillison.net/2026/Oct/6/hn-49982139/",
+      "https://openai.com/index/gpt-6-for-everyone",
+      "https://www.anthropic.com/claude-haiku-5-5",
+      "https://www.latent.space/p/ainews-claude-haiku-55-better-than",
+      "https://www.latent.space/p/stacklok",
+      "https://www.latent.space/p/ainews-quasi-riemann-hypothesis-openai",
+      "https://www.lesswrong.com/posts/aQTNbqFegfPcJsgmA/using-llm-surprisal-to-highlight-informative-words-2",
+      "https://pytorch.org/blog/building-spyre-as-a-native-pytorch-device/",
+      "https://www.therundown.ai/articles/ai-s-next-frontier-is-the-human-cell",
+      "https://openai.com/index/disrupting-ai-enabled-false-front-operations",
+      "https://rocm.blogs.amd.com/artificial-intelligence/primus-hybrid-llm/README.html",
+      "https://rocm.blogs.amd.com/software-tools-optimization/di-kimi-k3-mxfp4/README.html",
+      "https://rocm.blogs.amd.com/software-tools-optimization/mi455x-vs-mi355x/README.html",
+      "https://vercel.com/changelog/grok-imagine-video-1-5-lite-on-ai-gateway",
+      "https://vercel.com/changelog/step-5-preview-now-available-on-ai-gateway",
+      "https://vercel.com/changelog/openai-ultrafast-mode-now-available-on-ai-gateway",
+      "https://vercel.com/changelog/flux-3-image-now-available-on-ai-gateway",
+      "https://www.anthropic.com/news/anthropic-cyber-mission",
+      "https://huggingface.co/blog/LiquidAI/open-d1",
+      "https://developer.nvidia.com/blog/validate-ai-factory-changes-with-digital-twins-and-ai-agents/",
+      "https://huggingface.co/blog/nvidia/nemotron-ioi-and-imo-2026",
+      "https://openai.com/index/teens-learn-and-plan",
+      "https://www.therundown.ai/articles/openai-math-avalanche-continues",
+      "https://openai.com/index/radisson",
+      "https://vercel.com/changelog/openai-decisions-api-now-available-on-ai-gateway",
+      "https://vercel.com/changelog/claude-haiku-5-5-now-available-on-ai-gateway",
+      "https://vercel.com/changelog/glyph-cluster-is-now-available-in-stealth-for-free-on-ai-gateway",
+      "https://simonwillison.net/2026/Oct/6/llm-mistral/",
+      "https://developer.nvidia.com/blog/doca-gpunetio-gda-ki-unified-gpu-networking/",
+      "https://www.databricks.com/blog/ai-powered-analytics-building-data-visualizations-natural-language-vs-sql",
+      "https://vercel.com/changelog/confidence-based-decision-fallbacks",
+      "https://www.microsoft.com/en-us/research/podcast/what-ai-gets-wrong-and-what-failure-teaches-us/",
+      "https://developer.nvidia.com/blog/aicr-v1-0-open-stable-and-verifiable-gpu-cluster-configuration/",
+      "https://openai.com/index/atlassian-partnership",
+      "https://research.google/blog/earth-ais-planetary-geospatial-foundation-models-for-global-public-health/",
+      "https://developer.nvidia.com/blog/control-how-your-gpu-shares-work-with-green-contexts/",
+      "https://www.therundown.ai/articles/a-breakout-moment-for-ai-medicine"
+    ],
+    "selected": [
+      {
+        "title": "Lakebase and Agentic SDLC: Branching Databases for Coding Agents",
+        "url": "https://www.databricks.com/blog/lakebase-and-agentic-sdlc-branching-databases-coding-agents",
+        "source": "Databricks",
+        "publisher": "Databricks",
+        "category": "engineering",
+        "published": "2026-10-08T22:00:00+00:00",
+        "score": 4.0,
+        "stars": 4
+      },
+      {
+        "title": "Session-Aware Agentic Inference with NVIDIA Dynamo",
+        "url": "https://pytorch.org/blog/session-aware-agentic-inference-with-nvidia-dynamo/",
+        "source": "PyTorch",
+        "publisher": "PyTorch",
+        "category": "engineering",
+        "published": "2026-10-08T18:13:46+00:00",
+        "score": 4.0,
+        "stars": 4
+      },
+      {
+        "title": "Synthesis Superintelligence: from Semiconductors to Superconductors — Periodic Labs’ Liam Fedus and Ekin Dogus Cubuk",
+        "url": "https://www.latent.space/p/periodic",
+        "source": "Latent Space",
+        "publisher": "Latent Space",
+        "category": "commentary",
+        "published": "2026-10-08T16:27:54+00:00",
+        "score": 3.25,
+        "stars": 4
+      },
+      {
+        "title": "Europe’s leading AI model still can’t reliably follow European law",
+        "url": "https://www.lesswrong.com/posts/XK7qJ3vGjuFuHfxaF/europe-s-leading-ai-model-still-can-t-reliably-follow",
+        "source": "LessWrong AI",
+        "publisher": "LessWrong AI",
+        "category": "commentary",
+        "published": "2026-10-09T12:25:22+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "AI Scaling vs Human Scaling",
+        "url": "https://www.lesswrong.com/posts/2J43xbszsuLv4zAk5/ai-scaling-vs-human-scaling",
+        "source": "LessWrong AI",
+        "publisher": "LessWrong AI",
+        "category": "commentary",
+        "published": "2026-10-09T12:11:14+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Proof of useful work for verifying AI treaties",
+        "url": "https://www.lesswrong.com/posts/xqjDi7oyadqxkmdLS/proof-of-useful-work-for-verifying-ai-treaties",
+        "source": "LessWrong AI",
+        "publisher": "LessWrong AI",
+        "category": "commentary",
+        "published": "2026-10-09T10:36:16+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Fired OpenAI safety researchers hit back",
+        "url": "https://www.therundown.ai/articles/fired-openai-safety-researchers-hit-back",
+        "source": "The Rundown AI",
+        "publisher": "The Rundown AI",
+        "category": "commentary",
+        "published": "2026-10-09T09:00:00+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "5 Steps to Create SimReady Assets for Robotics with Frontier AI Models",
+        "url": "https://developer.nvidia.com/blog/5-steps-to-create-simready-assets-for-robotics-with-frontier-ai-models/",
+        "source": "NVIDIA Developer",
+        "publisher": "NVIDIA Developer",
+        "category": "engineering",
+        "published": "2026-10-08T20:57:55+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Building Reliable Data Analytics Agents: Lessons from the KDD Cup",
+        "url": "https://developer.nvidia.com/blog/building-reliable-data-analytics-agents-lessons-from-the-kdd-cup/",
+        "source": "NVIDIA Developer",
+        "publisher": "NVIDIA Developer",
+        "category": "engineering",
+        "published": "2026-10-08T18:30:02+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Claude Haiku 5.5",
+        "url": "https://simonwillison.net/2026/Oct/7/claude-haiku-5-5/",
+        "source": "Simon Willison",
+        "publisher": "Simon Willison",
+        "category": "commentary",
+        "published": "2026-10-07T20:56:21+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Building an evidence-grounded agentic security operations harness on Cloudflare",
+        "url": "https://blog.cloudflare.com/agentic-security-operations/",
+        "source": "Cloudflare",
+        "publisher": "Cloudflare",
+        "category": "engineering",
+        "published": "2026-10-07T16:30:36+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Agent Lightning v1.0: A 3,500-Line Lightweight Agentic RL Framework for Training Agents with Real Harnesses",
+        "url": "https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/",
+        "source": "Microsoft Research",
+        "publisher": "Microsoft Research",
+        "category": "research",
+        "published": "2026-10-07T16:00:00+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "OpenAI “rogue” agent activities found on Wikimedia projects",
+        "url": "https://simonwillison.net/2026/Oct/7/openai-rogue-agents-wikimedia/",
+        "source": "Simon Willison",
+        "publisher": "Simon Willison",
+        "category": "commentary",
+        "published": "2026-10-07T00:16:45+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "llm-openai-decisions 0.1a0",
+        "url": "https://simonwillison.net/2026/Oct/6/llm-openai-decisions/",
+        "source": "Simon Willison",
+        "publisher": "Simon Willison",
+        "category": "commentary",
+        "published": "2026-10-06T23:04:13+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Introducing Mistral Large 4: Le chonk",
+        "url": "https://simonwillison.net/2026/Oct/6/le-chonk/",
+        "source": "Simon Willison",
+        "publisher": "Simon Willison",
+        "category": "commentary",
+        "published": "2026-10-06T20:18:19+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Introducing Claude Haiku 5.5",
+        "url": "https://www.anthropic.com/claude-haiku-5-5",
+        "source": "Anthropic News",
+        "publisher": "Anthropic",
+        "category": "frontier_lab",
+        "published": "2026-10-07T00:00:00+00:00",
+        "score": 2.75,
+        "stars": 3
+      },
+      {
+        "title": "[AINews] Claude Haiku 5.5 — better than GPT-6 Luna at the same pricing",
+        "url": "https://www.latent.space/p/ainews-claude-haiku-55-better-than",
+        "source": "Latent Space",
+        "publisher": "Latent Space",
+        "category": "commentary",
+        "published": "2026-10-08T07:27:51+00:00",
+        "score": 2.25,
+        "stars": 3
+      },
+      {
+        "title": "Can a Cloud-Native Harness Make Agents Reliable Beyond the Desktop?",
+        "url": "https://www.latent.space/p/stacklok",
+        "source": "Latent Space",
+        "publisher": "Latent Space",
+        "category": "commentary",
+        "published": "2026-10-07T14:10:45+00:00",
+        "score": 2.25,
+        "stars": 3
+      },
+      {
+        "title": "[AINews] Quasi-Riemann-Hypothesis: OpenAI publishes 722 math papers solving 90 of the top 500 open math problems; “the most significant moment” in >100 years of mathematics",
+        "url": "https://www.latent.space/p/ainews-quasi-riemann-hypothesis-openai",
+        "source": "Latent Space",
+        "publisher": "Latent Space",
+        "category": "commentary",
+        "published": "2026-10-07T04:55:44+00:00",
+        "score": 2.25,
+        "stars": 3
+      },
+      {
+        "title": "Using LLM surprisal to highlight informative words",
+        "url": "https://www.lesswrong.com/posts/aQTNbqFegfPcJsgmA/using-llm-surprisal-to-highlight-informative-words-2",
+        "source": "LessWrong AI",
+        "publisher": "LessWrong AI",
+        "category": "commentary",
+        "published": "2026-10-09T10:51:19+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Building Spyre as a Native PyTorch Device",
+        "url": "https://pytorch.org/blog/building-spyre-as-a-native-pytorch-device/",
+        "source": "PyTorch",
+        "publisher": "PyTorch",
+        "category": "engineering",
+        "published": "2026-10-08T12:45:49+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "AI's next frontier is the human cell",
+        "url": "https://www.therundown.ai/articles/ai-s-next-frontier-is-the-human-cell",
+        "source": "The Rundown AI",
+        "publisher": "The Rundown AI",
+        "category": "commentary",
+        "published": "2026-10-08T09:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Pre-Training Hybrid LLMs from Scratch in Primus on AMD Instinct™ GPUs",
+        "url": "https://rocm.blogs.amd.com/artificial-intelligence/primus-hybrid-llm/README.html",
+        "source": "AMD ROCm",
+        "publisher": "AMD ROCm",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "DI Series: Serving Kimi-K3 MXFP4 Wide-EP Disaggregated on AMD Instinct MI300X and MI325X",
+        "url": "https://rocm.blogs.amd.com/software-tools-optimization/di-kimi-k3-mxfp4/README.html",
+        "source": "AMD ROCm",
+        "publisher": "AMD ROCm",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "AMD Instinct MI455X vs MI355X: A Technical Look at the Advancing AI 2026 Inference Numbers",
+        "url": "https://rocm.blogs.amd.com/software-tools-optimization/mi455x-vs-mi355x/README.html",
+        "source": "AMD ROCm",
+        "publisher": "AMD ROCm",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Grok Imagine Video 1.5 Lite on AI Gateway",
+        "url": "https://vercel.com/changelog/grok-imagine-video-1-5-lite-on-ai-gateway",
+        "source": "Vercel",
+        "publisher": "Vercel",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Step 5 Preview now available on AI Gateway",
+        "url": "https://vercel.com/changelog/step-5-preview-now-available-on-ai-gateway",
+        "source": "Vercel",
+        "publisher": "Vercel",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "OpenAI Ultrafast mode now available on AI Gateway",
+        "url": "https://vercel.com/changelog/openai-ultrafast-mode-now-available-on-ai-gateway",
+        "source": "Vercel",
+        "publisher": "Vercel",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "FLUX 3 Image now available on AI Gateway",
+        "url": "https://vercel.com/changelog/flux-3-image-now-available-on-ai-gateway",
+        "source": "Vercel",
+        "publisher": "Vercel",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Introducing the Anthropic Cyber Mission",
+        "url": "https://www.anthropic.com/news/anthropic-cyber-mission",
+        "source": "Anthropic News",
+        "publisher": "Anthropic",
+        "category": "frontier_lab",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      }
+    ],
+    "publisher_counts": {
+      "Databricks": 1,
+      "PyTorch": 2,
+      "Latent Space": 4,
+      "LessWrong AI": 4,
+      "The Rundown AI": 2,
+      "NVIDIA Developer": 2,
+      "Simon Willison": 4,
+      "Cloudflare": 1,
+      "Microsoft Research": 1,
+      "Anthropic": 2,
+      "AMD ROCm": 3,
+      "Vercel": 4
+    }
+  },
+  "entered": [],
+  "left": [],
+  "position_changes": [
+    {
+      "url": "https://www.databricks.com/blog/lakebase-and-agentic-sdlc-branching-databases-coding-agents",
+      "title": "Lakebase and Agentic SDLC: Branching Databases for Coding Agents",
+      "source": "Databricks",
+      "before": 4,
+      "after": 1
+    },
+    {
+      "url": "https://pytorch.org/blog/session-aware-agentic-inference-with-nvidia-dynamo/",
+      "title": "Session-Aware Agentic Inference with NVIDIA Dynamo",
+      "source": "PyTorch",
+      "before": 5,
+      "after": 2
+    },
+    {
+      "url": "https://www.latent.space/p/periodic",
+      "title": "Synthesis Superintelligence: from Semiconductors to Superconductors — Periodic Labs’ Liam Fedus and Ekin Dogus Cubuk",
+      "source": "Latent Space",
+      "before": 7,
+      "after": 3
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/XK7qJ3vGjuFuHfxaF/europe-s-leading-ai-model-still-can-t-reliably-follow",
+      "title": "Europe’s leading AI model still can’t reliably follow European law",
+      "source": "LessWrong AI",
+      "before": 1,
+      "after": 4
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/2J43xbszsuLv4zAk5/ai-scaling-vs-human-scaling",
+      "title": "AI Scaling vs Human Scaling",
+      "source": "LessWrong AI",
+      "before": 2,
+      "after": 5
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/xqjDi7oyadqxkmdLS/proof-of-useful-work-for-verifying-ai-treaties",
+      "title": "Proof of useful work for verifying AI treaties",
+      "source": "LessWrong AI",
+      "before": 3,
+      "after": 6
+    },
+    {
+      "url": "https://www.therundown.ai/articles/fired-openai-safety-researchers-hit-back",
+      "title": "Fired OpenAI safety researchers hit back",
+      "source": "The Rundown AI",
+      "before": 8,
+      "after": 7
+    },
+    {
+      "url": "https://developer.nvidia.com/blog/5-steps-to-create-simready-assets-for-robotics-with-frontier-ai-models/",
+      "title": "5 Steps to Create SimReady Assets for Robotics with Frontier AI Models",
+      "source": "NVIDIA Developer",
+      "before": 9,
+      "after": 8
+    },
+    {
+      "url": "https://developer.nvidia.com/blog/building-reliable-data-analytics-agents-lessons-from-the-kdd-cup/",
+      "title": "Building Reliable Data Analytics Agents: Lessons from the KDD Cup",
+      "source": "NVIDIA Developer",
+      "before": 10,
+      "after": 9
+    },
+    {
+      "url": "https://simonwillison.net/2026/Oct/7/claude-haiku-5-5/",
+      "title": "Claude Haiku 5.5",
+      "source": "Simon Willison",
+      "before": 11,
+      "after": 10
+    },
+    {
+      "url": "https://blog.cloudflare.com/agentic-security-operations/",
+      "title": "Building an evidence-grounded agentic security operations harness on Cloudflare",
+      "source": "Cloudflare",
+      "before": 12,
+      "after": 11
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/",
+      "title": "Agent Lightning v1.0: A 3,500-Line Lightweight Agentic RL Framework for Training Agents with Real Harnesses",
+      "source": "Microsoft Research",
+      "before": 13,
+      "after": 12
+    },
+    {
+      "url": "https://simonwillison.net/2026/Oct/7/openai-rogue-agents-wikimedia/",
+      "title": "OpenAI “rogue” agent activities found on Wikimedia projects",
+      "source": "Simon Willison",
+      "before": 14,
+      "after": 13
+    },
+    {
+      "url": "https://simonwillison.net/2026/Oct/6/llm-openai-decisions/",
+      "title": "llm-openai-decisions 0.1a0",
+      "source": "Simon Willison",
+      "before": 15,
+      "after": 14
+    },
+    {
+      "url": "https://simonwillison.net/2026/Oct/6/le-chonk/",
+      "title": "Introducing Mistral Large 4: Le chonk",
+      "source": "Simon Willison",
+      "before": 16,
+      "after": 15
+    },
+    {
+      "url": "https://www.anthropic.com/claude-haiku-5-5",
+      "title": "Introducing Claude Haiku 5.5",
+      "source": "Anthropic News",
+      "before": 17,
+      "after": 16
+    },
+    {
+      "url": "https://www.latent.space/p/ainews-claude-haiku-55-better-than",
+      "title": "[AINews] Claude Haiku 5.5 — better than GPT-6 Luna at the same pricing",
+      "source": "Latent Space",
+      "before": 18,
+      "after": 17
+    },
+    {
+      "url": "https://www.latent.space/p/stacklok",
+      "title": "Can a Cloud-Native Harness Make Agents Reliable Beyond the Desktop?",
+      "source": "Latent Space",
+      "before": 19,
+      "after": 18
+    },
+    {
+      "url": "https://www.latent.space/p/ainews-quasi-riemann-hypothesis-openai",
+      "title": "[AINews] Quasi-Riemann-Hypothesis: OpenAI publishes 722 math papers solving 90 of the top 500 open math problems; “the most significant moment” in >100 years of mathematics",
+      "source": "Latent Space",
+      "before": 20,
+      "after": 19
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/aQTNbqFegfPcJsgmA/using-llm-surprisal-to-highlight-informative-words-2",
+      "title": "Using LLM surprisal to highlight informative words",
+      "source": "LessWrong AI",
+      "before": 6,
+      "after": 20
+    }
+  ],
+  "input_sha256": "8efbff46198391a17766ff37f675081139347e247d180c36f3d138bca9c2b36b",
+  "sources_sha256": "a784083fc40f4569f3dca530cde97593671604f01fd8781b528fd5e44485be1e"
+}

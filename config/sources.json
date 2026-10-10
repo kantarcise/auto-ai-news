@@ -3,7 +3,7 @@
     "name": "LessWrong AI",
     "homepage": "https://www.lesswrong.com/w/ai?sortedBy=new",
     "feed_url": "https://www.lesswrong.com/feed.xml?view=ai",
-    "priority": 5,
+    "priority": 2,
     "enabled": true,
     "category": "commentary",
     "publisher": "LessWrong AI",

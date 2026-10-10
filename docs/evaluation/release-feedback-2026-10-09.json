@@ -1,0 +1,92 @@
+{
+  "review_date": "2026-10-10",
+  "release": "https://github.com/kantarcise/auto-ai-news/releases/tag/daily-2026-10-09",
+  "reviewer": "repository owner",
+  "snapshot_captured_at": "2026-10-09T13:14:31.895812+00:00",
+  "snapshot_sha256": "6cdad9ead14e81c07f6040520b4ed26933d2795f53f21594978bea5b99430e82",
+  "provenance": "Direct chat feedback; notes paraphrased. No independent article inspection. Rejected importance and unspecified reading depth remain unset.",
+  "scope": "First five selected headlines, selected for review by current rank. Not a random sample or complete benchmark.",
+  "source_preference": "Give community/forum posts less source weight than strong research and engineering sources, especially frontier labs. Useful forum posts remain eligible. This is a reader preference, not a verified quality rating for every article.",
+  "interpretation_limits": [
+    "Difficulty alone is not an exclusion rule: the owner rejected the treaty article but valued difficult infrastructure material.",
+    "Publisher affiliation alone does not establish importance: the promotional Databricks article received 1.",
+    "These labels inform a proposed source-weight change and cannot independently validate that change."
+  ],
+  "items": [
+    {
+      "title": "Europe’s leading AI model still can’t reliably follow European law",
+      "url": "https://www.lesswrong.com/posts/XK7qJ3vGjuFuHfxaF/europe-s-leading-ai-model-still-can-t-reliably-follow",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-09T12:25:22+00:00",
+      "release_position": 1,
+      "include": "yes",
+      "importance": 1,
+      "evidence": "user_feedback",
+      "inspection_evidence": null,
+      "inspection_note": "Reading depth unspecified.",
+      "reviewer_note": "Keep, with low importance. LessWrong is a forum in the owner’s view and should receive less source weight than strong research and engineering sources, especially frontier labs."
+    },
+    {
+      "title": "AI Scaling vs Human Scaling",
+      "url": "https://www.lesswrong.com/posts/2J43xbszsuLv4zAk5/ai-scaling-vs-human-scaling",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-09T12:11:14+00:00",
+      "release_position": 2,
+      "include": "yes",
+      "importance": 1,
+      "evidence": "user_feedback",
+      "inspection_evidence": null,
+      "inspection_note": "Reading depth unspecified.",
+      "reviewer_note": "Keep, with low importance."
+    },
+    {
+      "title": "Proof of useful work for verifying AI treaties",
+      "url": "https://www.lesswrong.com/posts/xqjDi7oyadqxkmdLS/proof-of-useful-work-for-verifying-ai-treaties",
+      "source": "LessWrong AI",
+      "publisher": "LessWrong AI",
+      "category": "commentary",
+      "published": "2026-10-09T10:36:16+00:00",
+      "release_position": 3,
+      "include": "no",
+      "importance": null,
+      "evidence": "user_feedback",
+      "inspection_evidence": null,
+      "inspection_note": "Reading depth unspecified.",
+      "reviewer_note": "Exclude because the owner could not understand the content."
+    },
+    {
+      "title": "Lakebase and Agentic SDLC: Branching Databases for Coding Agents",
+      "url": "https://www.databricks.com/blog/lakebase-and-agentic-sdlc-branching-databases-coding-agents",
+      "source": "Databricks",
+      "publisher": "Databricks",
+      "category": "engineering",
+      "published": "2026-10-08T22:00:00+00:00",
+      "release_position": 4,
+      "include": "yes",
+      "importance": 1,
+      "evidence": "user_feedback",
+      "inspection_evidence": null,
+      "inspection_note": "Reading depth unspecified.",
+      "reviewer_note": "Some useful information, but largely promotional."
+    },
+    {
+      "title": "Session-Aware Agentic Inference with NVIDIA Dynamo",
+      "url": "https://pytorch.org/blog/session-aware-agentic-inference-with-nvidia-dynamo/",
+      "source": "PyTorch",
+      "publisher": "PyTorch",
+      "category": "engineering",
+      "published": "2026-10-08T18:13:46+00:00",
+      "release_position": 5,
+      "include": "yes",
+      "importance": 3,
+      "evidence": "user_feedback",
+      "inspection_evidence": "article_excerpt",
+      "inspection_note": "Article passage supplied and discussed; full-read versus skim unspecified.",
+      "reviewer_note": "Strong interest in technical serving details: session identifiers, routing, KV cache indexing and movement across vLLM and SGLang. Difficult technical content is exciting here, not an exclusion reason."
+    }
+  ]
+}
