@@ -1155,6 +1155,7 @@ def render_report(
     history_enabled: bool = False,
     legacy_release_count: int = 0,
     previously_included: list[tuple[Item, str]] | None = None,
+    previous_report_dates: list[str] | None = None,
 ) -> str:
     generated = now.astimezone(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     if previously_included is not None:
@@ -1285,6 +1286,38 @@ def render_report(
         if not repeats:
             lines.append("- None today.")
         lines.extend(["", "</details>", ""])
+        dates = sorted(set(previous_report_dates or []), reverse=True)[:14]
+        lines.extend(
+            [
+                "<details>",
+                "<summary>Previous daily reports</summary>",
+                "",
+                "Missed a few days? Read up to 14 earlier reports below, newest first. Dates are in UTC.",
+                "",
+            ]
+        )
+        for date in dates:
+            lines.append(
+                "- "
+                + markdown_link(
+                    date,
+                    f"https://github.com/kantarcise/auto-ai-news/releases/tag/daily-{date}",
+                )
+            )
+        if not dates:
+            lines.append("- No earlier reports recorded.")
+        lines.extend(
+            [
+                "",
+                markdown_link(
+                    "View full report history",
+                    "https://github.com/kantarcise/auto-ai-news/releases",
+                ),
+                "",
+                "</details>",
+                "",
+            ]
+        )
     lines.extend(
         [
             "<details>",
@@ -1502,6 +1535,7 @@ def main(argv: list[str] | None = None) -> int:
         history_enabled=history is not None,
         legacy_release_count=history.get("legacy_release_count", 0) if history else 0,
         previously_included=previously_included if history is not None else None,
+        previous_report_dates=history.get("report_dates", []) if history else None,
     )
     if history is not None:
         urls = [canonicalize_url(url) for url in history["published"].get(today, [])]

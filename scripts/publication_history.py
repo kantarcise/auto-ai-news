@@ -48,6 +48,7 @@ def history_from_releases(pages: list, today: str) -> dict:
     dt.date.fromisoformat(today)
     published: dict[str, list[str]] = {}
     legacy_count = 0
+    report_dates: set[str] = set()
     if not isinstance(pages, list) or any(not isinstance(page, list) for page in pages):
         raise ValueError("Expected paginated release arrays")
     for page in pages:
@@ -59,6 +60,8 @@ def history_from_releases(pages: list, today: str) -> dict:
             dt.date.fromisoformat(date)
             if release.get("draft") or release.get("prerelease") or date > today:
                 continue
+            if date < today:
+                report_dates.add(date)
             body = release.get("body") or ""
             matches = RECEIPT.findall(body)
             if not matches:
@@ -77,6 +80,7 @@ def history_from_releases(pages: list, today: str) -> dict:
         "report_date": today,
         "published": published,
         "legacy_release_count": legacy_count,
+        "report_dates": sorted(report_dates, reverse=True),
     }
 
 
@@ -97,6 +101,14 @@ def load_history(path: Path, today: str) -> dict:
         validate_receipt({"schema_version": 1, "report_date": date, "urls": urls})
         if date > today:
             raise ValueError("Future publication history")
+    dates = value.get("report_dates", [])
+    if not isinstance(dates, list) or any(
+        not isinstance(date, str)
+        or dt.date.fromisoformat(date).isoformat() != date
+        or date >= today
+        for date in dates
+    ):
+        raise ValueError("Invalid previous report dates")
     return value
 
 

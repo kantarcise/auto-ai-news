@@ -47,6 +47,7 @@ class PublicationHistoryTest(unittest.TestCase):
             },
         )
         self.assertEqual(result["legacy_release_count"], 1)
+        self.assertEqual(result["report_dates"], ["2026-10-08", "2026-10-07"])
 
     def test_corrupt_receipt_stops_instead_of_silently_losing_history(self):
         valid = release("2026-10-08", ["https://example.com/a"])
@@ -286,6 +287,8 @@ class PublicationHistoryTest(unittest.TestCase):
             notes = output.read_text()
             check.assert_called_once_with("https://example.com/new")
             self.assertIn("1 new story", notes)
+            self.assertIn("<summary>Previous daily reports</summary>", notes)
+            self.assertEqual(notes.count("releases/tag/daily-2026-10-08"), 2)
             self.assertLess(
                 notes.index("## New articles"),
                 notes.index("Previously included — catch up (1)"),
@@ -329,6 +332,57 @@ class PublicationHistoryTest(unittest.TestCase):
         self.assertIn("Previously included — catch up (0)", empty)
         self.assertIn("- None today.", empty)
         self.assertEqual(empty.count("<details>"), empty.count("</details>"))
+
+    def test_previous_reports_are_bounded_sorted_and_include_legacy_dates(self):
+        dates = [(NOW.date() - dt.timedelta(days=i)).isoformat() for i in range(1, 21)]
+        captured = history.history_from_releases(
+            [[release(date) for date in reversed(dates)]], NOW.date().isoformat()
+        )
+        self.assertEqual(captured["report_dates"], dates)
+        self.assertEqual(captured["published"], {})
+        notes = report.render_report(
+            [],
+            [],
+            NOW,
+            history_enabled=True,
+            previous_report_dates=captured["report_dates"] + dates[:1],
+        )
+        self.assertIn("Previous daily reports", notes)
+        self.assertEqual(notes.count("releases/tag/daily-"), 14)
+        self.assertLess(
+            notes.index(dates[0].replace("-", "\\-")),
+            notes.index(dates[1].replace("-", "\\-")),
+        )
+        self.assertIn("daily-" + dates[13], notes)
+        self.assertNotIn("daily-" + dates[14], notes)
+        self.assertIn(
+            "[View full report history](https://github.com/kantarcise/auto-ai-news/releases)",
+            notes,
+        )
+        self.assertEqual(notes.count("<details>"), notes.count("</details>"))
+        local = report.render_report([], [], NOW)
+        self.assertNotIn("Previous daily reports", local)
+
+    def test_previous_report_dates_are_validated(self):
+        original = history.history_from_releases([[]], "2026-10-09")
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "history.json"
+            for invalid in (
+                ["2026-10-09"],
+                ["2026-10-10"],
+                ["invalid"],
+                ["20261008"],
+                [None],
+                "2026-10-08",
+            ):
+                path.write_text(json.dumps(dict(original, report_dates=invalid)))
+                with self.subTest(invalid=invalid), self.assertRaises(ValueError):
+                    history.load_history(path, "2026-10-09")
+        empty = report.render_report(
+            [], [], NOW, history_enabled=True, previous_report_dates=[]
+        )
+        self.assertIn("No earlier reports recorded", empty)
+        self.assertIn("View full report history", empty)
 
     def test_empty_selection_records_no_unpublished_candidates(self):
         original = history.history_from_releases([[]], "2026-10-09")
