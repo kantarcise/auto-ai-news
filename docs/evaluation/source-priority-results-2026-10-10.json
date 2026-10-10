@@ -1,0 +1,843 @@
+{
+  "captured_at": "2026-10-10T12:29:25.547050+00:00",
+  "original_snapshot_sha256": "88e7476a409f07a63ffa8782e1e2fe21eb9376abfc88f391764785f02fc46146",
+  "generator_revision": "fe5d76801328ffd82998dce894aa7b055a68a201",
+  "workflow_run_url": "https://github.com/kantarcise/auto-ai-news/actions/runs/38052129439",
+  "priority_changes": {
+    "LessWrong AI": {
+      "before": 5,
+      "after": 2
+    }
+  },
+  "scope": "Frozen eligibility and link outcomes; reruns deduplication, grouping, ranking, publisher caps and selection. No network requests or history changes.",
+  "before": {
+    "candidate_order": [
+      "https://www.lesswrong.com/posts/NohAAhLDP42Kdqatr/claude-haiku-4-5-submits-false-police-tip-anthropic-takes-72",
+      "https://www.lesswrong.com/posts/GqrJjNkiWbogxCLL5/clarifying-types-of-rogue-ai-activity-breakout-breakin",
+      "https://www.lesswrong.com/posts/eyqxBuxXCaamNSxBB/new-math-from-openai",
+      "https://openai.com/index/asana-browser-agent",
+      "https://www.latent.space/p/ainews-typesafejev-at-100m-arr-75b",
+      "https://www.latent.space/p/biohub-deepmind",
+      "https://www.lesswrong.com/posts/c6pzD74rqLyTvbg9f/the-public-intellectual-is-dead-and-ai-has-killed-them",
+      "https://huggingface.co/blog/allenai/impactful-scheduling",
+      "https://www.databricks.com/blog/lakebase-and-agentic-sdlc-branching-databases-coding-agents",
+      "https://pytorch.org/blog/session-aware-agentic-inference-with-nvidia-dynamo/",
+      "https://openai.com/index/pollo-ai",
+      "https://simonwillison.net/2026/Oct/7/claude-haiku-5-5/",
+      "https://blog.cloudflare.com/agentic-security-operations/",
+      "https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/",
+      "https://www.latent.space/p/periodic",
+      "https://www.latent.space/p/ainews-claude-haiku-55-better-than",
+      "https://www.latent.space/p/stacklok",
+      "https://www.therundown.ai/articles/fired-openai-safety-researchers-hit-back",
+      "https://allenai.org/blog/impactful-scheduling",
+      "https://allenai.org/blog/colm-2026-recap",
+      "https://openai.com/index/sophos",
+      "https://vercel.com/blog/how-rillet-ships-3-faster-with-ai-agents-on-vercel",
+      "https://vercel.com/changelog/microsoft-decision-1-now-available-on-ai-gateway",
+      "https://vercel.com/changelog/liquid-ai-d1-is-available-on-ai-gateway",
+      "https://developer.nvidia.com/blog/5-steps-to-create-simready-assets-for-robotics-with-frontier-ai-models/",
+      "https://developer.nvidia.com/blog/building-reliable-data-analytics-agents-lessons-from-the-kdd-cup/",
+      "https://openai.com/index/oracle",
+      "https://pytorch.org/blog/building-spyre-as-a-native-pytorch-device/",
+      "https://www.therundown.ai/articles/ai-s-next-frontier-is-the-human-cell",
+      "https://openai.com/index/disrupting-ai-enabled-false-front-operations",
+      "https://rocm.blogs.amd.com/artificial-intelligence/primus-hybrid-llm/README.html",
+      "https://rocm.blogs.amd.com/software-tools-optimization/di-kimi-k3-mxfp4/README.html",
+      "https://rocm.blogs.amd.com/software-tools-optimization/mi455x-vs-mi355x/README.html",
+      "https://vercel.com/changelog/grok-imagine-video-1-5-lite-on-ai-gateway",
+      "https://vercel.com/changelog/step-5-preview-now-available-on-ai-gateway",
+      "https://vercel.com/changelog/openai-ultrafast-mode-now-available-on-ai-gateway",
+      "https://vercel.com/changelog/flux-3-image-now-available-on-ai-gateway",
+      "https://www.anthropic.com/news/anthropic-cyber-mission",
+      "https://huggingface.co/blog/LiquidAI/open-d1",
+      "https://developer.nvidia.com/blog/validate-ai-factory-changes-with-digital-twins-and-ai-agents/",
+      "https://huggingface.co/blog/nvidia/nemotron-ioi-and-imo-2026"
+    ],
+    "selected": [
+      {
+        "title": "Claude Haiku 4.5 submits false police tip; Anthropic takes 72 days to notice",
+        "url": "https://www.lesswrong.com/posts/NohAAhLDP42Kdqatr/claude-haiku-4-5-submits-false-police-tip-anthropic-takes-72",
+        "source": "LessWrong AI",
+        "publisher": "LessWrong AI",
+        "category": "commentary",
+        "published": "2026-10-10T04:43:21+00:00",
+        "score": 4.25,
+        "stars": 5
+      },
+      {
+        "title": "Clarifying types of rogue AI activity: Breakout, breakin, exfiltration, … What’s what?",
+        "url": "https://www.lesswrong.com/posts/GqrJjNkiWbogxCLL5/clarifying-types-of-rogue-ai-activity-breakout-breakin",
+        "source": "LessWrong AI",
+        "publisher": "LessWrong AI",
+        "category": "commentary",
+        "published": "2026-10-09T17:03:01+00:00",
+        "score": 4.25,
+        "stars": 5
+      },
+      {
+        "title": "New Math from OpenAI",
+        "url": "https://www.lesswrong.com/posts/eyqxBuxXCaamNSxBB/new-math-from-openai",
+        "source": "LessWrong AI",
+        "publisher": "LessWrong AI",
+        "category": "commentary",
+        "published": "2026-10-09T13:30:52+00:00",
+        "score": 4.25,
+        "stars": 5
+      },
+      {
+        "title": "[AINews] TypeSafe/Jev at >$100M ARR, $7.5B valuation 3 weeks after launch",
+        "url": "https://www.latent.space/p/ainews-typesafejev-at-100m-arr-75b",
+        "source": "Latent Space",
+        "publisher": "Latent Space",
+        "category": "commentary",
+        "published": "2026-10-10T06:45:57+00:00",
+        "score": 3.25,
+        "stars": 4
+      },
+      {
+        "title": "Why AlphaFold Didn't Solve Protein Folding — Pushmeet Kohli, Google DeepMind & Sal Candido, Biohub",
+        "url": "https://www.latent.space/p/biohub-deepmind",
+        "source": "Latent Space",
+        "publisher": "Latent Space",
+        "category": "commentary",
+        "published": "2026-10-10T00:31:26+00:00",
+        "score": 3.25,
+        "stars": 4
+      },
+      {
+        "title": "The Public Intellectual Is Dead. And AI Has Killed Them.",
+        "url": "https://www.lesswrong.com/posts/c6pzD74rqLyTvbg9f/the-public-intellectual-is-dead-and-ai-has-killed-them",
+        "source": "LessWrong AI",
+        "publisher": "LessWrong AI",
+        "category": "commentary",
+        "published": "2026-10-09T16:49:33+00:00",
+        "score": 3.25,
+        "stars": 4
+      },
+      {
+        "title": "Impactful scheduling for GPU clusters",
+        "url": "https://huggingface.co/blog/allenai/impactful-scheduling",
+        "source": "Hugging Face",
+        "publisher": "Hugging Face",
+        "category": "engineering",
+        "published": "2026-10-09T15:20:29+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Lakebase and Agentic SDLC: Branching Databases for Coding Agents",
+        "url": "https://www.databricks.com/blog/lakebase-and-agentic-sdlc-branching-databases-coding-agents",
+        "source": "Databricks",
+        "publisher": "Databricks",
+        "category": "engineering",
+        "published": "2026-10-08T22:00:00+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Session-Aware Agentic Inference with NVIDIA Dynamo",
+        "url": "https://pytorch.org/blog/session-aware-agentic-inference-with-nvidia-dynamo/",
+        "source": "PyTorch",
+        "publisher": "PyTorch",
+        "category": "engineering",
+        "published": "2026-10-08T18:13:46+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Claude Haiku 5.5",
+        "url": "https://simonwillison.net/2026/Oct/7/claude-haiku-5-5/",
+        "source": "Simon Willison",
+        "publisher": "Simon Willison",
+        "category": "commentary",
+        "published": "2026-10-07T20:56:21+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Building an evidence-grounded agentic security operations harness on Cloudflare",
+        "url": "https://blog.cloudflare.com/agentic-security-operations/",
+        "source": "Cloudflare",
+        "publisher": "Cloudflare",
+        "category": "engineering",
+        "published": "2026-10-07T16:30:36+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Agent Lightning v1.0: A 3,500-Line Lightweight Agentic RL Framework for Training Agents with Real Harnesses",
+        "url": "https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/",
+        "source": "Microsoft Research",
+        "publisher": "Microsoft Research",
+        "category": "research",
+        "published": "2026-10-07T16:00:00+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Synthesis Superintelligence: from Semiconductors to Superconductors — Periodic Labs’ Liam Fedus and Ekin Dogus Cubuk",
+        "url": "https://www.latent.space/p/periodic",
+        "source": "Latent Space",
+        "publisher": "Latent Space",
+        "category": "commentary",
+        "published": "2026-10-08T16:27:54+00:00",
+        "score": 2.25,
+        "stars": 3
+      },
+      {
+        "title": "[AINews] Claude Haiku 5.5 — better than GPT-6 Luna at the same pricing",
+        "url": "https://www.latent.space/p/ainews-claude-haiku-55-better-than",
+        "source": "Latent Space",
+        "publisher": "Latent Space",
+        "category": "commentary",
+        "published": "2026-10-08T07:27:51+00:00",
+        "score": 2.25,
+        "stars": 3
+      },
+      {
+        "title": "Fired OpenAI safety researchers hit back",
+        "url": "https://www.therundown.ai/articles/fired-openai-safety-researchers-hit-back",
+        "source": "The Rundown AI",
+        "publisher": "The Rundown AI",
+        "category": "commentary",
+        "published": "2026-10-09T09:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Impactful scheduling for GPU clusters",
+        "url": "https://allenai.org/blog/impactful-scheduling",
+        "source": "AI2",
+        "publisher": "AI2",
+        "category": "research",
+        "published": "2026-10-09T08:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Ai2 at COLM 2026: Open research, from models to agents for science",
+        "url": "https://allenai.org/blog/colm-2026-recap",
+        "source": "AI2",
+        "publisher": "AI2",
+        "category": "research",
+        "published": "2026-10-09T08:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "How Rillet ships 3× faster with AI agents on Vercel",
+        "url": "https://vercel.com/blog/how-rillet-ships-3-faster-with-ai-agents-on-vercel",
+        "source": "Vercel",
+        "publisher": "Vercel",
+        "category": "engineering",
+        "published": "2026-10-09T04:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Microsoft Decision-1 now available on AI Gateway",
+        "url": "https://vercel.com/changelog/microsoft-decision-1-now-available-on-ai-gateway",
+        "source": "Vercel",
+        "publisher": "Vercel",
+        "category": "engineering",
+        "published": "2026-10-09T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Liquid AI's d1 is available on AI Gateway",
+        "url": "https://vercel.com/changelog/liquid-ai-d1-is-available-on-ai-gateway",
+        "source": "Vercel",
+        "publisher": "Vercel",
+        "category": "engineering",
+        "published": "2026-10-09T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "5 Steps to Create SimReady Assets for Robotics with Frontier AI Models",
+        "url": "https://developer.nvidia.com/blog/5-steps-to-create-simready-assets-for-robotics-with-frontier-ai-models/",
+        "source": "NVIDIA Developer",
+        "publisher": "NVIDIA Developer",
+        "category": "engineering",
+        "published": "2026-10-08T20:57:55+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Building Reliable Data Analytics Agents: Lessons from the KDD Cup",
+        "url": "https://developer.nvidia.com/blog/building-reliable-data-analytics-agents-lessons-from-the-kdd-cup/",
+        "source": "NVIDIA Developer",
+        "publisher": "NVIDIA Developer",
+        "category": "engineering",
+        "published": "2026-10-08T18:30:02+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Building Spyre as a Native PyTorch Device",
+        "url": "https://pytorch.org/blog/building-spyre-as-a-native-pytorch-device/",
+        "source": "PyTorch",
+        "publisher": "PyTorch",
+        "category": "engineering",
+        "published": "2026-10-08T12:45:49+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "AI's next frontier is the human cell",
+        "url": "https://www.therundown.ai/articles/ai-s-next-frontier-is-the-human-cell",
+        "source": "The Rundown AI",
+        "publisher": "The Rundown AI",
+        "category": "commentary",
+        "published": "2026-10-08T09:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Pre-Training Hybrid LLMs from Scratch in Primus on AMD Instinct™ GPUs",
+        "url": "https://rocm.blogs.amd.com/artificial-intelligence/primus-hybrid-llm/README.html",
+        "source": "AMD ROCm",
+        "publisher": "AMD ROCm",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "DI Series: Serving Kimi-K3 MXFP4 Wide-EP Disaggregated on AMD Instinct MI300X and MI325X",
+        "url": "https://rocm.blogs.amd.com/software-tools-optimization/di-kimi-k3-mxfp4/README.html",
+        "source": "AMD ROCm",
+        "publisher": "AMD ROCm",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "AMD Instinct MI455X vs MI355X: A Technical Look at the Advancing AI 2026 Inference Numbers",
+        "url": "https://rocm.blogs.amd.com/software-tools-optimization/mi455x-vs-mi355x/README.html",
+        "source": "AMD ROCm",
+        "publisher": "AMD ROCm",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Grok Imagine Video 1.5 Lite on AI Gateway",
+        "url": "https://vercel.com/changelog/grok-imagine-video-1-5-lite-on-ai-gateway",
+        "source": "Vercel",
+        "publisher": "Vercel",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Introducing the Anthropic Cyber Mission",
+        "url": "https://www.anthropic.com/news/anthropic-cyber-mission",
+        "source": "Anthropic News",
+        "publisher": "Anthropic",
+        "category": "frontier_lab",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Multimodal open d1 decision models for the edge",
+        "url": "https://huggingface.co/blog/LiquidAI/open-d1",
+        "source": "Hugging Face",
+        "publisher": "Hugging Face",
+        "category": "engineering",
+        "published": "2026-10-07T16:54:33+00:00",
+        "score": 2.0,
+        "stars": 2
+      }
+    ],
+    "publisher_counts": {
+      "LessWrong AI": 4,
+      "Latent Space": 4,
+      "Hugging Face": 2,
+      "Databricks": 1,
+      "PyTorch": 2,
+      "Simon Willison": 1,
+      "Cloudflare": 1,
+      "Microsoft Research": 1,
+      "The Rundown AI": 2,
+      "AI2": 2,
+      "Vercel": 4,
+      "NVIDIA Developer": 2,
+      "AMD ROCm": 3,
+      "Anthropic": 1
+    }
+  },
+  "after": {
+    "candidate_order": [
+      "https://openai.com/index/asana-browser-agent",
+      "https://www.latent.space/p/ainews-typesafejev-at-100m-arr-75b",
+      "https://www.latent.space/p/biohub-deepmind",
+      "https://www.lesswrong.com/posts/NohAAhLDP42Kdqatr/claude-haiku-4-5-submits-false-police-tip-anthropic-takes-72",
+      "https://www.lesswrong.com/posts/GqrJjNkiWbogxCLL5/clarifying-types-of-rogue-ai-activity-breakout-breakin",
+      "https://huggingface.co/blog/allenai/impactful-scheduling",
+      "https://www.lesswrong.com/posts/eyqxBuxXCaamNSxBB/new-math-from-openai",
+      "https://www.databricks.com/blog/lakebase-and-agentic-sdlc-branching-databases-coding-agents",
+      "https://pytorch.org/blog/session-aware-agentic-inference-with-nvidia-dynamo/",
+      "https://openai.com/index/pollo-ai",
+      "https://simonwillison.net/2026/Oct/7/claude-haiku-5-5/",
+      "https://blog.cloudflare.com/agentic-security-operations/",
+      "https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/",
+      "https://www.latent.space/p/periodic",
+      "https://www.latent.space/p/ainews-claude-haiku-55-better-than",
+      "https://www.latent.space/p/stacklok",
+      "https://www.lesswrong.com/posts/c6pzD74rqLyTvbg9f/the-public-intellectual-is-dead-and-ai-has-killed-them",
+      "https://www.therundown.ai/articles/fired-openai-safety-researchers-hit-back",
+      "https://allenai.org/blog/impactful-scheduling",
+      "https://allenai.org/blog/colm-2026-recap",
+      "https://openai.com/index/sophos",
+      "https://vercel.com/blog/how-rillet-ships-3-faster-with-ai-agents-on-vercel",
+      "https://vercel.com/changelog/microsoft-decision-1-now-available-on-ai-gateway",
+      "https://vercel.com/changelog/liquid-ai-d1-is-available-on-ai-gateway",
+      "https://developer.nvidia.com/blog/5-steps-to-create-simready-assets-for-robotics-with-frontier-ai-models/",
+      "https://developer.nvidia.com/blog/building-reliable-data-analytics-agents-lessons-from-the-kdd-cup/",
+      "https://openai.com/index/oracle",
+      "https://pytorch.org/blog/building-spyre-as-a-native-pytorch-device/",
+      "https://www.therundown.ai/articles/ai-s-next-frontier-is-the-human-cell",
+      "https://openai.com/index/disrupting-ai-enabled-false-front-operations",
+      "https://rocm.blogs.amd.com/artificial-intelligence/primus-hybrid-llm/README.html",
+      "https://rocm.blogs.amd.com/software-tools-optimization/di-kimi-k3-mxfp4/README.html",
+      "https://rocm.blogs.amd.com/software-tools-optimization/mi455x-vs-mi355x/README.html",
+      "https://vercel.com/changelog/grok-imagine-video-1-5-lite-on-ai-gateway",
+      "https://vercel.com/changelog/step-5-preview-now-available-on-ai-gateway",
+      "https://vercel.com/changelog/openai-ultrafast-mode-now-available-on-ai-gateway",
+      "https://vercel.com/changelog/flux-3-image-now-available-on-ai-gateway",
+      "https://www.anthropic.com/news/anthropic-cyber-mission",
+      "https://huggingface.co/blog/LiquidAI/open-d1",
+      "https://developer.nvidia.com/blog/validate-ai-factory-changes-with-digital-twins-and-ai-agents/",
+      "https://huggingface.co/blog/nvidia/nemotron-ioi-and-imo-2026"
+    ],
+    "selected": [
+      {
+        "title": "[AINews] TypeSafe/Jev at >$100M ARR, $7.5B valuation 3 weeks after launch",
+        "url": "https://www.latent.space/p/ainews-typesafejev-at-100m-arr-75b",
+        "source": "Latent Space",
+        "publisher": "Latent Space",
+        "category": "commentary",
+        "published": "2026-10-10T06:45:57+00:00",
+        "score": 3.25,
+        "stars": 4
+      },
+      {
+        "title": "Why AlphaFold Didn't Solve Protein Folding — Pushmeet Kohli, Google DeepMind & Sal Candido, Biohub",
+        "url": "https://www.latent.space/p/biohub-deepmind",
+        "source": "Latent Space",
+        "publisher": "Latent Space",
+        "category": "commentary",
+        "published": "2026-10-10T00:31:26+00:00",
+        "score": 3.25,
+        "stars": 4
+      },
+      {
+        "title": "Claude Haiku 4.5 submits false police tip; Anthropic takes 72 days to notice",
+        "url": "https://www.lesswrong.com/posts/NohAAhLDP42Kdqatr/claude-haiku-4-5-submits-false-police-tip-anthropic-takes-72",
+        "source": "LessWrong AI",
+        "publisher": "LessWrong AI",
+        "category": "commentary",
+        "published": "2026-10-10T04:43:21+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Clarifying types of rogue AI activity: Breakout, breakin, exfiltration, … What’s what?",
+        "url": "https://www.lesswrong.com/posts/GqrJjNkiWbogxCLL5/clarifying-types-of-rogue-ai-activity-breakout-breakin",
+        "source": "LessWrong AI",
+        "publisher": "LessWrong AI",
+        "category": "commentary",
+        "published": "2026-10-09T17:03:01+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Impactful scheduling for GPU clusters",
+        "url": "https://huggingface.co/blog/allenai/impactful-scheduling",
+        "source": "Hugging Face",
+        "publisher": "Hugging Face",
+        "category": "engineering",
+        "published": "2026-10-09T15:20:29+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "New Math from OpenAI",
+        "url": "https://www.lesswrong.com/posts/eyqxBuxXCaamNSxBB/new-math-from-openai",
+        "source": "LessWrong AI",
+        "publisher": "LessWrong AI",
+        "category": "commentary",
+        "published": "2026-10-09T13:30:52+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Lakebase and Agentic SDLC: Branching Databases for Coding Agents",
+        "url": "https://www.databricks.com/blog/lakebase-and-agentic-sdlc-branching-databases-coding-agents",
+        "source": "Databricks",
+        "publisher": "Databricks",
+        "category": "engineering",
+        "published": "2026-10-08T22:00:00+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Session-Aware Agentic Inference with NVIDIA Dynamo",
+        "url": "https://pytorch.org/blog/session-aware-agentic-inference-with-nvidia-dynamo/",
+        "source": "PyTorch",
+        "publisher": "PyTorch",
+        "category": "engineering",
+        "published": "2026-10-08T18:13:46+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Claude Haiku 5.5",
+        "url": "https://simonwillison.net/2026/Oct/7/claude-haiku-5-5/",
+        "source": "Simon Willison",
+        "publisher": "Simon Willison",
+        "category": "commentary",
+        "published": "2026-10-07T20:56:21+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Building an evidence-grounded agentic security operations harness on Cloudflare",
+        "url": "https://blog.cloudflare.com/agentic-security-operations/",
+        "source": "Cloudflare",
+        "publisher": "Cloudflare",
+        "category": "engineering",
+        "published": "2026-10-07T16:30:36+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Agent Lightning v1.0: A 3,500-Line Lightweight Agentic RL Framework for Training Agents with Real Harnesses",
+        "url": "https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/",
+        "source": "Microsoft Research",
+        "publisher": "Microsoft Research",
+        "category": "research",
+        "published": "2026-10-07T16:00:00+00:00",
+        "score": 3.0,
+        "stars": 3
+      },
+      {
+        "title": "Synthesis Superintelligence: from Semiconductors to Superconductors — Periodic Labs’ Liam Fedus and Ekin Dogus Cubuk",
+        "url": "https://www.latent.space/p/periodic",
+        "source": "Latent Space",
+        "publisher": "Latent Space",
+        "category": "commentary",
+        "published": "2026-10-08T16:27:54+00:00",
+        "score": 2.25,
+        "stars": 3
+      },
+      {
+        "title": "[AINews] Claude Haiku 5.5 — better than GPT-6 Luna at the same pricing",
+        "url": "https://www.latent.space/p/ainews-claude-haiku-55-better-than",
+        "source": "Latent Space",
+        "publisher": "Latent Space",
+        "category": "commentary",
+        "published": "2026-10-08T07:27:51+00:00",
+        "score": 2.25,
+        "stars": 3
+      },
+      {
+        "title": "The Public Intellectual Is Dead. And AI Has Killed Them.",
+        "url": "https://www.lesswrong.com/posts/c6pzD74rqLyTvbg9f/the-public-intellectual-is-dead-and-ai-has-killed-them",
+        "source": "LessWrong AI",
+        "publisher": "LessWrong AI",
+        "category": "commentary",
+        "published": "2026-10-09T16:49:33+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Fired OpenAI safety researchers hit back",
+        "url": "https://www.therundown.ai/articles/fired-openai-safety-researchers-hit-back",
+        "source": "The Rundown AI",
+        "publisher": "The Rundown AI",
+        "category": "commentary",
+        "published": "2026-10-09T09:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Impactful scheduling for GPU clusters",
+        "url": "https://allenai.org/blog/impactful-scheduling",
+        "source": "AI2",
+        "publisher": "AI2",
+        "category": "research",
+        "published": "2026-10-09T08:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Ai2 at COLM 2026: Open research, from models to agents for science",
+        "url": "https://allenai.org/blog/colm-2026-recap",
+        "source": "AI2",
+        "publisher": "AI2",
+        "category": "research",
+        "published": "2026-10-09T08:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "How Rillet ships 3× faster with AI agents on Vercel",
+        "url": "https://vercel.com/blog/how-rillet-ships-3-faster-with-ai-agents-on-vercel",
+        "source": "Vercel",
+        "publisher": "Vercel",
+        "category": "engineering",
+        "published": "2026-10-09T04:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Microsoft Decision-1 now available on AI Gateway",
+        "url": "https://vercel.com/changelog/microsoft-decision-1-now-available-on-ai-gateway",
+        "source": "Vercel",
+        "publisher": "Vercel",
+        "category": "engineering",
+        "published": "2026-10-09T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Liquid AI's d1 is available on AI Gateway",
+        "url": "https://vercel.com/changelog/liquid-ai-d1-is-available-on-ai-gateway",
+        "source": "Vercel",
+        "publisher": "Vercel",
+        "category": "engineering",
+        "published": "2026-10-09T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "5 Steps to Create SimReady Assets for Robotics with Frontier AI Models",
+        "url": "https://developer.nvidia.com/blog/5-steps-to-create-simready-assets-for-robotics-with-frontier-ai-models/",
+        "source": "NVIDIA Developer",
+        "publisher": "NVIDIA Developer",
+        "category": "engineering",
+        "published": "2026-10-08T20:57:55+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Building Reliable Data Analytics Agents: Lessons from the KDD Cup",
+        "url": "https://developer.nvidia.com/blog/building-reliable-data-analytics-agents-lessons-from-the-kdd-cup/",
+        "source": "NVIDIA Developer",
+        "publisher": "NVIDIA Developer",
+        "category": "engineering",
+        "published": "2026-10-08T18:30:02+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Building Spyre as a Native PyTorch Device",
+        "url": "https://pytorch.org/blog/building-spyre-as-a-native-pytorch-device/",
+        "source": "PyTorch",
+        "publisher": "PyTorch",
+        "category": "engineering",
+        "published": "2026-10-08T12:45:49+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "AI's next frontier is the human cell",
+        "url": "https://www.therundown.ai/articles/ai-s-next-frontier-is-the-human-cell",
+        "source": "The Rundown AI",
+        "publisher": "The Rundown AI",
+        "category": "commentary",
+        "published": "2026-10-08T09:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Pre-Training Hybrid LLMs from Scratch in Primus on AMD Instinct™ GPUs",
+        "url": "https://rocm.blogs.amd.com/artificial-intelligence/primus-hybrid-llm/README.html",
+        "source": "AMD ROCm",
+        "publisher": "AMD ROCm",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "DI Series: Serving Kimi-K3 MXFP4 Wide-EP Disaggregated on AMD Instinct MI300X and MI325X",
+        "url": "https://rocm.blogs.amd.com/software-tools-optimization/di-kimi-k3-mxfp4/README.html",
+        "source": "AMD ROCm",
+        "publisher": "AMD ROCm",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "AMD Instinct MI455X vs MI355X: A Technical Look at the Advancing AI 2026 Inference Numbers",
+        "url": "https://rocm.blogs.amd.com/software-tools-optimization/mi455x-vs-mi355x/README.html",
+        "source": "AMD ROCm",
+        "publisher": "AMD ROCm",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Grok Imagine Video 1.5 Lite on AI Gateway",
+        "url": "https://vercel.com/changelog/grok-imagine-video-1-5-lite-on-ai-gateway",
+        "source": "Vercel",
+        "publisher": "Vercel",
+        "category": "engineering",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Introducing the Anthropic Cyber Mission",
+        "url": "https://www.anthropic.com/news/anthropic-cyber-mission",
+        "source": "Anthropic News",
+        "publisher": "Anthropic",
+        "category": "frontier_lab",
+        "published": "2026-10-08T00:00:00+00:00",
+        "score": 2.0,
+        "stars": 2
+      },
+      {
+        "title": "Multimodal open d1 decision models for the edge",
+        "url": "https://huggingface.co/blog/LiquidAI/open-d1",
+        "source": "Hugging Face",
+        "publisher": "Hugging Face",
+        "category": "engineering",
+        "published": "2026-10-07T16:54:33+00:00",
+        "score": 2.0,
+        "stars": 2
+      }
+    ],
+    "publisher_counts": {
+      "Latent Space": 4,
+      "LessWrong AI": 4,
+      "Hugging Face": 2,
+      "Databricks": 1,
+      "PyTorch": 2,
+      "Simon Willison": 1,
+      "Cloudflare": 1,
+      "Microsoft Research": 1,
+      "The Rundown AI": 2,
+      "AI2": 2,
+      "Vercel": 4,
+      "NVIDIA Developer": 2,
+      "AMD ROCm": 3,
+      "Anthropic": 1
+    }
+  },
+  "entered": [],
+  "left": [],
+  "position_changes": [
+    {
+      "url": "https://www.latent.space/p/ainews-typesafejev-at-100m-arr-75b",
+      "title": "[AINews] TypeSafe/Jev at >$100M ARR, $7.5B valuation 3 weeks after launch",
+      "source": "Latent Space",
+      "before": 4,
+      "after": 1
+    },
+    {
+      "url": "https://www.latent.space/p/biohub-deepmind",
+      "title": "Why AlphaFold Didn't Solve Protein Folding — Pushmeet Kohli, Google DeepMind & Sal Candido, Biohub",
+      "source": "Latent Space",
+      "before": 5,
+      "after": 2
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/NohAAhLDP42Kdqatr/claude-haiku-4-5-submits-false-police-tip-anthropic-takes-72",
+      "title": "Claude Haiku 4.5 submits false police tip; Anthropic takes 72 days to notice",
+      "source": "LessWrong AI",
+      "before": 1,
+      "after": 3
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/GqrJjNkiWbogxCLL5/clarifying-types-of-rogue-ai-activity-breakout-breakin",
+      "title": "Clarifying types of rogue AI activity: Breakout, breakin, exfiltration, … What’s what?",
+      "source": "LessWrong AI",
+      "before": 2,
+      "after": 4
+    },
+    {
+      "url": "https://huggingface.co/blog/allenai/impactful-scheduling",
+      "title": "Impactful scheduling for GPU clusters",
+      "source": "Hugging Face",
+      "before": 7,
+      "after": 5
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/eyqxBuxXCaamNSxBB/new-math-from-openai",
+      "title": "New Math from OpenAI",
+      "source": "LessWrong AI",
+      "before": 3,
+      "after": 6
+    },
+    {
+      "url": "https://www.databricks.com/blog/lakebase-and-agentic-sdlc-branching-databases-coding-agents",
+      "title": "Lakebase and Agentic SDLC: Branching Databases for Coding Agents",
+      "source": "Databricks",
+      "before": 8,
+      "after": 7
+    },
+    {
+      "url": "https://pytorch.org/blog/session-aware-agentic-inference-with-nvidia-dynamo/",
+      "title": "Session-Aware Agentic Inference with NVIDIA Dynamo",
+      "source": "PyTorch",
+      "before": 9,
+      "after": 8
+    },
+    {
+      "url": "https://simonwillison.net/2026/Oct/7/claude-haiku-5-5/",
+      "title": "Claude Haiku 5.5",
+      "source": "Simon Willison",
+      "before": 10,
+      "after": 9
+    },
+    {
+      "url": "https://blog.cloudflare.com/agentic-security-operations/",
+      "title": "Building an evidence-grounded agentic security operations harness on Cloudflare",
+      "source": "Cloudflare",
+      "before": 11,
+      "after": 10
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/",
+      "title": "Agent Lightning v1.0: A 3,500-Line Lightweight Agentic RL Framework for Training Agents with Real Harnesses",
+      "source": "Microsoft Research",
+      "before": 12,
+      "after": 11
+    },
+    {
+      "url": "https://www.latent.space/p/periodic",
+      "title": "Synthesis Superintelligence: from Semiconductors to Superconductors — Periodic Labs’ Liam Fedus and Ekin Dogus Cubuk",
+      "source": "Latent Space",
+      "before": 13,
+      "after": 12
+    },
+    {
+      "url": "https://www.latent.space/p/ainews-claude-haiku-55-better-than",
+      "title": "[AINews] Claude Haiku 5.5 — better than GPT-6 Luna at the same pricing",
+      "source": "Latent Space",
+      "before": 14,
+      "after": 13
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/c6pzD74rqLyTvbg9f/the-public-intellectual-is-dead-and-ai-has-killed-them",
+      "title": "The Public Intellectual Is Dead. And AI Has Killed Them.",
+      "source": "LessWrong AI",
+      "before": 6,
+      "after": 14
+    }
+  ],
+  "input_sha256": "dd5c48f427dd309d153da65953f9879a961404b3af746430ad700b723375459a",
+  "sources_sha256": "a784083fc40f4569f3dca530cde97593671604f01fd8781b528fd5e44485be1e"
+}

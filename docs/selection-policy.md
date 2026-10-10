@@ -17,11 +17,14 @@ These are conservative lexical rules, not content understanding. They can miss l
 | Base | 1 |
 | Source priority >=5 | +1.25 |
 | Source priority 3–4 | +1 |
+| Source priority 1–2 | +0 |
 | Existing title/summary keyword score >=3 | +1 |
 | Publication within 24 hours | +1 |
 | Qualifying frontier research/model announcement | +0.75 |
 
 The old priority-5 bonus was +2. Reducing that advantage to 0.25 over priority 3–4 lets a qualifying lab item outrank a generic priority-5 item with otherwise equal components. The selected bonus is bounded; a strong recent engineering or independent-analysis article can still beat an older lab announcement. Corpus-weighted topic similarity is recorded only in shadow mode: the proposed bonus is bounded by one point but is not added to production scores. Optional captures show current, fixed-weight and adaptive orderings before publisher caps/access checks. The daily workflow saves replayable comparison artifacts; see [scope and review instructions](evaluation/daily-ranking-comparison.md). This is not a second selected report or a measured improvement in ranking quality. The existing keyword and 24-hour components remain.
+
+LessWrong AI is configured at priority 2: it receives no source-only bonus but remains eligible under the same relevance, freshness and selection checks. This expresses the owner’s preference for a smaller community-forum prior, not a quality judgment about every post. PyTorch, NVIDIA and other priority-4 sources retain +1. Other source priorities are unchanged. See the [two-date source-priority comparison](evaluation/source-priority.md), including cases this adjustment does not fix.
 
 Sort by the unrounded score, then publication timestamp. Map stars afterward using `ceil(score)`, clamped to 1–5. Stars are heuristic rank buckets, not verified quality or importance. A legacy seven-day scoring penalty remains for direct scoring callers; the collection cutoff removes such items beforehand.
 
