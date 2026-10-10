@@ -5,9 +5,23 @@ from __future__ import annotations
 import re
 from html.parser import HTMLParser
 
-VERSION = 1
+try:
+    from scripts.html_evidence import (
+        MAX_CONTENT_CHARS,
+        VOID_TAGS,
+        analyze_parts,
+        blocked_element,
+    )
+except ModuleNotFoundError:
+    from html_evidence import (
+        MAX_CONTENT_CHARS,
+        VOID_TAGS,
+        analyze_parts,
+        blocked_element,
+    )
+
+VERSION = 2
 MAX_RAW_CHARS = 24000
-MAX_CONTENT_CHARS = 12000
 MAX_SUMMARY_CHARS = 4000
 MAX_TITLE_CHARS = 500
 MIN_SUBSTANTIAL_WORDS = 120
@@ -21,19 +35,63 @@ LABEL_NAMES = {
     "opinion_discussion": "Opinion / discussion",
     "event_announcement": "Event / announcement",
 }
-LABEL_PATTERNS = {
-    "technical_walkthrough": r"\b(?:walkthrough|step.by.step|implementation|troubleshoot\w*|debugg\w*|how (?:to|we) (?:build|implement|deploy|configure|debug|integrate))\b",
-    "research_evaluation": r"\b(?:ablations?|benchmarks?|benchmarking|evaluation|experiments?|methodology|we evaluate|our findings)\b",
-    "model_tool_release": r"\b(?:introducing|now available|release notes|we (?:release|announce)|new (?:model|tool|release))\b",
-    "practical_experience": r"\b(?:lessons (?:learned|from)|what we learned|our experience|in production|we (?:built|deployed|migrated|operated))\b",
-    "promotion_testimonial": r"\b(?:sponsored|testimonials?|customer stor(?:y|ies)|case stud(?:y|ies)|our customers|contact (?:our )?sales|(?:book|request) a demo|trusted by|partnership)\b",
-    "opinion_discussion": r"\b(?:i (?:think|believe|argue)|we (?:think|believe|argue)|in my opinion|discussion|opinion|essay)\b",
-    "event_announcement": r"\b(?:conference|webinar|meetup|register now|join us|call for papers)\b",
+# Stable rule IDs and fixed descriptions make labels auditable without quotations.
+LABEL_RULES = {
+    "technical_walkthrough": {
+        "implementation-guide": (
+            "Implementation or troubleshooting language",
+            r"\b(?:walkthrough|step.by.step|implementation|troubleshoot\w*|debugg\w*|how (?:to|we) (?:build|implement|deploy|configure|debug|integrate))\b",
+        ),
+    },
+    "research_evaluation": {
+        "evaluation-language": (
+            "Evaluation, experiment or methodology language",
+            r"\b(?:ablations?|benchmarks?|benchmarking|evaluation|experiments?|methodology|we evaluate|our findings)\b",
+        ),
+        "comparative-testing": (
+            "Reported comparative testing",
+            r"\b(?:we (?:tested|compared)|test(?:ed|ing) \d+ (?:frontier )?models|measured improvements?|improves (?:performance )?by \d+)\b",
+        ),
+    },
+    "model_tool_release": {
+        "release-announcement": (
+            "Explicit model or tool release language",
+            r"\b(?:introducing|now available|release notes|we (?:release|announce)|new (?:model|tool|release))\b",
+        ),
+    },
+    "practical_experience": {
+        "deployment-experience": (
+            "Lessons or reported deployment experience",
+            r"\b(?:lessons (?:learned|from)|what we learned|our experience|in production|we (?:built|deployed|migrated|operated))\b",
+        ),
+    },
+    "promotion_testimonial": {
+        "customer-promotion": (
+            "Customer story, sponsorship or partnership language",
+            r"\b(?:sponsored|testimonials?|customer stor(?:y|ies)|case stud(?:y|ies)|our customers|trusted by|partnership)\b",
+        ),
+        "sales-demo-invitation": (
+            "Sales or demo invitation",
+            r"\b(?:contact (?:our )?sales|(?:book|request) a demo)\b",
+        ),
+    },
+    "opinion_discussion": {
+        "opinion-framing": (
+            "Explicit opinion or discussion framing",
+            r"\b(?:i (?:think|believe|argue)|we (?:think|believe|argue)|in my opinion|discussion|opinion|essay)\b",
+        ),
+    },
+    "event_announcement": {
+        "event-invitation": (
+            "Event or registration language",
+            r"\b(?:conference|webinar|meetup|register now|join us|call for papers)\b",
+        ),
+    },
 }
 TECHNICAL_PATTERNS = {
     "implementation": r"\b(?:implementation|routing|scheduler|algorithm|cache indexing|programmatic cache movement|troubleshoot\w*|debugg\w*)\b",
     "configuration": r"\b(?:configuration|parameters?|command.line|api calls?|kv cach(?:e|es)|environment variables?)\b",
-    "measurement": r"\b(?:ablations?|benchmarks?|benchmarking|profiling|p\d{2} latency|\d+(?:\.\d+)?\s*(?:ms|milliseconds|tokens/s|requests/s|gb/s))\b",
+    "measurement": r"\b(?:ablations?|benchmarks?|benchmarking|profiling|we (?:tested|compared)|test(?:ed|ing) \d+ (?:frontier )?models|improves (?:performance )?by \d+|p\d{2} latency|\d+(?:\.\d+)?\s*(?:ms|milliseconds|tokens/s|requests/s|gb/s))\b",
     "tradeoffs": r"\b(?:trade.offs?|limitations?|failure modes?|bottlenecks?|maintenance|dependencies)\b",
 }
 REASONS = {
@@ -50,67 +108,42 @@ NEGATION = re.compile(
 
 
 class TextParser(HTMLParser):
-    """Ignore executable/navigation text; record only nonempty code examples."""
+    """Use the body extractor's visibility rules, without requiring an article region."""
 
-    def __init__(self, limit: int):
+    def __init__(self):
         super().__init__()
-        self.limit = limit
-        self.text_length = 0
         self.parts = []
         self.stack = []
-        self.code = False
 
     def handle_starttag(self, tag, attrs):
-        if tag not in {
-            "br",
-            "hr",
-            "img",
-            "input",
-            "meta",
-            "link",
-            "source",
-            "wbr",
-            "area",
-            "base",
-            "embed",
-            "param",
-            "track",
-            "col",
-        }:
-            self.stack.append(tag)
+        blocked = bool(self.stack and self.stack[-1][1]) or blocked_element(
+            tag, dict(attrs)
+        )
+        if tag not in VOID_TAGS:
+            self.stack.append((tag, blocked))
 
     def handle_endtag(self, tag):
-        if tag in self.stack:
-            index = len(self.stack) - 1 - self.stack[::-1].index(tag)
-            del self.stack[index:]
+        for index in range(len(self.stack) - 1, -1, -1):
+            if self.stack[index][0] == tag:
+                del self.stack[index:]
+                break
 
     def handle_data(self, data):
-        if any(
-            tag in {"script", "style", "nav", "footer", "aside"} for tag in self.stack
-        ):
+        if self.stack and self.stack[-1][1]:
             return
-        self.parts.append(data)
-        self.text_length += len(data) + 1
-        if (
-            self.text_length <= self.limit
-            and any(tag in {"pre", "code"} for tag in self.stack)
-            and re.search(
-                r"[=(){};]|\b(?:import|def|pip|python|docker|curl|torchrun)\b", data
-            )
-        ):
-            self.code = True
+        self.parts.append((data, any(tag in {"pre", "code"} for tag, _ in self.stack)))
 
 
 def text_evidence(value: str, html: bool, limit: int) -> tuple[str, bool, bool]:
     bounded = value[:MAX_RAW_CHARS]
-    code = False
     if html:
-        parser = TextParser(limit)
+        parser = TextParser()
         parser.feed(bounded)
-        bounded = " ".join(parser.parts)
-        code = parser.code
-    text = re.sub(r"\s+", " ", bounded).strip()
-    return text[:limit], code, len(value) > MAX_RAW_CHARS or len(text) > limit
+        parts = parser.parts
+    else:
+        parts = [(bounded, False)]
+    text, code, truncated = analyze_parts(parts, limit)
+    return text, code, truncated or len(value) > MAX_RAW_CHARS
 
 
 def matches(pattern: str, text: str) -> bool:
@@ -127,64 +160,124 @@ def label_article(
     content: str = "",
     content_format: str = "text",
     content_provenance: str = "missing",
+    content_structure: dict | None = None,
 ) -> dict:
-    title_text = title[:MAX_TITLE_CHARS]
-    summary_text, _, summary_truncated = text_evidence(summary, True, MAX_SUMMARY_CHARS)
-    content_text, code, content_truncated = text_evidence(
-        content, content_format == "html", MAX_CONTENT_CHARS
-    )
-    if content_text and content_provenance in {
-        "rss_content",
-        "atom_content",
-        "article_body",
-    }:
-        evidence = (
-            "article_body" if content_provenance == "article_body" else "feed_content"
-        )
-        text = content_text
-        truncated = content_truncated
-    else:
-        evidence = (
-            "feed_summary"
-            if summary_text
-            else ("title_only" if title_text else "missing")
-        )
-        text = summary_text
-        code = False
-        truncated = summary_truncated
-    combined = title_text + " " + text
-    labels = [
-        name for name, pattern in LABEL_PATTERNS.items() if matches(pattern, combined)
-    ]
-    # Depth comes from available content, never publisher identity or title keywords.
-    signals = [
-        name for name, pattern in TECHNICAL_PATTERNS.items() if matches(pattern, text)
-    ]
-    if code:
-        signals.append("code")
-    if len(signals) >= 2 and "technical_walkthrough" not in labels:
-        labels.insert(0, "technical_walkthrough")
-    depth = "uncertain"
-    if len(signals) >= 2:
-        depth = "some"
+    fields = {}
+    for name, value, html, limit in (
+        ("title", title, True, MAX_TITLE_CHARS),
+        ("summary", summary, True, MAX_SUMMARY_CHARS),
+        ("content", content, content_format == "html", MAX_CONTENT_CHARS),
+    ):
+        if name == "content" and content_provenance not in {
+            "rss_content",
+            "atom_content",
+            "article_body",
+        }:
+            continue
+        text, code, truncated = text_evidence(value, html, limit)
         if (
-            evidence in {"feed_content", "article_body"}
-            and len(signals) >= 3
-            and len(text.split()) >= MIN_SUBSTANTIAL_WORDS
-            and ("code" in signals or "implementation" in signals)
+            name == "content"
+            and content_provenance == "article_body"
+            and content_structure
         ):
-            depth = "substantial"
+            # Only metadata from the same normalized extractor window is accepted.
+            code |= (
+                content_structure.get("analyzed_characters") == len(text)
+                and content_structure.get("limit") == MAX_CONTENT_CHARS
+                and content_structure.get("code") is True
+            )
+        if text:
+            fields[name] = {"text": text, "code": code, "truncated": truncated}
+    label_evidence = []
+    signal_evidence = []
+    for name, data in fields.items():
+        for label, rules in LABEL_RULES.items():
+            for rule, (description, pattern) in rules.items():
+                if matches(pattern, data["text"]):
+                    label_evidence.append(
+                        {
+                            "label": label,
+                            "rule_id": rule,
+                            "field": name,
+                            "description": description,
+                        }
+                    )
+        if name == "title":
+            continue
+        signals = [
+            signal
+            for signal, pattern in TECHNICAL_PATTERNS.items()
+            if matches(pattern, data["text"])
+        ]
+        if data["code"]:
+            signals.append("code")
+        signal_evidence.extend(
+            {"signal": signal, "field": name, "description": REASONS[signal]}
+            for signal in signals
+        )
+        if len(signals) >= 2:
+            label_evidence.append(
+                {
+                    "label": "technical_walkthrough",
+                    "rule_id": "multiple-technical-signals",
+                    "field": name,
+                    "description": "Several distinct technical signal categories",
+                }
+            )
+    labels = [
+        label
+        for label in LABEL_NAMES
+        if any(row["label"] == label for row in label_evidence)
+    ]
+    signals = [
+        signal
+        for signal in REASONS
+        if any(row["signal"] == signal for row in signal_evidence)
+    ]
+    content_signals = {
+        row["signal"] for row in signal_evidence if row["field"] == "content"
+    }
+    # Aggregate depth is experimental. Stronger claims require content evidence alone.
+    depth = "some" if len(signals) >= 2 else "uncertain"
+    if (
+        len(content_signals) >= 3
+        and content_signals & {"code", "implementation"}
+        and len(fields["content"]["text"].split()) >= MIN_SUBSTANTIAL_WORDS
+    ):
+        depth = "substantial"
+    evidence = (
+        ("article_body" if content_provenance == "article_body" else "feed_content")
+        if "content" in fields
+        else (
+            "feed_summary"
+            if "summary" in fields
+            else ("title_only" if "title" in fields else "missing")
+        )
+    )
     return {
         "version": VERSION,
         "method": "bounded_text_rules",
         "provisional": True,
         "labels": labels,
+        "label_evidence": label_evidence,
         "technical_depth": depth,
+        "depth_experimental": True,
         "evidence": evidence,
         "depth_scope": "available_text_only",
-        "analyzed_characters": len(text),
-        "truncated": truncated or len(title) > MAX_TITLE_CHARS,
+        "fields": {
+            name: {
+                "analyzed_characters": len(data["text"]),
+                "truncated": data["truncated"],
+                "code": data["code"],
+            }
+            for name, data in fields.items()
+        },
+        "analyzed_characters": sum(
+            len(data["text"]) for name, data in fields.items() if name != "title"
+        ),
+        "truncated": any(data["truncated"] for data in fields.values()),
         "signals": signals,
+        "signal_evidence": signal_evidence,
         "reasons": [REASONS[name] for name in signals]
         or ["Insufficient positive evidence to estimate technical depth"],
     }

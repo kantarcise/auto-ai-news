@@ -2,7 +2,7 @@
 
 This PR advances the ranking evaluation in issue #12. The existing daily workflow will save a candidate capture and compare three orderings on every normal scheduled/manual run after merge. Both alternatives remain experiments: neither changes report selection, stars or publication.
 
-Optional captures also include [best-effort article labels](article-labels.md), with evidence scope, technical-depth uncertainty and reasons. Selected-body annotations reuse existing retrieval after ranking inputs are frozen; no article body is copied into the capture and no extra requests are made. Labels do not change the three orderings or selection.
+Optional captures also include [best-effort article labels](article-labels.md), with field-specific explanations and technical clues. Feed and selected-stage assessments are shown together, with differences; experimental depth categories stay in JSON only. Selected-body annotations reuse existing retrieval after ranking inputs are frozen; no article body is copied into the capture and no extra requests are made. Labels do not change the three orderings or selection.
 
 ## What to review
 

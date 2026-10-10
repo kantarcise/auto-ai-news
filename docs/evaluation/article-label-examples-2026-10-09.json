@@ -24,6 +24,53 @@
         "reasons": [
           "Insufficient positive evidence to estimate technical depth"
         ]
+      },
+      "reassessment_v2": {
+        "version": 2,
+        "method": "bounded_text_rules",
+        "provisional": true,
+        "labels": [
+          "research_evaluation"
+        ],
+        "label_evidence": [
+          {
+            "label": "research_evaluation",
+            "rule_id": "comparative-testing",
+            "field": "summary",
+            "description": "Reported comparative testing"
+          }
+        ],
+        "technical_depth": "uncertain",
+        "depth_experimental": true,
+        "evidence": "feed_summary",
+        "depth_scope": "available_text_only",
+        "fields": {
+          "title": {
+            "analyzed_characters": 66,
+            "truncated": false,
+            "code": false
+          },
+          "summary": {
+            "analyzed_characters": 1000,
+            "truncated": false,
+            "code": false
+          }
+        },
+        "analyzed_characters": 1000,
+        "truncated": false,
+        "signals": [
+          "measurement"
+        ],
+        "signal_evidence": [
+          {
+            "signal": "measurement",
+            "field": "summary",
+            "description": "Evaluation or measurement details"
+          }
+        ],
+        "reasons": [
+          "Evaluation or measurement details"
+        ]
       }
     },
     {
@@ -44,6 +91,36 @@
         "analyzed_characters": 1000,
         "truncated": false,
         "signals": [],
+        "reasons": [
+          "Insufficient positive evidence to estimate technical depth"
+        ]
+      },
+      "reassessment_v2": {
+        "version": 2,
+        "method": "bounded_text_rules",
+        "provisional": true,
+        "labels": [],
+        "label_evidence": [],
+        "technical_depth": "uncertain",
+        "depth_experimental": true,
+        "evidence": "feed_summary",
+        "depth_scope": "available_text_only",
+        "fields": {
+          "title": {
+            "analyzed_characters": 27,
+            "truncated": false,
+            "code": false
+          },
+          "summary": {
+            "analyzed_characters": 1000,
+            "truncated": false,
+            "code": false
+          }
+        },
+        "analyzed_characters": 1000,
+        "truncated": false,
+        "signals": [],
+        "signal_evidence": [],
         "reasons": [
           "Insufficient positive evidence to estimate technical depth"
         ]
@@ -70,6 +147,36 @@
         "reasons": [
           "Insufficient positive evidence to estimate technical depth"
         ]
+      },
+      "reassessment_v2": {
+        "version": 2,
+        "method": "bounded_text_rules",
+        "provisional": true,
+        "labels": [],
+        "label_evidence": [],
+        "technical_depth": "uncertain",
+        "depth_experimental": true,
+        "evidence": "feed_summary",
+        "depth_scope": "available_text_only",
+        "fields": {
+          "title": {
+            "analyzed_characters": 46,
+            "truncated": false,
+            "code": false
+          },
+          "summary": {
+            "analyzed_characters": 1000,
+            "truncated": false,
+            "code": false
+          }
+        },
+        "analyzed_characters": 1000,
+        "truncated": false,
+        "signals": [],
+        "signal_evidence": [],
+        "reasons": [
+          "Insufficient positive evidence to estimate technical depth"
+        ]
       }
     },
     {
@@ -93,6 +200,36 @@
         "reasons": [
           "Insufficient positive evidence to estimate technical depth"
         ]
+      },
+      "reassessment_v2": {
+        "version": 2,
+        "method": "bounded_text_rules",
+        "provisional": true,
+        "labels": [],
+        "label_evidence": [],
+        "technical_depth": "uncertain",
+        "depth_experimental": true,
+        "evidence": "feed_summary",
+        "depth_scope": "available_text_only",
+        "fields": {
+          "title": {
+            "analyzed_characters": 64,
+            "truncated": false,
+            "code": false
+          },
+          "summary": {
+            "analyzed_characters": 83,
+            "truncated": false,
+            "code": false
+          }
+        },
+        "analyzed_characters": 83,
+        "truncated": false,
+        "signals": [],
+        "signal_evidence": [],
+        "reasons": [
+          "Insufficient positive evidence to estimate technical depth"
+        ]
       }
     },
     {
@@ -113,6 +250,36 @@
         "analyzed_characters": 295,
         "truncated": false,
         "signals": [],
+        "reasons": [
+          "Insufficient positive evidence to estimate technical depth"
+        ]
+      },
+      "reassessment_v2": {
+        "version": 2,
+        "method": "bounded_text_rules",
+        "provisional": true,
+        "labels": [],
+        "label_evidence": [],
+        "technical_depth": "uncertain",
+        "depth_experimental": true,
+        "evidence": "feed_summary",
+        "depth_scope": "available_text_only",
+        "fields": {
+          "title": {
+            "analyzed_characters": 50,
+            "truncated": false,
+            "code": false
+          },
+          "summary": {
+            "analyzed_characters": 295,
+            "truncated": false,
+            "code": false
+          }
+        },
+        "analyzed_characters": 295,
+        "truncated": false,
+        "signals": [],
+        "signal_evidence": [],
         "reasons": [
           "Insufficient positive evidence to estimate technical depth"
         ]

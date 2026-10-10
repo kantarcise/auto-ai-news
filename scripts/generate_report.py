@@ -151,6 +151,7 @@ class Item:
     content: str = ""
     content_format: str = "text"
     content_provenance: str = "missing"
+    content_structure: dict = field(default_factory=dict)
     category: str = "other"
     publisher: str = ""
     coverage: str = "mixed"
@@ -579,23 +580,26 @@ def enrich_article_bodies(
     items: list[Item], request_limit: int = MAX_REQUESTS
 ) -> list[tuple[str, str]]:
     """Enrich selected representatives only; failures never remove a story."""
-    cache: dict[str, tuple[str, str]] = {}
+    cache: dict[str, tuple[str, str, dict]] = {}
     diagnostics = []
     for item in items:
         if estimate_reading_time(item) is not None:
             continue
         key = canonicalize_url(item.url)
         if key not in cache:
-            cache[key] = (
-                fetch_body(item.url, USER_AGENT)
+            structure = {}
+            body, reason = (
+                fetch_body(item.url, USER_AGENT, structure=structure)
                 if len(cache) < request_limit
                 else ("", "Article request budget exhausted.")
             )
-        body, reason = cache[key]
+            cache[key] = (body, reason, structure)
+        body, reason, structure = cache[key]
         if body:
             item.content = body
             item.content_format = "text"
             item.content_provenance = "article_body"
+            item.content_structure = dict(structure)
             estimate_reading_time(item)
         else:
             item.body_status = reason
@@ -682,6 +686,7 @@ def label_item(item: Item) -> dict:
         content=item.content,
         content_format=item.content_format,
         content_provenance=item.content_provenance,
+        content_structure=item.content_structure,
     )
 
 

@@ -7,6 +7,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts import generate_report as report
+from scripts.article_content import extract_body_evidence
 from scripts.article_labels import MAX_CONTENT_CHARS, label_article
 from scripts.compare_rankings import compare, render
 
@@ -117,6 +118,198 @@ class ArticleLabelsTest(unittest.TestCase):
         )
         self.assertNotIn("code", late_code["signals"])
         self.assertEqual(late_code["technical_depth"], "uncertain")
+
+    def test_feed_and_downloaded_code_evidence_are_equal(self):
+        filler = (
+            "We describe each operation and its effect on the running service. " * 12
+        )
+        html = f"<article><p>Configuration and profiling.</p><pre>import torch; x = model()</pre><p>{filler}</p></article>"
+        body, reason, structure = extract_body_evidence(html)
+        self.assertFalse(reason)
+        feed = label_article(
+            "Service guide",
+            content=html,
+            content_format="html",
+            content_provenance="rss_content",
+        )
+        downloaded = label_article(
+            "Service guide",
+            content=body,
+            content_provenance="article_body",
+            content_structure=structure,
+        )
+        self.assertEqual(feed["signals"], downloaded["signals"])
+        self.assertEqual(feed["technical_depth"], "substantial")
+        self.assertEqual(feed["technical_depth"], downloaded["technical_depth"])
+        self.assertNotEqual(feed["evidence"], downloaded["evidence"])
+        # Both paths ignore empty, navigation, hidden and out-of-window code.
+        for code in (
+            "<code></code>",
+            "<nav><code>import torch</code></nav>",
+            "<div hidden><code>import torch</code></div>",
+            "ordinary words " * 1000 + "<pre>import torch</pre>",
+        ):
+            document = (
+                f"<article><p>Configuration and profiling. {filler}</p>{code}</article>"
+            )
+            body, _, structure = extract_body_evidence(document)
+            for assessed in (
+                label_article(
+                    "Guide",
+                    content=document,
+                    content_format="html",
+                    content_provenance="rss_content",
+                ),
+                label_article(
+                    "Guide",
+                    content=body,
+                    content_provenance="article_body",
+                    content_structure=structure,
+                ),
+            ):
+                self.assertNotIn("code", assessed["signals"])
+                self.assertEqual(assessed["technical_depth"], "some")
+
+    def test_independent_fields_preserve_summary_and_deduplicate_signals(self):
+        summary = "Customer story: we deployed an implementation using configuration and profiling. Book a demo."
+        result = label_article(
+            "Service",
+            summary,
+            content="Read more on our website.",
+            content_provenance="rss_content",
+        )
+        self.assertIn("promotion_testimonial", result["labels"])
+        self.assertIn("technical_walkthrough", result["labels"])
+        self.assertEqual(result["technical_depth"], "some")
+        self.assertTrue(
+            all(row["field"] == "summary" for row in result["signal_evidence"])
+        )
+        repeated = label_article(
+            "Guide",
+            "Configuration.",
+            content="Configuration. " * 150,
+            content_provenance="rss_content",
+        )
+        self.assertEqual(repeated["signals"], ["configuration"])
+        self.assertEqual(repeated["technical_depth"], "uncertain")
+        split = label_article(
+            "Guide",
+            "Profiling and limitations.",
+            content="Configuration. " * 150,
+            content_provenance="rss_content",
+        )
+        self.assertEqual(
+            split["technical_depth"], "some"
+        )  # Summary cannot promote weak content to substantial.
+        informative = label_article(
+            "Guide",
+            "Read more.",
+            content="Implementation configuration profiling.",
+            content_provenance="rss_content",
+        )
+        self.assertEqual(informative["technical_depth"], "some")
+        title_only = label_article(
+            "Implementation configuration profiling",
+            "Read more.",
+            content="Visit our website.",
+            content_provenance="rss_content",
+        )
+        self.assertEqual(title_only["signals"], [])
+
+    def test_labels_explain_their_own_rules_even_without_depth(self):
+        assessed = label_article("Customer story", "Book a demo.")
+        self.assertEqual(assessed["technical_depth"], "uncertain")
+        self.assertIn(
+            {
+                "label": "promotion_testimonial",
+                "rule_id": "sales-demo-invitation",
+                "field": "summary",
+                "description": "Sales or demo invitation",
+            },
+            assessed["label_evidence"],
+        )
+        self.assertIn(
+            {
+                "label": "promotion_testimonial",
+                "rule_id": "customer-promotion",
+                "field": "title",
+                "description": "Customer story, sponsorship or partnership language",
+            },
+            assessed["label_evidence"],
+        )
+
+    def test_paired_comparison_keeps_both_stages_and_prioritizes_changes(self):
+        snapshot = self.collect(True)[2]
+        row = snapshot["ranking_inputs"][0]
+        row["article_labels"] = label_article("Service", "A teaser.")
+        enriched = label_article(
+            "Service",
+            content="Implementation configuration profiling.",
+            content_provenance="article_body",
+        )
+        snapshot["selected_article_labels"] = [
+            {
+                "title": row["title"],
+                "url": row["url"],
+                "source": row["source"],
+                "assessment": enriched,
+            }
+        ]
+        result = compare(snapshot)
+        review = result["article_label_reviews"][0]
+        self.assertTrue(review["changed"])
+        self.assertEqual(
+            review["differences"]["added_signals"],
+            ["configuration", "implementation", "measurement"],
+        )
+        rendered = render(result)
+        self.assertIn("| Feed | Unclassified", rendered)
+        self.assertIn("| Selected | Technical walkthrough", rendered)
+        self.assertIn("feed\\_summary", rendered)
+        self.assertIn("article\\_body", rendered)
+        self.assertLess(
+            rendered.index("| Selected |"), rendered.index("| Feed | Opinion")
+        )
+        self.assertNotIn("| Depth |", rendered)
+        self.assertEqual(
+            result["orders"],
+            compare({**snapshot, "selected_article_labels": []})["orders"],
+        )
+
+    def test_comparative_testing_and_marketing_are_clues_not_quality(self):
+        testing = label_article(
+            "Results",
+            "We tested 12 frontier models. The new version improves performance by 61 percentage points.",
+        )
+        self.assertIn("research_evaluation", testing["labels"])
+        self.assertIn("measurement", testing["signals"])
+        marketing = label_article(
+            "Customer story", "Our customers lead the benchmarks. Book a demo."
+        )
+        self.assertIn("promotion_testimonial", marketing["labels"])
+        # Merely mentioning benchmarks is not verified evaluation or technical depth.
+        self.assertEqual(marketing["technical_depth"], "uncertain")
+        self.assertEqual(testing["technical_depth"], "uncertain")
+        self.assertNotIn(
+            "comparative-testing",
+            [row["rule_id"] for row in marketing["label_evidence"]],
+        )
+
+    def test_representative_evidence_controls(self):
+        dataset = json.loads(
+            (Path(__file__).parent / "fixtures/article-label-evidence.json").read_text()
+        )
+        for row in dataset["cases"]:
+            with self.subTest(case=row["id"]):
+                assessed = label_article(
+                    row["title"],
+                    row.get("summary", ""),
+                    content=row.get("content", ""),
+                    content_format=row.get("content_format", "text"),
+                    content_provenance=row.get("content_provenance", "missing"),
+                )
+                self.assertEqual(set(assessed["labels"]), set(row["expected_labels"]))
+                self.assertEqual(set(assessed["signals"]), set(row["expected_signals"]))
 
     def collect(self, excerpts):
         source = report.Source(
@@ -252,7 +445,7 @@ class ArticleLabelsTest(unittest.TestCase):
         for example in examples:
             with self.subTest(url=example["url"]):
                 actual = label_article(example["title"], example["summary_excerpt"])
-                self.assertEqual(actual, example["assessment"])
+                self.assertEqual(actual, example["reassessment_v2"])
                 self.assertEqual(actual["technical_depth"], "uncertain")
                 self.assertLessEqual(len(example["summary_excerpt"]), 1000)
 
@@ -263,9 +456,9 @@ class ArticleLabelsTest(unittest.TestCase):
             row.pop("article_labels")
         self.assertIn("No article labels captured", render(compare(legacy)))
         snapshot["ranking_inputs"][0]["title"] = "<script>alert(1)</script> | title"
-        snapshot["ranking_inputs"][0]["article_labels"]["reasons"] = [
-            "<img onerror=bad> | reason"
-        ]
+        snapshot["ranking_inputs"][0]["article_labels"]["label_evidence"][0][
+            "description"
+        ] = "<img onerror=bad> | reason"
         rendered = render(compare(snapshot))
         self.assertNotIn("<script>", rendered)
         self.assertNotIn("<img", rendered)

@@ -1,0 +1,121 @@
+{
+  "scope": "Offline evidence controls with independently stated expected content clues. Seven authored controls and one existing inspected feed excerpt, not article-level accuracy validation. No inclusion preferences or usefulness grades are used. Future unchanged-rule daily captures are reserved for independent review; no unseen set has been evaluated.",
+  "cases": [
+    {
+      "id": "engineering",
+      "kind": "engineering guide",
+      "title": "Service configuration guide",
+      "content": "We explain implementation and configuration. Profiling measured p95 latency of 14 ms. Limitations include cache contention. <pre>import torch; output = model()</pre>",
+      "content_format": "html",
+      "content_provenance": "rss_content",
+      "expected_labels": [
+        "technical_walkthrough"
+      ],
+      "expected_signals": [
+        "implementation",
+        "configuration",
+        "measurement",
+        "tradeoffs",
+        "code"
+      ],
+      "support": "Implementation, configuration, measured latency, limitation, nonempty code.",
+      "origin": "Authored synthetic control; not a real article or held-out example."
+    },
+    {
+      "id": "benchmark",
+      "kind": "benchmark report",
+      "title": "Measured model comparison",
+      "summary": "We tested 12 models on the same inputs and measured improvements across tasks.",
+      "expected_labels": [
+        "research_evaluation"
+      ],
+      "expected_signals": [
+        "measurement"
+      ],
+      "support": "Explicit comparative-testing report; no independent implementation evidence.",
+      "origin": "Authored synthetic control; not a real article or held-out example."
+    },
+    {
+      "id": "marketing",
+      "kind": "marketing only",
+      "title": "Customer story",
+      "summary": "Our customers lead the benchmarks. Book a demo.",
+      "expected_labels": [
+        "promotion_testimonial",
+        "research_evaluation"
+      ],
+      "expected_signals": [
+        "measurement"
+      ],
+      "support": "Sales invitation and customer framing. Benchmark keyword is an ambiguous research clue, not verified evaluation.",
+      "origin": "Authored synthetic control; not a real article or held-out example."
+    },
+    {
+      "id": "mixed",
+      "kind": "mixed customer and technical story",
+      "title": "Customer story",
+      "summary": "We deployed an implementation with KV caches. Profiling documents p95 latency and limitations. Book a demo.",
+      "expected_labels": [
+        "technical_walkthrough",
+        "practical_experience",
+        "promotion_testimonial"
+      ],
+      "expected_signals": [
+        "implementation",
+        "configuration",
+        "measurement",
+        "tradeoffs"
+      ],
+      "support": "Deployment, implementation, cache, measurements and sales invitation coexist.",
+      "origin": "Authored synthetic control; not a real article or held-out example."
+    },
+    {
+      "id": "opinion",
+      "kind": "opinion",
+      "title": "An essay",
+      "summary": "I believe this direction is promising.",
+      "expected_labels": [
+        "opinion_discussion"
+      ],
+      "expected_signals": [],
+      "support": "Explicit opinion framing without implementation evidence.",
+      "origin": "Authored synthetic control; not a real article or held-out example."
+    },
+    {
+      "id": "release",
+      "kind": "short release",
+      "title": "Introducing a new tool",
+      "summary": "Now available for local use.",
+      "expected_labels": [
+        "model_tool_release"
+      ],
+      "expected_signals": [],
+      "support": "Explicit announcement without depth evidence.",
+      "origin": "Authored synthetic control; not a real article or held-out example."
+    },
+    {
+      "id": "missing",
+      "kind": "missing evidence",
+      "title": "",
+      "expected_labels": [],
+      "expected_signals": [],
+      "support": "No text; no inferred content type or shallow grade.",
+      "origin": "Authored synthetic control; not a real article or held-out example."
+    },
+    {
+      "id": "reviewed-comparison-excerpt",
+      "kind": "comparative-testing excerpt",
+      "title": "Europe’s leading AI model still can’t reliably follow European law",
+      "summary": "TL;DR: Mistral previously performed the worst of all providers on our human rights scenarios, with their Medium 3.5 model failing on almost every single test. Their newly released model, Mistral Large 4, improves performance by 61 percentage points, showing strong resistance in most scenarios. Likewise, Mistral Large 4 demonstrates large improvements in compliance with European law. Its predecessor, Mistral Large 2512, lagged at the bottom of the leaderboard when we tested 12 frontier models earlier this year on compliance with the EU AI Act and GDPR, reaching only 16% compliance even when explicitly instructed to follow these laws. Mistral Large 4 improves by 37 percentage points, reaching 53% compliance - but still falling behind recent Claude and GPT models. These much needed improvements close the gap between Europe’s leading model and US models. However, legal compliance of 53% means breaking the law in just under half of cases - and while Mistral’s latest model is more robust aga",
+      "origin": "Existing frozen feed excerpt; inspected during development, not held out.",
+      "url": "https://www.lesswrong.com/posts/XK7qJ3vGjuFuHfxaF/europe-s-leading-ai-model-still-can-t-reliably-follow",
+      "expected_labels": [
+        "research_evaluation"
+      ],
+      "expected_signals": [
+        "measurement"
+      ],
+      "support": "Reports testing 12 frontier models and numerical improvements; does not establish usefulness or independent depth."
+    }
+  ]
+}
