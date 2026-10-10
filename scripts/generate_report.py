@@ -41,6 +41,11 @@ try:
 except ModuleNotFoundError:
     from publication_history import load_history, receipt_comment
 
+try:
+    from scripts.article_labels import label_article
+except ModuleNotFoundError:
+    from article_labels import label_article
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCES = ROOT / "config" / "sources.json"
 DEFAULT_OUTPUT = ROOT / "README.md"
@@ -670,6 +675,16 @@ def freshness_reason(item: Item, now: dt.datetime, lookback_hours: int) -> str:
     return ""
 
 
+def label_item(item: Item) -> dict:
+    return label_article(
+        item.title,
+        item.summary,
+        content=item.content,
+        content_format=item.content_format,
+        content_provenance=item.content_provenance,
+    )
+
+
 def evaluation_metadata(item: Item) -> dict:
     """Export attributed metadata only, never feed text or article bodies."""
     return {
@@ -847,6 +862,7 @@ def collect_items(
                     "admitted": is_ai_related(item),
                     "adaptive_bonus": item.editorial_relevance.proposed_rank_bonus,
                     "fixed_bonus": item.editorial_relevance.proposed_fixed_bonus,
+                    "article_labels": label_item(item),
                 }
                 for index, ((item, _), feature) in enumerate(zip(pending, features))
             ]
@@ -1527,6 +1543,17 @@ def main(argv: list[str] | None = None) -> int:
         )
     if not args.no_article_bodies:
         unavailable.extend(enrich_article_bodies(items))
+    if evaluation is not None and args.evaluation_excerpts:
+        # Ranking inputs remain frozen before body enrichment. Export labels only,
+        # never the selected article text used to derive these annotations.
+        evaluation["selected_article_labels"] = [
+            {**evaluation_metadata(item), "assessment": label_item(item)}
+            for item in items
+        ]
+        args.evaluation_output.write_text(
+            json.dumps(evaluation, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
     report = render_report(
         items,
         unavailable,

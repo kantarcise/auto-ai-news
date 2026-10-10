@@ -2,6 +2,8 @@
 
 This PR advances the ranking evaluation in issue #12. The existing daily workflow will save a candidate capture and compare three orderings on every normal scheduled/manual run after merge. Both alternatives remain experiments: neither changes report selection, stars or publication.
 
+Optional captures also include [best-effort article labels](article-labels.md), with evidence scope, technical-depth uncertainty and reasons. Selected-body annotations reuse existing retrieval after ranking inputs are frozen; no article body is copied into the capture and no extra requests are made. Labels do not change the three orderings or selection.
+
 ## What to review
 
 Open a completed [Daily AI News workflow run](https://github.com/kantarcise/auto-ai-news/actions/workflows/daily-report.yml), download its `ranking-evaluation-<run-id>-<attempt>` artifact, and open `comparison.md`.
@@ -30,7 +32,7 @@ The artifact contains:
 - `comparison.json`: three complete story orderings, disagreement/rejection counts, review rows, actual selection/link metadata, input checksum and generator revision.
 - `comparison.md`: the readable review list.
 
-`--evaluation-excerpts` opts into feed-summary excerpts of **at most 1,000 characters per fresh candidate**, plus normalized scoring features. Similarity still examines at most 4,000 characters each of title/summary; saved unordered term counts reproduce that calculation without copying the remaining feed text. The excerpt need not contain all context used for admission/scoring. No article body is stored. These are public-feed-derived excerpts/features and metadata, stored in workflow artifacts rather than release notes or repository commits. Snapshot capture happens before optional article-body enrichment.
+`--evaluation-excerpts` opts into feed-summary excerpts of **at most 1,000 characters per fresh candidate**, plus normalized scoring features. Similarity still examines at most 4,000 characters each of title/summary; saved unordered term counts reproduce that calculation without copying the remaining feed text. The excerpt need not contain all context used for admission/scoring. No article body is stored. These are public-feed-derived excerpts/features and metadata, stored in workflow artifacts rather than release notes or repository commits. Ranking inputs and the initial capture are saved before optional article-body enrichment; separate selected-article label metadata is appended afterward when excerpt capture is enabled. No body text is added.
 
 Without the flag, evaluation capture remains metadata-only and does not export excerpts or normalized document terms. Both fixed/adaptive score summaries can still be recorded, but full replay requires the opt-in inputs. Historical captures and feedback remain untouched.
 

@@ -4,6 +4,8 @@ This first batch contains all 34 candidates from the frozen October 3 comparison
 
 The [October 9–10 source-priority comparison](source-priority.md) replays actual saved selections after reducing LessWrong’s source-only bonus, with the latest owner feedback and explicit remaining ranking misses.
 
+The [best-effort article-label capture](article-labels.md) adds provisional content-type/depth clues to saved comparisons, reusing available feed text and already retrieved selected bodies. It does not change ranking or filter articles.
+
 ## Editorial brief
 
 Prioritize substantive model/capability releases, research with concrete findings or evaluations, and useful AI engineering with reproducible methods. Include independent analysis that adds evidence or insight. Cover general-purpose models and specialist visual/spatial models across regions. Assess the article, not just its publisher; frontier-lab marketing is not automatically important. Deprioritize corporate/customer promotions, generic advice, unsupported claims and repeated summaries that add little.

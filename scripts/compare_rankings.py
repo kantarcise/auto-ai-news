@@ -9,6 +9,7 @@ from collections import Counter
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from scripts.article_labels import LABEL_NAMES
 from scripts.generate_report import markdown_escape, markdown_link
 
 
@@ -165,6 +166,11 @@ def compare(snapshot: dict, *, revision: str = "", limit: int = 20) -> dict:
                 }
             )
     disagreements.sort(key=lambda row: (-row["spread"], row["ranks"]["current"]))
+    selected_labels = snapshot.get("selected_article_labels", [])
+    if len({row["url"] for row in selected_labels}) != len(selected_labels) or any(
+        row["url"] not in selected_urls for row in selected_labels
+    ):
+        raise ValueError("Selected article labels must identify actual selected URLs")
     return {
         "schema_version": 1,
         "captured_at": snapshot["captured_at"],
@@ -180,6 +186,20 @@ def compare(snapshot: dict, *, revision: str = "", limit: int = 20) -> dict:
             if not row["admitted"]
         ][:limit],
         "fresh_rejected_count": sum(not row["admitted"] for row in inputs),
+        "selected_article_labels": selected_labels,
+        "article_labels": [
+            {
+                "id": row["id"],
+                "url": row["url"],
+                "title": row["title"],
+                "source": row["source"],
+                "selected": row["url"] in selected_urls,
+                "admitted": row["admitted"],
+                "assessment": row["article_labels"],
+            }
+            for row in inputs
+            if "article_labels" in row
+        ],
         "actual_selected": snapshot["policies"]["frontier"]["selected"],
         "link_outcomes": snapshot["link_outcomes"],
     }
@@ -225,6 +245,46 @@ def render(result: dict) -> str:
             lines.append(
                 f"- {markdown_link(row['title'], row['url'])} · {markdown_escape(row['source'])}"
             )
+    lines += [
+        "",
+        "## Best-effort article labels — no ranking effect",
+        "",
+        "These are provisional text clues, not content understanding or usefulness grades. Multiple labels can coexist. Technical depth describes only the available text; uncertain does not mean shallow. Labels do not filter, score or publish articles. Feed content and extracted bodies may be incomplete. Candidate labels use feed evidence; selected-article annotations reuse any text already retrieved, without extra requests.",
+        "",
+    ]
+    selected_annotations = result.get("selected_article_labels", [])
+    enriched_urls = {row["url"] for row in selected_annotations}
+    label_rows = [{**row, "selected": True} for row in selected_annotations] + [
+        row
+        for row in result.get("article_labels", [])
+        if row["url"] not in enriched_urls
+    ]
+    if label_rows:
+        positions = {row["url"]: i for i, row in enumerate(result["actual_selected"])}
+        ordered = sorted(
+            label_rows,
+            key=lambda row: (
+                not row["selected"],
+                positions.get(row["url"], len(positions)),
+            ),
+        )
+        lines += [
+            f"Showing {min(20, len(ordered))} of {len(ordered)} article assessments, selected articles first. Complete candidate assessments with capture-local identities and separate selected-article annotations are retained in JSON.",
+            "",
+            "| Article | Suggested labels | Depth | Evidence | Reason |",
+            "| --- | --- | --- | --- | --- |",
+        ]
+        for row in ordered[:20]:
+            assessment = row["assessment"]
+            names = (
+                "; ".join(LABEL_NAMES.get(name, name) for name in assessment["labels"])
+                or "Unclassified"
+            )
+            lines.append(
+                f"| {markdown_link(row['title'], row['url'])} | {markdown_escape(names)} | {markdown_escape(assessment['technical_depth'])} | {markdown_escape(assessment['evidence'])} | {markdown_escape('; '.join(assessment['reasons']))} |"
+            )
+    else:
+        lines += ["No article labels captured in this snapshot."]
     lines += [
         "",
         "## Review guidance",
