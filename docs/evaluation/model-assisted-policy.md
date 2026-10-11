@@ -100,4 +100,8 @@ Use existing examples for development; reserve independent dates and keep duplic
 
 ## Implementation acceptance cases
 
-The next implementation PR should add offline tests for every row in the admission and worked-case tables, equal-score ordering versus higher-score announcements, representative/alternate handling (including inaccessible-primary and publisher-cap replacements in mixed and all-qualifying groups), short `feed_excerpt` negatives with unknown completeness and no truncation, and insufficient-evidence versus provider-failure behavior. Verify identical frozen inputs and downstream constraints, inclusion of baseline relevance rejects, cache version/expiration handling, schema rejection and report-level fallback. These are acceptance requirements; no runtime behavior or test results for the future adapter are claimed here.
+The implementation PRs should add offline tests for every row in the admission and worked-case tables, equal-score ordering versus higher-score announcements, representative/alternate handling (including inaccessible-primary and publisher-cap replacements in mixed and all-qualifying groups), short `feed_excerpt` negatives with unknown completeness and no truncation, and insufficient-evidence versus provider-failure behavior. Verify identical frozen inputs and downstream constraints, inclusion of baseline relevance rejects, cache version/expiration handling, schema rejection and report-level fallback. These are acceptance requirements; no runtime behavior or test results for the future adapter are claimed here.
+
+The [assessment-layer implementation](model-assessment.md) supplies the contract
+and hosted adapter. Policy application, paired reports and their acceptance
+tests remain the next implementation step.
