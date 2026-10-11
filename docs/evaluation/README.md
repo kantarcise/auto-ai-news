@@ -69,3 +69,8 @@ records bounded text for eligible candidates, including title-relevance rejects.
 It preserves the published rules baseline and does not call a model. Public
 previews, missing evidence and excerpts are explicitly labeled; captures stay
 local unless separately reviewed for publication.
+
+The [candidate content-aware policy](model-assisted-policy.md) proposes explicit
+admission, equal-score ordering and fallback rules for issue #38's next shadow
+comparison. It is a design for review; provider integration and paired report
+generation are subsequent implementation work.
