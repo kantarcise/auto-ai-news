@@ -108,10 +108,10 @@ valid insufficient-evidence answers, invalid distributions/labels/usage,
 credentials, request and response bounds, request budgets, redirect refusal,
 timeouts and safe diagnostics. No live compatibility or billing check is claimed.
 
-Next, the paired comparison runner must apply the documented admission and
-conservative group tie rules, freeze shared eligibility/history/link outcomes,
-include baseline relevance rejects, implement report-level fallback and produce
-both unpublished reports. That PR must test the policy's worked cases, including
+The [paired comparison runner](paired-model-reports.md) now applies the documented admission and
+conservative group tie rules, freezes shared eligibility/history/link outcomes,
+includes baseline relevance rejects, implements report-level fallback and produces
+both unpublished reports. Its offline tests cover the policy's worked cases, including
 short feed excerpts and inaccessible group representatives. Optional local
 Decider can later implement the same `assess` protocol without adding CUDA/model
 packages to the normal generator.

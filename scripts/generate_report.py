@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import datetime as dt
 import email.utils
 import html
@@ -838,6 +839,24 @@ def collect_items(
                 "matched_terms": list(assessment.terms),
                 "proposed_rank_bonus": round(assessment.proposed_rank_bonus, 6),
             }
+        if evaluation_article_content:
+            # Freeze baseline features from the original feed fields, including
+            # rejects. A copy keeps observation from mutating production Items.
+            replay = copy.deepcopy(item)
+            estimate_reading_time(replay)
+            score_item(replay, now)
+            record["comparison_candidate"] = {
+                "canonical_url": item.canonical_url,
+                "source_priority": item.source_priority,
+                "coverage": item.coverage,
+                "baseline_admit": is_ai_related(item),
+                "event_listing": assessment.event_listing,
+                "rank_score": replay.rank_score,
+                "stars": replay.stars,
+                "word_count": replay.word_count,
+                "read_minutes": replay.read_minutes,
+                "content_provenance": replay.content_provenance,
+            }
         if is_ai_related(item):
             estimate_reading_time(item)
             score_item(item, now)
@@ -850,6 +869,16 @@ def collect_items(
             )
     candidates = group_stories(dedupe_items(items))
     if evaluation is not None:
+        if evaluation_article_content:
+            evaluation["model_comparison"] = {
+                "schema_version": 1,
+                "published_urls": dict(published_urls or {}),
+                "collection_diagnostics": copy.deepcopy(unavailable),
+                "selection_parameters": {
+                    "report_limit": MAX_ITEMS,
+                    "publisher_limit": MAX_PER_PUBLISHER,
+                },
+            }
         evaluation["editorial_config"] = editorial_config
         evaluation["scoring_parameters"] = {
             "base": 1.0,
@@ -1016,6 +1045,7 @@ def filter_accessible_items(
     publisher_limit: int | None = MAX_PER_PUBLISHER,
     *,
     link_outcomes: dict | None = None,
+    access_checker=None,
 ) -> tuple[list[Item], list[tuple[str, str]]]:
     accessible: list[Item] = []
     if publisher_limit is not None and publisher_limit <= 0:
@@ -1037,7 +1067,7 @@ def filter_accessible_items(
             continue
         verified = []
         for member in [item, *item.related_coverage]:
-            ok, reason = check_url_accessible(member.url)
+            ok, reason = (access_checker or check_url_accessible)(member.url)
             if link_outcomes is not None:
                 link_outcomes[member.url] = {"accessible": ok, "reason": reason}
             if ok:
@@ -1189,6 +1219,7 @@ def render_report(
     legacy_release_count: int = 0,
     previously_included: list[tuple[Item, str]] | None = None,
     previous_report_dates: list[str] | None = None,
+    selection_disclosure: str | None = None,
 ) -> str:
     generated = now.astimezone(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     if previously_included is not None:
@@ -1431,7 +1462,9 @@ def render_report(
             "",
             "Ratings range from 1 to 5 stars and indicate heuristic rank, not article quality.",
             (
-                "Reading times estimate available text at 225 words per minute with a 100-word minimum. Feed content and extracted bodies may be incomplete; "
+                "Frozen replay reading times use available feed text at 225 words per minute with a 100-word minimum; no selected-body retrieval is performed. Estimates may be incomplete. Publication dates are UTC."
+                if selection_disclosure is not None
+                else "Reading times estimate available text at 225 words per minute with a 100-word minimum. Feed content and extracted bodies may be incomplete; "
                 "full articles may take longer. Selected stories with insufficient feed text receive bounded HTML body retrieval; estimates are labeled extracted body when successful, and failures remain unknown. Publication dates are shown in UTC."
             ),
             "",
@@ -1442,12 +1475,16 @@ def render_report(
                 else "A story may recur across consecutive reports within the window; publication history is disabled."
             ),
             "",
-            "Selection uses a continuous score before mapping to stars. Source bonuses are 1.25 for priority 5, 1 for priorities 3–4 and zero for priorities 1–2; qualifying frontier-lab research/model announcements add 0.75. Stable topic/context rules use headlines and feed summaries; known model families accept future version numbers. Experimental topic similarity scores are recorded only in optional evaluation captures and do not change selection order. Matching is lexical, not content understanding; event-directory listings without technical context are excluded. Headline classification is heuristic; corporate posts receive no lab bonus. At most four story headlines per representative publisher are selected, with shared lab channels grouped together. Detailed identical titles within 24 hours are grouped, preferring research/lab representatives when available; other accessible source links appear as alternate coverage. This is a conservative title rule, not semantic story matching. No older articles fill excluded slots.",
+            selection_disclosure
+            if selection_disclosure is not None
+            else "Selection uses a continuous score before mapping to stars. Source bonuses are 1.25 for priority 5, 1 for priorities 3–4 and zero for priorities 1–2; qualifying frontier-lab research/model announcements add 0.75. Stable topic/context rules use headlines and feed summaries; known model families accept future version numbers. Experimental topic similarity scores are recorded only in optional evaluation captures and do not change selection order. Matching is lexical, not content understanding; event-directory listings without technical context are excluded. Headline classification is heuristic; corporate posts receive no lab bonus. At most four story headlines per representative publisher are selected, with shared lab channels grouped together. Detailed identical titles within 24 hours are grouped, preferring research/lab representatives when available; other accessible source links appear as alternate coverage. This is a conservative title rule, not semantic story matching. No older articles fill excluded slots.",
             "",
             "## Source policy",
             "",
             textwrap.fill(
-                "This report is generated from trusted public feeds. Links are deduplicated by "
+                "This unpublished comparison replays frozen public-feed candidates. Admission and ordering follow the selection policy described above; stars remain heuristic buckets. Attribution, grouping and publisher limits are preserved."
+                if selection_disclosure is not None
+                else "This report is generated from trusted public feeds. Links are deduplicated by "
                 "canonical URL, filtered for AI relevance, and scored with a transparent heuristic "
                 "based on source priority, recency, and title or summary relevance.",
                 width=100,
