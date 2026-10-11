@@ -522,6 +522,13 @@ class RunnerTests(unittest.TestCase):
                     result, expires_at=(NOW + timedelta(seconds=60)).isoformat()
                 )
             elapsed[0] = 120
+            if len(provider.calls) == 3:
+                return replace(
+                    result,
+                    answers=AssessmentAnswers(
+                        "no", "no", "mixed or insufficient evidence"
+                    ),
+                )
             return result
 
         provider.assess = assess
@@ -533,6 +540,18 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(len(provider.calls), 3)
         self.assertEqual(result["usage"]["new_assessment_attempts"], 3)
         self.assertEqual(result["usage"]["reported_input_tokens"], 60)
+        first, refreshed = result["decisions"][0], result["decisions"][2]
+        self.assertNotEqual(first["assessment_key"], refreshed["assessment_key"])
+        self.assertTrue(first["candidate_admit"])
+        self.assertFalse(refreshed["candidate_admit"])
+        self.assertEqual(
+            result["assessments"][first["assessment_key"]]["answers"]["ai_subject"],
+            "yes",
+        )
+        self.assertEqual(
+            result["assessments"][refreshed["assessment_key"]]["answers"]["ai_subject"],
+            "no",
+        )
 
     def test_cache_expiration_version_identity_and_schema(self):
         value = snapshot([row(0)])

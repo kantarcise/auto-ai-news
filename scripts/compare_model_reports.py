@@ -425,14 +425,15 @@ def compare(
                         raise AssessmentError("invalid_assessment_record")
                     attempted_records[-1] = result.to_record()
                 records[identity] = result.to_record()
-                assessments[identity] = result.to_record()
+                assessment_key = f"{identity}:{index}"
+                assessments[assessment_key] = result.to_record()
                 allow, why = admission(
                     decision["baseline_admit"], article, result.answers
                 )
                 decision.update(
                     candidate_admit=allow,
                     reason=why,
-                    assessment_key=identity,
+                    assessment_key=assessment_key,
                     cache_hit=reused,
                     score=item.rank_score,
                     technical_preference=technical(result.answers),
