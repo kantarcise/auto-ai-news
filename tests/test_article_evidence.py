@@ -403,6 +403,15 @@ class ArticleEvidenceTest(unittest.TestCase):
             rendered.append(report.render_report(items, diagnostics, NOW))
             snapshots.append(snapshot)
         self.assertEqual(rendered[0], rendered[1])
+        from scripts.compare_model_reports import compare
+
+        replay = compare(snapshots[1])
+        self.assertEqual(
+            [row["url"] for row in replay["baseline_selected"]],
+            ["https://example.com/yes"],
+        )
+        self.assertEqual(len(replay["shared_exclusions"]), 2)
+        self.assertNotIn("model_comparison", snapshots[0])
         captured = [r for r in snapshots[1]["collection"] if "article_evidence" in r]
         self.assertEqual(
             {r["url"] for r in captured},
