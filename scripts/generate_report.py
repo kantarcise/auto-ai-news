@@ -709,12 +709,13 @@ def collect_items(
     *,
     evaluation: dict | None = None,
     evaluation_excerpts: bool = False,
+    evaluation_article_content: bool = False,
     published_urls: dict[str, str] | None = None,
     previously_included: list[tuple[Item, str]] | None = None,
 ) -> tuple[list[Item], list[tuple[str, str]]]:
     if lookback_hours <= 0:
         raise ValueError("lookback_hours must be positive")
-    if evaluation_excerpts and evaluation is None:
+    if (evaluation_excerpts or evaluation_article_content) and evaluation is None:
         raise ValueError("Evaluation excerpts require evaluation capture")
     if evaluation is not None and (now.tzinfo is None or now.utcoffset() is None):
         raise ValueError("Evaluation capture requires a timezone-aware clock")
@@ -807,6 +808,17 @@ def collect_items(
             unavailable.append(
                 (source.name, f"Freshness: {count} entries excluded: {reason}.")
             )
+    if evaluation_article_content:
+        # Capture evidence for baseline rejects too, without changing the Items
+        # or the title/summary inputs used by production admission and ranking.
+        try:
+            from scripts.article_evidence import EvidenceCollector
+        except ModuleNotFoundError:
+            from article_evidence import EvidenceCollector
+
+        collector = EvidenceCollector(USER_AGENT)
+        for item, record in pending:
+            record["article_evidence"] = collector.capture(item)
     editorial_config = load_config()
     features = [] if evaluation_excerpts else None
     relevance = assess(
@@ -1469,9 +1481,14 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         help="Include bounded feed-summary excerpts and normalized scoring inputs in the evaluation snapshot.",
     )
     parser.add_argument(
+        "--evaluation-article-content",
+        action="store_true",
+        help="Opt in to bounded pre-admission article text in the evaluation snapshot; does not change selection.",
+    )
+    parser.add_argument(
         "--evaluation-output",
         type=Path,
-        help="Optional metadata-only review snapshot including pre-ranking rejects.",
+        help="Optional review snapshot including pre-ranking rejects; text requires explicit capture flags.",
     )
     parser.add_argument(
         "--lookback-hours",
@@ -1487,6 +1504,10 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     args = parser.parse_args(argv)
     if args.lookback_hours <= 0:
         parser.error("--lookback-hours must be positive")
+    if args.evaluation_article_content and args.evaluation_output is None:
+        parser.error("--evaluation-article-content requires --evaluation-output")
+    if args.evaluation_article_content and args.no_article_bodies:
+        parser.error("--evaluation-article-content conflicts with --no-article-bodies")
     if args.evaluation_excerpts and args.evaluation_output is None:
         parser.error("--evaluation-excerpts requires --evaluation-output")
     if (
@@ -1532,6 +1553,7 @@ def main(argv: list[str] | None = None) -> int:
         args.lookback_hours,
         evaluation=evaluation,
         evaluation_excerpts=args.evaluation_excerpts,
+        evaluation_article_content=args.evaluation_article_content,
         published_urls=published_urls,
         previously_included=previously_included,
     )
