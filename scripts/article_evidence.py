@@ -8,6 +8,7 @@ import io
 import re
 import urllib.parse
 import urllib.request
+import zlib
 from datetime import UTC, datetime
 from html.parser import HTMLParser
 
@@ -43,6 +44,7 @@ class EvidenceParser(HTMLParser):
         super().__init__()
         self.stack = []
         self.regions = []
+        self.region_kinds = []
         self.active = []
         self.preview = False
         self.stopped = set()
@@ -52,25 +54,43 @@ class EvidenceParser(HTMLParser):
         attrs = dict(attrs)
         identity = " ".join([attrs.get("id") or "", attrs.get("class") or ""]).lower()
         classes = set((attrs.get("class") or "").lower().split())
-        gate = bool(GATE.search(identity))
-        self.preview |= gate
-        if gate:
-            # Text after a subscription gate in the same region is not evidence.
-            self.stopped.update(self.active)
+        # Invisible/blocked templates are not visible subscription boundaries.
         blocked = (
             bool(self.stack and self.stack[-1][1])
             or any(region in self.stopped for region in self.active)
-            or gate
             or "entryfooter" in classes
             or blocked_element(tag, attrs)
         )
+        gate = not blocked and bool(GATE.search(identity))
+        self.preview |= gate
+        if gate:
+            self.stopped.update(self.active)
+            blocked = True
         region = None
         if not blocked and (tag in {"article", "main"} or classes & BODY_CLASSES):
-            region = len(self.regions)
-            # Explicit body containers outrank their enclosing layout regions.
             priority = 3 if classes & BODY_CLASSES else 2 if tag == "article" else 1
-            self.regions.append((priority, []))
-            self.active.append(region)
+            parent = self.active[-1] if self.active else None
+            if (
+                tag != "article"
+                and parent is not None
+                and self.region_kinds[parent] in {"article", "body"}
+            ):
+                # Nested body classes belong to this article, in document order.
+                # Only a nested semantic article starts independent evidence.
+                rank, parts = self.regions[parent]
+                self.regions[parent] = (max(rank, priority), parts)
+            else:
+                region = len(self.regions)
+                self.regions.append((priority, []))
+                kind = (
+                    "article"
+                    if tag == "article"
+                    else "body"
+                    if classes & BODY_CLASSES
+                    else "main"
+                )
+                self.region_kinds.append(kind)
+                self.active.append(region)
         if tag not in VOID_TAGS:
             self.stack.append((tag, blocked, region))
 
@@ -220,19 +240,37 @@ def fetch(url, user_agent):
                 **metadata,
                 "response_sha256": hashlib.sha256(raw).hexdigest(),
             }
-    except (OSError, ValueError, LookupError, EOFError) as exc:
+    except (OSError, ValueError, LookupError, EOFError, zlib.error) as exc:
         return evidence(
             "", "unavailable", reason=f"Article retrieval failed: {type(exc).__name__}."
         )
 
 
-def feed_text(text, content_format):
+def feed_fragment(text, content_format):
+    """Return visible feed text and known subscription-preview status together."""
     if content_format != "html":
-        return normalize(text)
+        return normalize(text), False
     parser = EvidenceParser()
     # A wrapper supplies a region for an RSS/Atom fragment without its own body.
     parser.feed("<article>" + text + "</article>")
-    return normalize(" ".join(parser.visible_parts))
+    preview = parser.preview or bool(
+        re.search(r'"isAccessibleForFree"\s*:\s*(?:false|"false")', text, re.IGNORECASE)
+    )
+    return normalize(" ".join(parser.visible_parts)), preview
+
+
+def feed_text(text, content_format):
+    return feed_fragment(text, content_format)[0]
+
+
+def feed_evidence(text, content_format, provenance):
+    text, preview = feed_fragment(text, content_format)
+    return evidence(
+        text,
+        provenance,
+        feed_origin=provenance,
+        completeness="partial" if preview else "unknown",
+    )
 
 
 class EvidenceCollector:
@@ -244,12 +282,14 @@ class EvidenceCollector:
         self.cache = {}
 
     def capture(self, item):
-        content = feed_text(item.content, item.content_format)
+        content = feed_evidence(
+            item.content, item.content_format, item.content_provenance
+        )
         if (
             item.content_provenance in {"rss_content", "atom_content"}
-            and len(content.split()) >= MIN_FEED_WORDS
+            and content["word_count"] >= MIN_FEED_WORDS
         ):
-            return evidence(content, item.content_provenance)
+            return content
         # Items already carry canonical URLs; tracking variants share a fetch.
         key = item.canonical_url or item.url
         if key not in self.cache:
@@ -264,14 +304,12 @@ class EvidenceCollector:
             fetched = self.cache[key]
         if fetched["text"]:
             return dict(fetched)
-        if content:
-            fallback = evidence(content, "feed_excerpt")
+        if content["text"]:
+            fallback = {**content, "provenance": "feed_excerpt"}
         else:
-            summary = feed_text(item.summary, "html")
+            summary = feed_evidence(item.summary, "html", "feed_summary")
             fallback = (
-                evidence(summary, "feed_summary")
-                if summary
-                else evidence(item.title, "title_only")
+                summary if summary["text"] else evidence(item.title, "title_only")
             )
         fallback["retrieval"] = {
             key: value for key, value in fetched.items() if key != "text"

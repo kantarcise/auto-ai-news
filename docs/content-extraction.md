@@ -41,14 +41,19 @@ This includes articles the baseline relevance filter rejects. Each candidate's
 `article_evidence` is stored separately from the generator Item: it cannot
 alter the baseline's summary, content, score, reading-time estimate or selection.
 
+Recognized previews in feed content or feed-summary fallbacks retain their
+feed origin and `completeness: partial`; hidden gate templates do not stop
+visible-text collection.
+
 Evidence preference is usable explicit RSS/Atom content (at least 100 words),
 then recognized visible article text, then a short feed excerpt, feed summary
 or title. The feed threshold is a retrieval preference, not an editorial rule.
 A recognized article can be shorter than 100 words and is marked `short`.
 Navigation, hidden text, scripts, forms, comments and related-post regions are
 excluded. Explicit body containers are preferred over enclosing article/main
-layouts when substantial text is available. Child regions are not also collected
-into their layout parent, keeping short recommendation articles out of a
+layouts when substantial text is available. Nested body containers within one
+article are combined in document order, including its introduction and conclusion. Semantic child articles remain
+separate from their layout parent, keeping recommendation cards out of a
 substantial main body. Among equally preferred regions, one substantial body can be used
 alongside short cards; multiple plausible substantial bodies remain unavailable.
 These heuristics are not a guarantee of correct article boundaries.

@@ -96,6 +96,91 @@ class ArticleEvidenceTest(unittest.TestCase):
         )
         self.assertGreater(result["characters_before_limit"], len(result["text"]))
 
+    def test_nested_body_containers_preserve_intro_details_and_conclusion(self):
+        for outer in ["article", "div", "main"]:
+            for outside_words in [1, 70]:
+                with self.subTest(outer=outer, outside_words=outside_words):
+                    intro = "INTRO " * outside_words
+                    details = "DETAILS " * 120
+                    conclusion = "CONCLUSION " * outside_words
+                    result = evidence.extract(
+                        f'<{outer} class="article-body"><p>{intro}</p>'
+                        f'<div class="prose">{details}</div><p>{conclusion}</p></{outer}>'
+                    )
+                    self.assertEqual(
+                        result["text"], evidence.normalize(intro + details + conclusion)
+                    )
+                    self.assertEqual(result["provenance"], "article_body")
+
+    def test_sibling_articles_are_not_combined_with_nested_body(self):
+        result = evidence.extract(
+            f'<article class="article-body"><p>{BODY}</p><div class="prose">Details.</div></article>'
+            f'<article class="article-body">{BODY} Separate story.</article>'
+        )
+        self.assertFalse(result["text"])
+        self.assertIn("Multiple", result["reason"])
+
+    def test_hidden_gates_do_not_suppress_visible_article(self):
+        for template in [
+            '<div hidden class="paywall">Unused template</div>',
+            '<div aria-hidden="true"><div class="paywall">Unused template</div></div>',
+            '<nav><div class="paywall">Unused template</div></nav>',
+        ]:
+            with self.subTest(template=template):
+                result = evidence.extract(
+                    f"<article>{template}<p>Visible AI article.</p></article>"
+                )
+                self.assertEqual(result["text"], "Visible AI article.")
+                self.assertEqual(result["provenance"], "article_body")
+                self.assertEqual(result["completeness"], "unknown")
+
+    @patch("scripts.article_evidence.fetch")
+    def test_preferred_feed_preview_retains_origin_and_partial_status(self, fetch):
+        for origin in ["rss_content", "atom_content"]:
+            with self.subTest(origin=origin):
+                item = report.Item(
+                    "Title",
+                    "https://example.com/a",
+                    "Example",
+                    3,
+                    content="<p>"
+                    + "Visible preview. " * 90
+                    + '</p><div class="paywall">Subscribe</div>',
+                    content_format="html",
+                    content_provenance=origin,
+                )
+                result = evidence.EvidenceCollector("agent").capture(item)
+                self.assertEqual(result["provenance"], origin)
+                self.assertEqual(result["feed_origin"], origin)
+                self.assertEqual(result["completeness"], "partial")
+                self.assertNotIn("Subscribe", result["text"])
+        fetch.assert_not_called()
+
+    @patch(
+        "scripts.article_evidence.fetch",
+        return_value=evidence.evidence("", "unavailable", reason="Timeout"),
+    )
+    def test_feed_fallback_preview_keeps_partial_status(self, fetch):
+        item = report.Item(
+            "Title",
+            "https://example.com/a",
+            "Example",
+            3,
+            content='<p>Short preview.</p><div class="paywall">Subscribe</div>',
+            content_format="html",
+            content_provenance="rss_content",
+        )
+        result = evidence.EvidenceCollector("agent").capture(item)
+        self.assertEqual(result["provenance"], "feed_excerpt")
+        self.assertEqual(result["feed_origin"], "rss_content")
+        self.assertEqual(result["completeness"], "partial")
+        self.assertEqual(result["retrieval"]["reason"], "Timeout")
+        item.summary = item.content
+        item.content = ""
+        result = evidence.EvidenceCollector("agent").capture(item)
+        self.assertEqual(result["provenance"], "feed_summary")
+        self.assertEqual(result["completeness"], "partial")
+
     def response(self, raw):
         response = MagicMock()
         response.__enter__.return_value = response
@@ -162,6 +247,20 @@ class ArticleEvidenceTest(unittest.TestCase):
         response.headers["Content-Encoding"] = "gzip"
         opener.return_value.open.return_value = response
         self.assertFalse(evidence.fetch("https://example.com/a", "agent")["text"])
+
+    @patch("scripts.article_evidence.urllib.request.build_opener")
+    def test_corrupt_gzip_payload_falls_back_instead_of_aborting(self, opener):
+        raw = bytes.fromhex("1f8b0800000000000003") + b"\x07" + b"\x00" * 8
+        response = self.response(raw)
+        response.headers["Content-Encoding"] = "gzip"
+        opener.return_value.open.return_value = response
+        item = report.Item(
+            "Title", "https://example.com/a", "Example", 3, summary="Available summary."
+        )
+        result = evidence.EvidenceCollector("agent").capture(item)
+        self.assertEqual(result["text"], "Available summary.")
+        self.assertEqual(result["provenance"], "feed_summary")
+        self.assertIn("Article retrieval failed: error", result["retrieval"]["reason"])
 
     @patch("scripts.article_evidence.urllib.request.build_opener")
     def test_unsupported_scheme_never_requested(self, opener):
