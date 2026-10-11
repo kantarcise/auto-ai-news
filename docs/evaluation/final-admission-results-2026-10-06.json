@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-10-06T17:57:42.282185+00:00",
+  "assessment_at": "2026-10-06T17:57:42.282185+00:00",
+  "candidate_count": 45,
+  "reviewed_wanted": 11,
+  "reviewed_unwanted": 1,
+  "policies": {
+    "current": {
+      "admitted": 26,
+      "wanted_admitted": 11,
+      "unwanted_admitted": 0,
+      "undecided_admitted": 15
+    },
+    "broader": {
+      "admitted": 27,
+      "wanted_admitted": 11,
+      "unwanted_admitted": 0,
+      "undecided_admitted": 16
+    }
+  },
+  "changes": [
+    {
+      "title": "The Agent Said It Was Done. The Database Disagreed.",
+      "url": "https://huggingface.co/blog/microsoft/thinkingbox",
+      "source": "Hugging Face",
+      "current_admitted": false,
+      "broader_admitted": true,
+      "owner_include": null,
+      "owner_importance": null
+    }
+  ],
+  "wanted_still_rejected": [],
+  "recovered_wanted": [],
+  "added_unwanted": [],
+  "profiles": {
+    "schema_version": 1,
+    "model_families": [
+      "gpt",
+      "chatgpt",
+      "claude",
+      "gemini",
+      "grok",
+      "llama",
+      "qwen",
+      "deepseek",
+      "mistral",
+      "kimi",
+      "glm",
+      "minimax",
+      "nemotron",
+      "nova",
+      "mimo",
+      "seed",
+      "inkling",
+      "muse",
+      "flux",
+      "seedance",
+      "seedream"
+    ],
+    "ambiguous_model_families": [
+      "seed",
+      "nova",
+      "muse",
+      "inkling",
+      "claude",
+      "gemini",
+      "llama",
+      "mistral",
+      "minimax",
+      "grok",
+      "kimi",
+      "mimo",
+      "flux"
+    ],
+    "maximum_rank_bonus": 1.0,
+    "profiles": [
+      {
+        "name": "model releases and research",
+        "anchors": [
+          "model_family",
+          "llm",
+          "transformer"
+        ],
+        "description": "model_family language models frontier intelligence reasoning training inference weights architecture context tokens benchmark evaluation multimodal transformer llm release research",
+        "supporting_terms": [
+          "language",
+          "reasoning",
+          "training",
+          "inference",
+          "weights",
+          "transformer",
+          "llm"
+        ]
+      },
+      {
+        "name": "GPU and framework engineering",
+        "anchors": [
+          "gpu",
+          "cuda",
+          "rocm",
+          "pytorch",
+          "torchcodec",
+          "torch",
+          "compiler",
+          "kernel"
+        ],
+        "description": "gpu cuda rocm pytorch torch torchcodec hardware cluster runtime memory throughput latency performance compiler kernel decoding encoding integration maintenance deployment training inference data parallel distributed",
+        "supporting_terms": [
+          "gpu",
+          "cuda",
+          "rocm",
+          "pytorch",
+          "torchcodec",
+          "cluster",
+          "runtime",
+          "memory",
+          "throughput",
+          "latency",
+          "performance",
+          "compiler",
+          "kernel",
+          "decoding",
+          "encoding",
+          "integration",
+          "deployment",
+          "training",
+          "inference",
+          "parallel",
+          "distributed"
+        ]
+      },
+      {
+        "name": "speech and model evaluation",
+        "anchors": [
+          "tts",
+          "speech",
+          "leaderboard",
+          "benchmark"
+        ],
+        "description": "tts speech voice cloning audio leaderboard benchmark evaluation scalable multilingual text speech open comparison reproducible measurements",
+        "supporting_terms": [
+          "tts",
+          "voice",
+          "cloning",
+          "audio",
+          "multilingual",
+          "evaluation",
+          "benchmark",
+          "leaderboard"
+        ]
+      },
+      {
+        "name": "robotics research",
+        "anchors": [
+          "robot",
+          "robotics",
+          "embodied"
+        ],
+        "description": "robot robotics embodied manipulation research learning policy control tasks environment simulation",
+        "supporting_terms": [
+          "robotics",
+          "embodied",
+          "manipulation",
+          "policy",
+          "simulation",
+          "learning"
+        ]
+      },
+      {
+        "name": "retrieval and agent systems",
+        "anchors": [
+          "vector",
+          "retrieval",
+          "agent",
+          "embedding"
+        ],
+        "description": "vector search retrieval nearest join embedding agent harness tracing workflow observability efficiency evaluation inference deployment tools",
+        "supporting_terms": [
+          "search",
+          "retrieval",
+          "nearest",
+          "join",
+          "embedding",
+          "harness",
+          "tracing",
+          "observability",
+          "inference",
+          "deployment",
+          "evaluation"
+        ]
+      }
+    ],
+    "ranking_mode": "shadow",
+    "ambiguous_topic_anchors": [
+      "speech",
+      "vector",
+      "torch",
+      "agent",
+      "embedding",
+      "compiler",
+      "kernel",
+      "leaderboard",
+      "benchmark",
+      "transformer"
+    ],
+    "model_variants": {
+      "claude": [
+        "opus",
+        "sonnet",
+        "haiku"
+      ],
+      "gemini": [
+        "flash",
+        "pro",
+        "ultra"
+      ],
+      "mistral": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "muse": [
+        "spark",
+        "image",
+        "video"
+      ],
+      "minimax": [
+        "music"
+      ],
+      "grok": [
+        "bot"
+      ]
+    },
+    "ambiguous_fallback_keywords": [
+      "agent",
+      "agents",
+      "model",
+      "transformer",
+      "diffusion",
+      "embedding",
+      "neural",
+      "generative",
+      "prompt",
+      "eval",
+      "evals",
+      "flux"
+    ],
+    "non_model_family_phrases": [
+      "claude monet",
+      "gemini horoscope",
+      "gemini zodiac"
+    ],
+    "family_version_formats": {
+      "flux": [
+        "\\.\\d+(?:\\.\\d+)*"
+      ],
+      "minimax": [
+        "[- ]m\\d+(?:\\.\\d+)*"
+      ]
+    }
+  },
+  "keywords": [
+    "agent",
+    "agentic",
+    "agents",
+    "agi",
+    "ai",
+    "anthropic",
+    "artificial intelligence",
+    "chatgpt",
+    "claude",
+    "deepmind",
+    "deepseek",
+    "diffusion",
+    "embedding",
+    "eval",
+    "evals",
+    "flux",
+    "frontier model",
+    "generative",
+    "glm",
+    "gpt",
+    "grok",
+    "inference",
+    "kimi",
+    "language model",
+    "llama",
+    "llm",
+    "machine learning",
+    "minimax",
+    "mistral",
+    "model",
+    "multimodal",
+    "muse image",
+    "muse spark",
+    "muse video",
+    "neural",
+    "openai",
+    "prompt",
+    "qwen",
+    "reasoning model",
+    "research lab",
+    "seedance",
+    "seedream",
+    "software factories",
+    "software factory",
+    "spatial intelligence",
+    "transformer",
+    "인공지능"
+  ],
+  "limitations": [
+    "Targeted development reviews, not a random or held-out accuracy test.",
+    "Title-only replay: frozen feed summaries and article bodies are unavailable.",
+    "September 30 is a retrospective assessment of entries captured October 6.",
+    "Unknown preferences remain undecided; an added match is not a recovered wanted story.",
+    "Admission only, not ranking, access, publisher caps or final report selection.",
+    "Existing source bypasses remain in both policies.",
+    "No network, dependency, publication or production-rule changes."
+  ],
+  "input_sha256": {
+    "snapshot": "2fd4ef0d8fdd9b601e0966261f77798ddd400a84a8b52f842ae6db050ba81267",
+    "feedback": "38e8ab7a9fe722ed6377f37e5a0a719f6a450cc2fa5919628bd8d954f30af11f"
+  },
+  "implementation_sha256": {
+    "compare_final_admission.py": "65201582dddeae39e7f87a9002426b66df813d20afadb7f9c533897bffaeb5ca",
+    "compare_editorial.py": "d2122868b85848cdb50f81a84af4a4aecf4ea3031aed93346655352c7f347665",
+    "compare_relevance.py": "29b763670a5c4b0d32f9db68b79a3bddd562381c8b906da1ecc2bac937e65244",
+    "editorial_relevance.py": "3d9077c2f0c4e553fb92440646dcd36d385833f029778a16b8834a5ebfe5cdb8",
+    "generate_report.py": "bfd1d274bb77997d920cd6cf82e5f6b25b325809344f31b93b74f12489133d1f"
+  }
+}
