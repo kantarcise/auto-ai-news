@@ -39,13 +39,13 @@ Let `baseline_admit` be the current title/summary relevance result after the sha
 | Condition | Candidate arm action | Recorded reason |
 | --- | --- | --- |
 | Valid `ai_subject=yes` | Admit, including a baseline relevance reject | `model_ai_subject_yes` |
-| Valid `ai_subject=no` from title/summary-only, explicitly partial preview, or truncated evidence | Retain `baseline_admit` | `limited_negative_baseline` |
+| Valid `ai_subject=no` from title/summary-only, `provenance=feed_excerpt`, explicitly partial preview, or truncated evidence | Retain `baseline_admit` | `limited_negative_baseline` |
 | Other valid `ai_subject=no` | Reject | `model_ai_subject_no` |
 | Valid `ai_subject=insufficient evidence` | Retain `baseline_admit` | `insufficient_evidence_baseline` |
 
 A positive judgment can be supported by a public preview. A negative judgment from limited evidence must not remove a baseline story because the unseen remainder may contain the relevant material. Even an untruncated extracted body or feed body can be incomplete: `completeness=unknown` remains unknown. Negative decisions on those inputs are experimental and must be separately reviewed; they do not establish that the entire article is off-topic.
 
-Extraction failure uses the captured summary/title fallback, with its actual provenance. It never directly means reject. Engineering detail and article type do not override this table. Preserve the baseline outcome and original rejection reason alongside the candidate decision, including when the two agree.
+Extraction failure uses the captured feed-excerpt/summary/title fallback, with its actual provenance. `feed_excerpt` always counts as limited evidence, including when `completeness=unknown` and `truncated=false`; these flags do not turn a short feed fragment into a body. Retrieval or extraction failure never directly means reject. Engineering detail and article type do not override this table. Preserve the baseline outcome and original rejection reason alongside the candidate decision, including when the two agree.
 
 ## Ranking rule
 
@@ -57,7 +57,11 @@ For this first comparison, use engineering detail only to break equal-score ties
 - `engineering_detail=yes`;
 - `article_type` is `technical explanation`, `research or model release`, or `substantive case study`.
 
-Sort stories by their existing group score, then this binary preference, then the existing publication-time ordering. Derive the preference from the group's representative article; a technical alternate must not lend its characterization to another article. Retain stable input order for otherwise equal keys. No numeric score bonus is introduced. A major announcement with a higher baseline score still precedes a lower-scoring technical article; the questions cannot identify which announcement is most consequential.
+Compute a story's binary preference before link checks: it is one only when **every member that could become its displayed representative** satisfies all three conditions above. This includes the initially chosen representative and every member of its related coverage. Otherwise it is zero, including when any member has insufficient engineering evidence. For an ungrouped article, evaluate that article alone. Do not exclude members from this calculation based on predicted accessibility or publisher capacity.
+
+Sort stories by their existing group score, then this binary preference, then the existing publication-time ordering. Retain stable input order for otherwise equal keys. Keep that order through the existing link-check and publisher-cap stage; do not recompute the preference or re-sort after replacing an inaccessible or capped representative. Thus any ultimately displayed article in a preferred group must itself qualify. A technical primary cannot lend a preference to a nontechnical replacement, and a technical alternate cannot lend one to a nontechnical primary. An all-technical group retains its preference when its primary is inaccessible; a mixed group receives none even if its eventual representative is technical. This conservative group rule avoids changing the downstream selection sequence or depending on which links were checked first.
+
+The existing group score can still come from a different member, as in the baseline; this safeguard applies specifically to the new engineering tie preference. No numeric score bonus is introduced. A major announcement with a higher baseline score still precedes a lower-scoring technical article; the questions cannot identify which announcement is most consequential.
 
 Mixed newsletters, promotional articles, opinions and announcements receive no tie preference but remain eligible. Insufficient engineering evidence gives no preference, rather than a penalty. This deliberately bounded proposal tests a small ordering change; it may show little benefit or miss valuable ordering changes. Expanding it requires an explicitly versioned policy and further editorial review.
 
@@ -71,10 +75,14 @@ These are illustrative inputs and expected mechanics, not new human labels or cl
 | Engineering article; AI yes, detail yes, technical explanation | Reject | Recover; compute ordinary score and give tie preference |
 | Off-topic article body; AI no, unknown completeness, not truncated | Admit | Reject experimentally; queue the removal for review |
 | Opaque title after extraction failure; AI insufficient | Admit | Retain baseline admission and ordinary order |
+| Three-word `feed_excerpt` after retrieval failure; AI no, completeness unknown, not truncated | Admit | Retain baseline admission and ordinary order |
 | Public preview; AI no, marked partial | Admit | Retain baseline admission and ordinary order |
 | Public preview; AI yes, detail yes, research release | Reject | Recover with provenance visible; give tie preference |
 | Mixed AI newsletter with an embedded tutorial | Admit | Admit on AI yes; mixed type receives no tie preference |
 | Useful AI customer story; AI yes, detail no, mainly promotion | Admit | Admit with ordinary score; human review decides its value |
+| Equal-score group with a technical primary and nontechnical alternate; primary inaccessible | Admit | Group gets no tie preference; accessible alternate replaces the primary without re-sorting |
+| Equal-score group with a nontechnical primary and technical alternate; primary inaccessible | Admit | Group gets no tie preference even when the technical alternate is displayed |
+| Equal-score group where every member qualifies for the engineering preference; primary inaccessible | Admit | Group retains its tie preference; accessible qualifying alternate replaces the primary without re-sorting |
 | Quiet-day edition, old article or previously published URL | Either | Shared exclusion; no model override |
 | Event-directory listing flagged by the existing exclusion | Reject | Shared exclusion; distinct from an ordinary announcement |
 
@@ -92,4 +100,4 @@ Use existing examples for development; reserve independent dates and keep duplic
 
 ## Implementation acceptance cases
 
-The next implementation PR should add offline tests for every row in the admission and worked-case tables, equal-score ordering versus higher-score announcements, representative/alternate handling, and insufficient-evidence versus provider-failure behavior. Verify identical frozen inputs and downstream constraints, inclusion of baseline relevance rejects, cache version/expiration handling, schema rejection and report-level fallback. These are acceptance requirements; no runtime behavior or test results for the future adapter are claimed here.
+The next implementation PR should add offline tests for every row in the admission and worked-case tables, equal-score ordering versus higher-score announcements, representative/alternate handling (including inaccessible-primary and publisher-cap replacements in mixed and all-qualifying groups), short `feed_excerpt` negatives with unknown completeness and no truncation, and insufficient-evidence versus provider-failure behavior. Verify identical frozen inputs and downstream constraints, inclusion of baseline relevance rejects, cache version/expiration handling, schema rejection and report-level fallback. These are acceptance requirements; no runtime behavior or test results for the future adapter are claimed here.
