@@ -1,0 +1,103 @@
+name: One-week model evaluation
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "45 6 * * *"
+
+concurrency:
+  group: public-model-evaluation
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  evaluate:
+    # Never expose the inference secret to a PR or a manual run from another ref.
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    outputs:
+      report_date: ${{ steps.export.outputs.report_date }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Check seven-day window
+        id: window
+        env:
+          MODEL_EVALUATION_START_DATE: ${{ vars.MODEL_EVALUATION_START_DATE }}
+        run: python -m scripts.public_model_evaluation window --github-output "$GITHUB_OUTPUT"
+      - name: Run offline tests
+        if: steps.window.outputs.active == 'true'
+        run: python -m unittest discover -s tests
+      - name: Read release history
+        if: steps.window.outputs.active == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m scripts.publication_history --output "$RUNNER_TEMP/model-history.json"
+      - name: Capture evaluation candidates and rules report
+        if: steps.window.outputs.active == 'true'
+        run: |
+          python scripts/generate_report.py \
+            --output "$RUNNER_TEMP/model-rules-preview.md" \
+            --publication-history "$RUNNER_TEMP/model-history.json" \
+            --evaluation-output "$RUNNER_TEMP/model-capture.json" \
+            --evaluation-article-content
+      - name: Assess bounded content arm
+        if: steps.window.outputs.active == 'true'
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          python -m scripts.compare_model_reports "$RUNNER_TEMP/model-capture.json" \
+            --mode shadow --cloudflare --fetch-missing-links \
+            --request-limit 100 --input-byte-limit 1000000 --link-request-limit 100 \
+            --revision "$GITHUB_SHA" --output-dir "$RUNNER_TEMP/model-paired"
+      - name: Export public reports without captured article text
+        id: export
+        if: steps.window.outputs.active == 'true'
+        run: |
+          python -m scripts.public_model_evaluation export \
+            "$RUNNER_TEMP/model-capture.json" "$RUNNER_TEMP/model-paired" \
+            --output-dir "$RUNNER_TEMP/model-public" --github-output "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v7
+        if: steps.export.outcome == 'success'
+        with:
+          name: public-model-evaluation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/model-public/
+          retention-days: 14
+          if-no-files-found: error
+
+  publish:
+    needs: evaluate
+    if: needs.evaluate.outputs.report_date != ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: public-model-evaluation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: public-reports
+      - name: Publish separate evaluation prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          REPORT_DATE: ${{ needs.evaluate.outputs.report_date }}
+        run: |
+          tag="evaluation-model-$REPORT_DATE"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Evaluation release already exists; leaving it unchanged."
+            exit 0
+          fi
+          gh release create "$tag" \
+            --title "Model evaluation - $REPORT_DATE" \
+            --notes-file public-reports/review.md \
+            --target "$GITHUB_SHA" --prerelease --latest=false \
+            public-reports/rules.md public-reports/content.md public-reports/differences.md
