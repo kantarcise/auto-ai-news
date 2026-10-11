@@ -109,6 +109,27 @@ def export(capture, result):
     return day, "\n".join(lines)
 
 
+def public_report(text):
+    """Relabel generated local disclosures without rewriting article titles."""
+    replacements = {
+        "# Unpublished paired report comparison": "# Experimental public paired report comparison",
+        "Unpublished content-shadow-v1 comparison.": "Experimental public content-shadow-v1 comparison.",
+        "Unpublished frozen rules replay.": "Experimental public frozen rules replay.",
+    }
+    lines = text.splitlines(keepends=True)
+    for index, line in enumerate(lines):
+        for old, new in replacements.items():
+            if line.startswith(old):
+                lines[index] = new + line[len(old) :]
+                break
+    title, _, body = "".join(lines).partition("\n")
+    return (
+        title
+        + "\n\n**Experimental evaluation; not the production daily report.**\n"
+        + body
+    )
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -139,13 +160,14 @@ def main(argv=None):
     args.output_dir.mkdir(parents=True)
     (args.output_dir / "review.md").write_text(notes, encoding="utf-8")
     # These rendered reports contain links and attribution, not captured bodies.
-    for source, target in [("baseline.md", "rules.md"), ("candidate.md", "content.md")]:
+    for source, target in [
+        ("baseline.md", "rules.md"),
+        ("candidate.md", "content.md"),
+        ("comparison.md", "differences.md"),
+    ]:
         (args.output_dir / target).write_text(
-            (args.comparison_dir / source).read_text(), encoding="utf-8"
+            public_report((args.comparison_dir / source).read_text()), encoding="utf-8"
         )
-    (args.output_dir / "differences.md").write_text(
-        (args.comparison_dir / "comparison.md").read_text(), encoding="utf-8"
-    )
     if args.github_output:
         with args.github_output.open("a") as stream:
             stream.write(f"report_date={day}\n")

@@ -77,6 +77,10 @@ class TrialTests(unittest.TestCase):
         self.assertIn("Model arm unavailable", notes)
         self.assertIn("entire rules fallback", notes)
         self.assertIn("unavailable", notes)
+        attachment = public.public_report(result["candidate_report"])
+        self.assertNotIn("Unpublished frozen rules replay.", attachment)
+        self.assertIn("entire candidate report falls back", attachment)
+        self.assertIn("not the production daily report", attachment)
 
     def test_wrong_arm_or_capture_is_rejected(self):
         value = snapshot([row(0)])
@@ -94,7 +98,7 @@ class TrialTests(unittest.TestCase):
                 public.export(value, changed)
 
     def test_cli_exports_only_four_public_markdown_files(self):
-        value = snapshot([row(0)])
+        value = snapshot([row(0, title="Unpublished AI research")])
         result = comparison.compare(value, mode="shadow", provider=Provider())
         result["revision"] = "test"
         with tempfile.TemporaryDirectory() as directory:
@@ -104,8 +108,13 @@ class TrialTests(unittest.TestCase):
             paired = root / "paired"
             paired.mkdir()
             (paired / "comparison.json").write_text(json.dumps(result))
-            for name in ("baseline.md", "candidate.md", "comparison.md"):
-                (paired / name).write_text("Rendered links only.\n")
+            for name, text in [
+                ("baseline.md", result["baseline_report"]),
+                ("candidate.md", result["candidate_report"]),
+                ("comparison.md", comparison.render_comparison(result)),
+            ]:
+                (paired / name).write_text(text)
+
             output = root / "public"
             github_output = root / "github-output"
             argv = [
@@ -122,6 +131,14 @@ class TrialTests(unittest.TestCase):
                 {p.name for p in output.iterdir()},
                 {"review.md", "rules.md", "content.md", "differences.md"},
             )
+            for name in ("rules.md", "content.md", "differences.md"):
+                text = (output / name).read_text()
+                self.assertIn("Experimental", text)
+                self.assertIn("not the production daily report", text)
+                self.assertNotIn("Unpublished frozen rules replay.", text)
+                self.assertNotIn("Unpublished content-shadow-v1 comparison.", text)
+                self.assertNotIn("# Unpublished paired report comparison", text)
+                self.assertIn("Unpublished AI research", text)
             self.assertIn("report_date=", github_output.read_text())
             with self.assertRaises(SystemExit):
                 public.main(argv)
