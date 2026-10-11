@@ -84,3 +84,5 @@ The [paired model-report runner](paired-model-reports.md) applies that policy to
 one frozen candidate pool, with opt-in hosted calls, expiring assessment caches,
 replayable link outcomes and whole-report fallback. It writes unpublished local
 reports and does not change the daily workflow.
+
+- [Seven-day public model evaluation](public-model-week.md): separate opt-in evaluation releases, bounded inference and setup.
