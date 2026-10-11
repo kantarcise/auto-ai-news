@@ -4,7 +4,7 @@ Part of [issue #38](https://github.com/kantarcise/auto-ai-news/issues/38), follo
 
 ## What runs
 
-`.github/workflows/model-evaluation.yml` schedules at 06:45 UTC (09:45 Europe/Istanbul), after the ordinary report's configured 06:15 UTC slot. GitHub schedule times are best effort, not guaranteed execution times. Manual dispatch uses the same gate and budgets. Only the repository default branch can run the evaluation; there is no pull-request trigger.
+`.github/workflows/model-evaluation.yml` schedules at 05:30 UTC (08:30 Europe/Istanbul). The ordinary production report keeps its separate 06:15 UTC slot; read the two attached evaluation reports for the paired comparison. GitHub schedule times are best effort, not guaranteed execution times. Manual dispatch uses the same gate and budgets. Only the repository default branch can run the evaluation; there is no pull-request trigger.
 
 Each active run reads release history and captures all configured feeds with best-effort evidence before relevance decisions. It creates two reports from that single evaluation capture:
 
@@ -19,7 +19,7 @@ Compare the two **attached evaluation reports** with each other. The normal dail
 
 1. Create a dedicated Cloudflare API token scoped to Workers AI inference for the intended account. Do not copy a broad local Wrangler OAuth login into GitHub.
 2. Store it as the repository Actions secret `CLOUDFLARE_API_TOKEN`. Set the repository variable `CLOUDFLARE_ACCOUNT_ID` to the corresponding account ID. Secret values are never committed or attached to a release.
-3. Set repository variable `MODEL_EVALUATION_START_DATE` to the first desired **UTC date**, formatted `YYYY-MM-DD`. It runs on that date and the following six calendar dates. For seven future scheduled runs, choose a date whose 06:45 UTC slot has not passed.
+3. Set repository variable `MODEL_EVALUATION_START_DATE` to the first desired **UTC date**, formatted `YYYY-MM-DD`. It runs on that date and the following six calendar dates. For seven future scheduled runs, choose a date whose 05:30 UTC slot has not passed.
 4. To stop early, clear `MODEL_EVALUATION_START_DATE`. Empty means disabled; malformed dates fail before inference. After the seven dates, later scheduled/manual runs skip the experiment automatically. This is seven calendar dates, not seven guaranteed successful reports; failed or missed runs do not silently extend it.
 
 No configuration is enabled by this PR. Creating the Cloudflare token and storing the secret require account-owner setup. The inference secret is supplied only to the model step of the default-branch evaluation job. The publication job has repository contents-write permission and receives only the public Markdown artifact; it never receives the Cloudflare token.

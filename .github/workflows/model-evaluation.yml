@@ -3,7 +3,7 @@ name: One-week model evaluation
 on:
   workflow_dispatch:
   schedule:
-    - cron: "45 6 * * *"
+    - cron: "30 5 * * *"
 
 concurrency:
   group: public-model-evaluation
