@@ -74,3 +74,8 @@ The [candidate content-aware policy](model-assisted-policy.md) proposes explicit
 admission, equal-score ordering and fallback rules for issue #38's next shadow
 comparison. It is a design for review; provider integration and paired report
 generation are subsequent implementation work.
+
+The [assessment contract and Cloudflare adapter](model-assessment.md) implement
+the versioned question/answer layer with bounded explicit requests and offline
+validation. They are not connected to publication; paired comparison and policy
+application remain subsequent work.
