@@ -480,6 +480,60 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(second["usage"]["new_assessment_attempts"], 0)
         self.assertTrue(second["decisions"][0]["cache_hit"])
 
+    def test_cache_expiring_during_slow_run_is_not_reused(self):
+        rows = [row(0), row(1)]
+        value = snapshot(rows)
+        article = AssessmentInput.from_capture(
+            rows[1]["title"], rows[1]["article_evidence"]
+        )
+        record = Provider().assess(article).to_record()
+        record["expires_at"] = (NOW + timedelta(seconds=60)).isoformat()
+        provider = Provider()
+        original = provider.assess
+        elapsed = [0]
+
+        def slow_assess(article):
+            elapsed[0] = 120
+            return original(article)
+
+        provider.assess = slow_assess
+        with patch.object(comparison.time, "monotonic", side_effect=lambda: elapsed[0]):
+            result = comparison.compare(
+                value,
+                mode="shadow",
+                provider=provider,
+                cache={comparison.cache_key(article): record},
+                assessment_now=NOW,
+            )
+        self.assertEqual(result["status"], "complete")
+        self.assertEqual(len(provider.calls), 2)
+        self.assertFalse(result["decisions"][1]["cache_hit"])
+
+    def test_expired_in_run_duplicate_is_reassessed_and_usage_counted(self):
+        rows = [row(0, title="Repeated title"), row(1), row(2, title="Repeated title")]
+        provider = Provider()
+        original = provider.assess
+        elapsed = [0]
+
+        def assess(article):
+            result = original(article)
+            if len(provider.calls) == 1:
+                return replace(
+                    result, expires_at=(NOW + timedelta(seconds=60)).isoformat()
+                )
+            elapsed[0] = 120
+            return result
+
+        provider.assess = assess
+        with patch.object(comparison.time, "monotonic", side_effect=lambda: elapsed[0]):
+            result = comparison.compare(
+                snapshot(rows), mode="shadow", provider=provider, assessment_now=NOW
+            )
+        self.assertEqual(result["status"], "complete")
+        self.assertEqual(len(provider.calls), 3)
+        self.assertEqual(result["usage"]["new_assessment_attempts"], 3)
+        self.assertEqual(result["usage"]["reported_input_tokens"], 60)
+
     def test_cache_expiration_version_identity_and_schema(self):
         value = snapshot([row(0)])
         first = comparison.compare(

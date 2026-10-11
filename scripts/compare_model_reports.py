@@ -373,9 +373,8 @@ def compare(
     if not isinstance(input_cache, dict):
         raise TypeError("Cache must be a record mapping")
     records = {}
-    resolved_results = {}
     assessments = {}
-    attempted_keys = set()
+    attempted_records = []
     decisions = []
     admitted = []
     preferences = {}
@@ -402,24 +401,29 @@ def compare(
                         item.title, row["article_evidence"]
                     )
                 identity = cache_key(article)
-                result = resolved_results.get(identity) or cached_result(
-                    input_cache.get(identity), article, now
+                cache_now = now + timedelta(seconds=time.monotonic() - started)
+                result = cached_result(
+                    records.get(identity) or input_cache.get(identity),
+                    article,
+                    cache_now,
                 )
                 reused = result is not None
                 if result is None:
                     if provider is None:
                         raise AssessmentError("missing_assessment")
-                    attempted_keys.add(identity)
+                    attempted_records.append(None)
                     result = provider.assess(article)
                     # Real requests finish after the runner's initial clock.
                     if (
                         cached_result(
-                            result.to_record(), article, max(now, datetime.now(UTC))
+                            result.to_record(),
+                            article,
+                            max(cache_now, datetime.now(UTC)),
                         )
                         is None
                     ):
                         raise AssessmentError("invalid_assessment_record")
-                resolved_results[identity] = result
+                    attempted_records[-1] = result.to_record()
                 records[identity] = result.to_record()
                 assessments[identity] = result.to_record()
                 allow, why = admission(
@@ -523,24 +527,24 @@ def compare(
         "link_outcomes": links.outcomes,
         "new_link_requests": links.requests,
         "usage": {
-            "new_assessment_attempts": len(attempted_keys),
+            "new_assessment_attempts": len(attempted_records),
             "reported_input_tokens": sum(
-                assessments[key]["input_tokens"] or 0
-                for key in attempted_keys
-                if key in assessments
+                record["input_tokens"] or 0
+                for record in attempted_records
+                if record is not None
             ),
             "reported_output_tokens": sum(
-                assessments[key]["output_tokens"] or 0
-                for key in attempted_keys
-                if key in assessments
-            ),
-            "unknown_output_usage_count": sum(
-                key not in assessments or assessments[key]["output_tokens"] is None
-                for key in attempted_keys
+                record["output_tokens"] or 0
+                for record in attempted_records
+                if record is not None
             ),
             "unknown_input_usage_count": sum(
-                key not in assessments or assessments[key]["input_tokens"] is None
-                for key in attempted_keys
+                record is None or record["input_tokens"] is None
+                for record in attempted_records
+            ),
+            "unknown_output_usage_count": sum(
+                record is None or record["output_tokens"] is None
+                for record in attempted_records
             ),
         },
         "baseline_report": baseline_report,
