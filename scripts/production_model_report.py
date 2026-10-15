@@ -6,8 +6,9 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from scripts import compare_model_reports as comparison
+from scripts.cloudflare_assessment import MODEL
 from scripts.generate_report import canonicalize_url
-from scripts.model_assessment import AssessmentError
+from scripts.model_assessment import QUESTION_SHA256, QUESTION_VERSION, AssessmentError
 from scripts.publication_history import receipt_comment
 
 
@@ -39,11 +40,39 @@ def select_report(baseline, snapshot=None, *, mode="model-assisted", provider=No
         status = {
             "selection": "model-assisted",
             "policy": comparison.POLICY_VERSION,
+            "model": MODEL,
+            "question_version": QUESTION_VERSION,
+            "question_sha256": QUESTION_SHA256,
             "failure": result["failure"],
             "usage": result["usage"],
             "runtime_seconds": result["runtime_seconds"],
             "rules_selected": len(result["baseline_selected"]),
             "model_selected": len(result["candidate_selected"]),
+            "decisions": [
+                {
+                    **{
+                        key: decision[key]
+                        for key in (
+                            "id",
+                            "url",
+                            "baseline_admit",
+                            "candidate_admit",
+                            "reason",
+                            "applied",
+                        )
+                    },
+                    "evidence": {
+                        key: snapshot["collection"][decision["id"]]["article_evidence"][
+                            key
+                        ]
+                        for key in ("provenance", "completeness", "truncated")
+                    },
+                    "answers": result["assessments"]
+                    .get(decision.get("assessment_key"), {})
+                    .get("answers"),
+                }
+                for decision in result["decisions"]
+            ],
         }
         if result["status"] != "complete":
             status["selection"] = "rules-fallback"

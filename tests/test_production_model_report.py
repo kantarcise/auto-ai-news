@@ -76,6 +76,7 @@ class ProductionTests(unittest.TestCase):
         self.assertEqual(status["selection"], "rules-fallback")
         self.assertEqual(status["failure"]["code"], "network_error")
         self.assertEqual(status["usage"]["new_assessment_attempts"], 2)
+        self.assertTrue(all(not row["applied"] for row in status["decisions"]))
         self.assertIn("Original rules report.", text)
         self.assertIn("entire report uses the existing rules fallback", text)
         self.assertEqual(RECEIPT.findall(text), RECEIPT.findall(self.baseline()))
@@ -132,6 +133,15 @@ class ProductionTests(unittest.TestCase):
                 json.loads(status.read_text())["selection"], "model-assisted"
             )
             self.assertNotIn("Synthetic AI measurements", status.read_text())
+            audit = json.loads(status.read_text())
+            self.assertIn("question_version", audit)
+            self.assertEqual(audit["model"], "@cf/cloudflare/clef-flash")
+            self.assertEqual(len(audit["decisions"]), 2)
+            self.assertEqual(audit["decisions"][1]["reason"], "model_ai_subject_yes")
+            self.assertEqual(
+                audit["decisions"][1]["evidence"]["provenance"], "article_body"
+            )
+            self.assertEqual(audit["decisions"][1]["answers"]["ai_subject"], "yes")
 
     def test_rules_rollback_needs_no_snapshot_provider_or_network(self):
         with patch.object(production.comparison, "compare") as compare:

@@ -711,12 +711,14 @@ def collect_items(
     evaluation: dict | None = None,
     evaluation_excerpts: bool = False,
     evaluation_article_content: bool = False,
+    evaluation_defer_article_content: bool = False,
     published_urls: dict[str, str] | None = None,
     previously_included: list[tuple[Item, str]] | None = None,
 ) -> tuple[list[Item], list[tuple[str, str]]]:
     if lookback_hours <= 0:
         raise ValueError("lookback_hours must be positive")
-    if (evaluation_excerpts or evaluation_article_content) and evaluation is None:
+    comparison_capture = evaluation_article_content or evaluation_defer_article_content
+    if (evaluation_excerpts or comparison_capture) and evaluation is None:
         raise ValueError("Evaluation excerpts require evaluation capture")
     if evaluation is not None and (now.tzinfo is None or now.utcoffset() is None):
         raise ValueError("Evaluation capture requires a timezone-aware clock")
@@ -820,6 +822,19 @@ def collect_items(
         collector = EvidenceCollector(USER_AGENT)
         for item, record in pending:
             record["article_evidence"] = collector.capture(item)
+    elif evaluation_defer_article_content:
+        # Persist original feed fields without optional retrieval/parsing. A later
+        # isolated step enriches these exact candidates after the baseline exists.
+        for item, record in pending:
+            record["evidence_input"] = {
+                key: getattr(item, key)
+                for key in (
+                    "summary",
+                    "content",
+                    "content_format",
+                    "content_provenance",
+                )
+            }
     editorial_config = load_config()
     features = [] if evaluation_excerpts else None
     relevance = assess(
@@ -839,7 +854,7 @@ def collect_items(
                 "matched_terms": list(assessment.terms),
                 "proposed_rank_bonus": round(assessment.proposed_rank_bonus, 6),
             }
-        if evaluation_article_content:
+        if comparison_capture:
             # Freeze baseline features from the original feed fields, including
             # rejects. A copy keeps observation from mutating production Items.
             replay = copy.deepcopy(item)
@@ -869,7 +884,7 @@ def collect_items(
             )
     candidates = group_stories(dedupe_items(items))
     if evaluation is not None:
-        if evaluation_article_content:
+        if comparison_capture:
             evaluation["model_comparison"] = {
                 "schema_version": 1,
                 "published_urls": dict(published_urls or {}),
@@ -1529,6 +1544,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         help="Opt in to bounded pre-admission article text in the evaluation snapshot; does not change selection.",
     )
     parser.add_argument(
+        "--evaluation-defer-article-content",
+        action="store_true",
+        help="Freeze original feed fields and model-comparison metadata without supplemental evidence retrieval; enrich the saved snapshot separately.",
+    )
+    parser.add_argument(
         "--evaluation-output",
         type=Path,
         help="Optional review snapshot including pre-ranking rejects; text requires explicit capture flags.",
@@ -1549,6 +1569,10 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         parser.error("--lookback-hours must be positive")
     if args.evaluation_article_content and args.evaluation_output is None:
         parser.error("--evaluation-article-content requires --evaluation-output")
+    if args.evaluation_defer_article_content and args.evaluation_output is None:
+        parser.error("--evaluation-defer-article-content requires --evaluation-output")
+    if args.evaluation_defer_article_content and args.evaluation_article_content:
+        parser.error("Choose immediate or deferred article evidence, not both")
     if args.evaluation_article_content and args.no_article_bodies:
         parser.error("--evaluation-article-content conflicts with --no-article-bodies")
     if args.evaluation_excerpts and args.evaluation_output is None:
@@ -1597,6 +1621,7 @@ def main(argv: list[str] | None = None) -> int:
         evaluation=evaluation,
         evaluation_excerpts=args.evaluation_excerpts,
         evaluation_article_content=args.evaluation_article_content,
+        evaluation_defer_article_content=args.evaluation_defer_article_content,
         published_urls=published_urls,
         previously_included=previously_included,
     )

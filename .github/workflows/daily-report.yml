@@ -47,19 +47,29 @@ jobs:
             *) echo "Invalid REPORT_SELECTION_MODE; use rules or model-assisted."; exit 1 ;;
           esac
 
-      - name: Generate rules fallback and optional article evidence
+      - name: Save rules fallback and frozen candidates
         run: |
           mkdir -p "$RUNNER_TEMP/model-status"
           evidence_args=()
           if [ "$REPORT_SELECTION_MODE" = "model-assisted" ]; then
-            evidence_args=(--evaluation-output "$RUNNER_TEMP/model-capture.json" --evaluation-article-content)
+            evidence_args=(--evaluation-output "$RUNNER_TEMP/model-candidates.json" --evaluation-defer-article-content)
           fi
           python scripts/generate_report.py \
             --output "$RUNNER_TEMP/rules-baseline.md" \
             --publication-history "$RUNNER_TEMP/publication-history.json" \
             "${evidence_args[@]}"
 
+      - name: Collect optional evidence from frozen candidates
+        id: evidence
+        if: env.REPORT_SELECTION_MODE == 'model-assisted'
+        timeout-minutes: 5
+        continue-on-error: true
+        run: |
+          python -m scripts.enrich_model_snapshot "$RUNNER_TEMP/model-candidates.json" \
+            --output "$RUNNER_TEMP/model-capture.json"
+
       - name: Select production report
+        if: env.REPORT_SELECTION_MODE == 'rules' || steps.evidence.outcome == 'success'
         id: selection
         timeout-minutes: 5
         continue-on-error: true
@@ -74,7 +84,7 @@ jobs:
             --output "$RUNNER_TEMP/daily-ai-news.md" \
             --status-output "$RUNNER_TEMP/model-status/status.json"
 
-      - name: Recover rules report after failed or timed-out selection step
+      - name: Recover rules report after failed or timed-out optional stage
         if: steps.selection.outcome != 'success'
         run: |
           python -m scripts.production_model_report \
