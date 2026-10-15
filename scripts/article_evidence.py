@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import gzip
 import hashlib
+import http.client
 import io
 import re
 import urllib.parse
@@ -240,7 +241,14 @@ def fetch(url, user_agent):
                 **metadata,
                 "response_sha256": hashlib.sha256(raw).hexdigest(),
             }
-    except (OSError, ValueError, LookupError, EOFError, zlib.error) as exc:
+    except (
+        OSError,
+        ValueError,
+        LookupError,
+        EOFError,
+        zlib.error,
+        http.client.HTTPException,
+    ) as exc:
         return evidence(
             "", "unavailable", reason=f"Article retrieval failed: {type(exc).__name__}."
         )

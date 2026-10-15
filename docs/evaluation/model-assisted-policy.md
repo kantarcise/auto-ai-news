@@ -1,5 +1,7 @@
 # Candidate policy for content-aware shadow comparison
 
+Adoption note: the owner authorized this same policy for the daily production path before the planned trial end. See [production configuration and fallback](../model-assisted-production.md). The original proposal below records the policy rationale; questions and ranking rules are unchanged by adoption.
+
 This proposal implements the policy-design part of [issue #38](https://github.com/kantarcise/auto-ai-news/issues/38), following the evidence capture merged in [PR #39](https://github.com/kantarcise/auto-ai-news/pull/39). It defines `content-shadow-v1` for a future paired, unpublished report comparison. It adds no executable policy, provider adapter, credentials or workflow changes. The [current selection policy](../selection-policy.md) remains the publishing baseline.
 
 ## Editorial intent and limits
