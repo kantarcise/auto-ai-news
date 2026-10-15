@@ -2,8 +2,8 @@ name: One-week model evaluation
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "30 5 * * *"
+  # The bounded trial is retired when model-assisted production is adopted.
+  # Manual comparisons remain available within the configured trial window.
 
 concurrency:
   group: public-model-evaluation

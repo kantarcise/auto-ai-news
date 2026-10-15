@@ -12,13 +12,20 @@ concurrency:
 permissions:
   contents: write
 
+env:
+  REPORT_SELECTION_MODE: ${{ vars.REPORT_SELECTION_MODE || 'model-assisted' }}
+
 jobs:
   generate:
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    timeout-minutes: 35
     # Keep publication stable when ubuntu-latest changes its underlying image.
     runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -33,32 +40,55 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: python -m scripts.publication_history --output "$RUNNER_TEMP/publication-history.json"
 
-      - name: Generate report
-        id: generate
+      - name: Validate selection mode
         run: |
-          mkdir -p "$RUNNER_TEMP/ranking-evaluation"
+          case "$REPORT_SELECTION_MODE" in
+            rules|model-assisted) ;;
+            *) echo "Invalid REPORT_SELECTION_MODE; use rules or model-assisted."; exit 1 ;;
+          esac
+
+      - name: Generate rules fallback and optional article evidence
+        run: |
+          mkdir -p "$RUNNER_TEMP/model-status"
+          evidence_args=()
+          if [ "$REPORT_SELECTION_MODE" = "model-assisted" ]; then
+            evidence_args=(--evaluation-output "$RUNNER_TEMP/model-capture.json" --evaluation-article-content)
+          fi
           python scripts/generate_report.py \
-            --output "$RUNNER_TEMP/daily-ai-news.md" \
+            --output "$RUNNER_TEMP/rules-baseline.md" \
             --publication-history "$RUNNER_TEMP/publication-history.json" \
-            --evaluation-output "$RUNNER_TEMP/ranking-evaluation/candidates.json" \
-            --evaluation-excerpts
+            "${evidence_args[@]}"
 
-      - name: Compare ranking proposals
+      - name: Select production report
+        id: selection
+        timeout-minutes: 5
         continue-on-error: true
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          python -m scripts.compare_rankings \
-            "$RUNNER_TEMP/ranking-evaluation/candidates.json" \
-            --output "$RUNNER_TEMP/ranking-evaluation/comparison.md" \
-            --json-output "$RUNNER_TEMP/ranking-evaluation/comparison.json" \
-            --revision "$GITHUB_SHA"
+          python -m scripts.production_model_report \
+            --baseline-report "$RUNNER_TEMP/rules-baseline.md" \
+            --snapshot "$RUNNER_TEMP/model-capture.json" \
+            --mode "$REPORT_SELECTION_MODE" \
+            --output "$RUNNER_TEMP/daily-ai-news.md" \
+            --status-output "$RUNNER_TEMP/model-status/status.json"
 
-      - name: Save ranking evaluation
-        if: always() && steps.generate.outcome == 'success'
+      - name: Recover rules report after failed or timed-out selection step
+        if: steps.selection.outcome != 'success'
+        run: |
+          python -m scripts.production_model_report \
+            --baseline-report "$RUNNER_TEMP/rules-baseline.md" \
+            --force-fallback \
+            --output "$RUNNER_TEMP/daily-ai-news.md" \
+            --status-output "$RUNNER_TEMP/model-status/status.json"
+
+      - name: Save selection status without article text or credentials
         continue-on-error: true
         uses: actions/upload-artifact@v7
         with:
-          name: ranking-evaluation-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/ranking-evaluation/
+          name: daily-selection-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/model-status/status.json
           retention-days: 30
           if-no-files-found: error
 

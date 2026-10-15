@@ -1220,6 +1220,8 @@ def render_report(
     previously_included: list[tuple[Item, str]] | None = None,
     previous_report_dates: list[str] | None = None,
     selection_disclosure: str | None = None,
+    source_policy: str | None = None,
+    reading_time_disclosure: str | None = None,
 ) -> str:
     generated = now.astimezone(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     if previously_included is not None:
@@ -1462,7 +1464,9 @@ def render_report(
             "",
             "Ratings range from 1 to 5 stars and indicate heuristic rank, not article quality.",
             (
-                "Frozen replay reading times use available feed text at 225 words per minute with a 100-word minimum; no selected-body retrieval is performed. Estimates may be incomplete. Publication dates are UTC."
+                reading_time_disclosure
+                if reading_time_disclosure is not None
+                else "Frozen replay reading times use available feed text at 225 words per minute with a 100-word minimum; no selected-body retrieval is performed. Estimates may be incomplete. Publication dates are UTC."
                 if selection_disclosure is not None
                 else "Reading times estimate available text at 225 words per minute with a 100-word minimum. Feed content and extracted bodies may be incomplete; "
                 "full articles may take longer. Selected stories with insufficient feed text receive bounded HTML body retrieval; estimates are labeled extracted body when successful, and failures remain unknown. Publication dates are shown in UTC."
@@ -1482,7 +1486,9 @@ def render_report(
             "## Source policy",
             "",
             textwrap.fill(
-                "This unpublished comparison replays frozen public-feed candidates. Admission and ordering follow the selection policy described above; stars remain heuristic buckets. Attribution, grouping and publisher limits are preserved."
+                source_policy
+                if source_policy is not None
+                else "This unpublished comparison replays frozen public-feed candidates. Admission and ordering follow the selection policy described above; stars remain heuristic buckets. Attribution, grouping and publisher limits are preserved."
                 if selection_disclosure is not None
                 else "This report is generated from trusted public feeds. Links are deduplicated by "
                 "canonical URL, filtered for AI relevance, and scored with a transparent heuristic "

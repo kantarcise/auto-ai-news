@@ -275,7 +275,9 @@ def alternate_coverage(items):
     ]
 
 
-def report_text(items, diagnostics, snapshot, *, candidate=False, fallback=False):
+def report_text(
+    items, diagnostics, snapshot, *, candidate=False, fallback=False, production=False
+):
     disclosure = (
         "Unpublished content-shadow-v1 comparison. Model AI-subject answers determine admission, with baseline fallback for insufficient or limited negative evidence. Original feed-derived scores and star buckets remain unchanged. Engineering detail breaks equal-score ties only when all possible group representatives qualify. The existing grouping, publisher caps and report limit apply."
         if candidate and not fallback
@@ -283,6 +285,11 @@ def report_text(items, diagnostics, snapshot, *, candidate=False, fallback=False
     )
     if fallback:
         disclosure += " Model comparison unavailable: the entire candidate report falls back to this rules report."
+    if production:
+        disclosure = disclosure.replace(
+            "Unpublished content-shadow-v1 comparison.",
+            "Selection uses Cloudflare Clef-flash with the content-shadow-v1 policy.",
+        ).replace("Unpublished frozen rules replay.", "Selection uses baseline rules.")
     history = snapshot.get("publication_history")
     previous = [
         (
@@ -307,6 +314,21 @@ def report_text(items, diagnostics, snapshot, *, candidate=False, fallback=False
         previous_report_dates=history.get("report_dates", []) if history else None,
         previously_included=previous if history is not None else None,
         selection_disclosure=disclosure,
+        reading_time_disclosure=(
+            "Reading times use captured feed text at 225 words per minute with a 100-word minimum. "
+            "Supplemental article evidence used by the model does not update these estimates; "
+            "an unknown reading time does not mean the model lacked article evidence. Publication dates are UTC."
+            if production
+            else None
+        ),
+        source_policy=(
+            "This daily report uses public-feed candidates and best-effort article evidence. "
+            "Evidence can be a partial article, feed content, summary or title. "
+            "Model labels are provisional, not fact checks or editorial quality grades. "
+            "Freshness, publication history, attribution, link checks, grouping and publisher limits remain enforced."
+            if production
+            else None
+        ),
     )
 
 
@@ -321,6 +343,7 @@ def compare(
     link_request_limit=100,
     evidence_arm="content",
     frozen_links=None,
+    production=False,
 ):
     if mode not in {"rules", "shadow"} or evidence_arm not in {"content", "title"}:
         raise ValueError("Invalid comparison mode or evidence arm")
@@ -555,6 +578,7 @@ def compare(
             snapshot,
             candidate=mode == "shadow",
             fallback=failure is not None,
+            production=production,
         ),
     }
 
