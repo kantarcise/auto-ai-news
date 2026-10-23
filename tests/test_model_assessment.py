@@ -309,9 +309,43 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(self.client.requests_attempted, 0)
 
     def test_multibyte_input_never_silently_truncates(self):
-        article = replace(ARTICLE, text="😀" * 12_000)
-        with self.assertRaisesRegex(AssessmentError, "request_too_large"):
+        for character in ("한", "😀", "\x00", '"', "\\"):
+            article = replace(ARTICLE, title=character * 1000, text=character * 12_000)
+            with self.subTest(character=repr(character)):
+                result = self.client.assess(article)
+                request = self.opener.open.call_args.args[0]
+                self.assertEqual(
+                    json.loads(request.data)["state"]["text"], article.text
+                )
+                self.assertEqual(
+                    json.loads(request.data)["state"]["title"], article.title
+                )
+                self.assertLessEqual(len(request.data), MAX_REQUEST_BYTES)
+                self.assertEqual(result.input_sha256, article.input_sha256)
+                self.assertEqual(result.text_sha256, article.text_sha256)
+                self.assertEqual(result.truncated, article.truncated)
+
+    def test_large_unicode_request_still_consumes_exact_run_byte_budget(self):
+        article = replace(ARTICLE, text="한" * 12_000)
+        self.client.assess(article)
+        request_size = len(self.opener.open.call_args.args[0].data)
+        self.assertGreater(request_size, 24_000)
+        self.assertEqual(self.client.input_bytes_attempted, request_size)
+        self.client.input_byte_limit = 2 * request_size - 1
+        with self.assertRaisesRegex(AssessmentError, "request_budget_exhausted"):
             self.client.assess(article)
+        self.assertEqual(self.opener.open.call_count, 1)
+        self.assertEqual(self.client.requests_attempted, 1)
+
+    def test_serialized_request_guard_still_rejects_oversized_payload(self):
+        with (
+            patch(
+                "scripts.cloudflare_assessment.question_schema",
+                return_value={"unexpected_expansion": "x" * MAX_REQUEST_BYTES},
+            ),
+            self.assertRaisesRegex(AssessmentError, "request_too_large"),
+        ):
+            self.client.assess(ARTICLE)
         self.opener.open.assert_not_called()
 
     def test_network_errors_are_sanitized(self):

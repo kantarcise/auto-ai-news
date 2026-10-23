@@ -24,7 +24,10 @@ from scripts.model_assessment import (
 
 MODEL = "@cf/cloudflare/clef-flash"
 MAX_RESPONSE_BYTES = 64_000
-MAX_REQUEST_BYTES = 24_000
+# AssessmentInput permits 1,000 title and 12,000 evidence characters. A
+# character can require four UTF-8 bytes or six JSON-escaped bytes. Allow
+# those valid inputs plus the question schema without altering frozen text.
+MAX_REQUEST_BYTES = 100_000
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):

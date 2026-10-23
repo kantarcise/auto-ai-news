@@ -43,7 +43,9 @@ provenance, unknown/partial completeness and truncation flag. It rejects missing
 or invalid capture fields. Inputs accept up to 1,000 title characters and
 12,000 evidence characters. Oversized inputs fail explicitly, without silently
 changing frozen evidence. The adapter also caps the complete UTF-8 request at
-24,000 bytes; multibyte text can reach this cap before the character cap.
+100,000 bytes, accommodating the character limits even with multibyte UTF-8,
+JSON escaping and the question schema. This does not change captured evidence,
+hashes or the total serialized-input budget per run.
 
 For local development, explicitly supply `CLOUDFLARE_ACCOUNT_ID` and
 `CLOUDFLARE_API_TOKEN` in the process environment, or pass credentials to the

@@ -5,12 +5,15 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from scripts import production_model_report as production
+from scripts.article_evidence import evidence
+from scripts.cloudflare_assessment import CloudflareAssessmentProvider
 from scripts.model_assessment import AssessmentAnswers
 from scripts.publication_history import RECEIPT, history_from_releases, receipt_comment
 from tests.test_compare_model_reports import NOW, Provider, row, snapshot
+from tests.test_model_assessment import ACCOUNT, TOKEN, response_body
 
 
 class ProductionTests(unittest.TestCase):
@@ -49,6 +52,40 @@ class ProductionTests(unittest.TestCase):
         )
         self.assertIn("https://example.com/1", history["published"][day])
         self.assertNotIn("https://example.com/0", history["published"][day])
+
+    def test_large_multilingual_evidence_does_not_disable_model_report(self):
+        rows = [row(0), row(1, admit=False), row(2, admit=False)]
+        rows[1]["article_evidence"] = evidence("한" * 12_000, "article_body")
+        provider = CloudflareAssessmentProvider(
+            ACCOUNT, TOKEN, request_limit=100, input_byte_limit=1_000_000
+        )
+        provider._opener = MagicMock()
+        response = provider._opener.open.return_value.__enter__.return_value
+        response.status = 200
+        response.headers = {}
+        response.read.return_value = json.dumps(response_body()).encode()
+
+        value = snapshot(rows)
+        value["publication_history"] = {
+            "report_date": NOW.date().isoformat(),
+            "published": {},
+        }
+        text, status = production.select_report(
+            self.baseline(), value, provider=provider
+        )
+
+        self.assertEqual(status["selection"], "model-assisted")
+        self.assertIsNone(status["failure"])
+        self.assertEqual(provider.requests_attempted, 3)
+        self.assertEqual(status["model_selected"], 3)
+        self.assertTrue(all(decision["applied"] for decision in status["decisions"]))
+        self.assertNotIn("entire report uses the existing rules fallback", text)
+        self.assertIn("AI topic 1", text)
+        self.assertIn("AI topic 2", text)
+        self.assertEqual(
+            json.loads(RECEIPT.findall(text)[0])["urls"],
+            ["https://example.com/0", "https://example.com/1", "https://example.com/2"],
+        )
 
     def test_alternate_links_enter_production_receipt(self):
         value = snapshot(
