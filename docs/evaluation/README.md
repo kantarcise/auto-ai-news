@@ -1,6 +1,6 @@
 # Editorial evaluation baseline
 
-[Issue #12 completion and final filter decision](issue-12-completion.md) records the bounded close-out, unchanged production rule, and optional follow-ups in #35.
+[Issue #12 completion and historical filter comparison](issue-12-completion.md) records the bounded close-out, the subsequent decision-model rollout, and optional follow-ups in #35. The October 11 keyword comparison is dated evidence, not a recommendation to revert model-assisted production.
 
 This first batch contains all 34 candidates from the frozen October 3 comparison, including selected and unselected candidates. Labels are deliberately blank. It is a pilot review, not a multi-day or representative quality benchmark. Articles rejected before this captured candidate stage are absent; it cannot measure those relevance/collection misses.
 
