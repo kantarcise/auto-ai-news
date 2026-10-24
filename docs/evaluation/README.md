@@ -64,3 +64,27 @@ For new dates, use the [optional broader capture](capture.md) to retain parsed e
 The owner has supplied [qualitative feedback on all five omitted candidates](omitted-feedback-2026-10-05.json). The rubric now reflects useful testimonials, frontier-lab practitioner perspectives and tentative lower priority for brief announcements. Explicit inclusion decisions and importance grades remain outstanding; the scored sheet is still unreviewed, so the evaluator reports no quality scores.
 
 Review this pilot and refine the rubric, then capture multiple dates including rejected candidates and representative regions/modalities. Freeze each snapshot's clock and operational outcomes. Group duplicate stories before chronological train/test splits, retain an unseen-publisher check, and measure important-story recall, graded ranking, repetition and concentration. Set acceptance targets from labeled baseline results. This pilot adds no runtime dependencies and changes no production ranking, workflow or releases.
+
+For issue #38's future paired report comparisons, the opt-in
+[pre-admission article evidence capture](../content-extraction.md#opt-in-evidence-before-relevance-filtering)
+records bounded text for eligible candidates, including title-relevance rejects.
+It preserves the published rules baseline and does not call a model. Public
+previews, missing evidence and excerpts are explicitly labeled; captures stay
+local unless separately reviewed for publication.
+
+The [candidate content-aware policy](model-assisted-policy.md) proposes explicit
+admission, equal-score ordering and fallback rules for issue #38's next shadow
+comparison. It is a design for review; provider integration and paired report
+generation are subsequent implementation work.
+
+The [assessment contract and Cloudflare adapter](model-assessment.md) implement
+the versioned question/answer layer with bounded explicit requests and offline
+validation. They are not connected to publication; paired comparison and policy
+application remain subsequent work.
+
+The [paired model-report runner](paired-model-reports.md) applies that policy to
+one frozen candidate pool, with opt-in hosted calls, expiring assessment caches,
+replayable link outcomes and whole-report fallback. It writes unpublished local
+reports and does not change the daily workflow.
+
+- [Seven-day public model evaluation](public-model-week.md): separate opt-in evaluation releases, bounded inference and setup.

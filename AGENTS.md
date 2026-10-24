@@ -3,7 +3,7 @@
 ## Project purpose and layout
 
 auto-ai-news aggregates public AI news feeds and publishes a dated GitHub Release each day.
-The generator uses the Python standard library; it does not call an LLM.
+The generator uses the Python standard library and remains a rules-only baseline. Daily automation additionally calls Cloudflare Clef-flash through the standard-library production adapter, with complete rules fallback; see `docs/model-assisted-production.md`.
 
 - `scripts/generate_report.py`: feed parsing, relevance filtering, ranking, URL checks, and Markdown rendering.
 - `config/sources.json`: source URLs, priorities, and disabled-source explanations.

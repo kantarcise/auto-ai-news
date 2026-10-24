@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import datetime as dt
 import email.utils
 import html
@@ -709,12 +710,15 @@ def collect_items(
     *,
     evaluation: dict | None = None,
     evaluation_excerpts: bool = False,
+    evaluation_article_content: bool = False,
+    evaluation_defer_article_content: bool = False,
     published_urls: dict[str, str] | None = None,
     previously_included: list[tuple[Item, str]] | None = None,
 ) -> tuple[list[Item], list[tuple[str, str]]]:
     if lookback_hours <= 0:
         raise ValueError("lookback_hours must be positive")
-    if evaluation_excerpts and evaluation is None:
+    comparison_capture = evaluation_article_content or evaluation_defer_article_content
+    if (evaluation_excerpts or comparison_capture) and evaluation is None:
         raise ValueError("Evaluation excerpts require evaluation capture")
     if evaluation is not None and (now.tzinfo is None or now.utcoffset() is None):
         raise ValueError("Evaluation capture requires a timezone-aware clock")
@@ -807,6 +811,30 @@ def collect_items(
             unavailable.append(
                 (source.name, f"Freshness: {count} entries excluded: {reason}.")
             )
+    if evaluation_article_content:
+        # Capture evidence for baseline rejects too, without changing the Items
+        # or the title/summary inputs used by production admission and ranking.
+        try:
+            from scripts.article_evidence import EvidenceCollector
+        except ModuleNotFoundError:
+            from article_evidence import EvidenceCollector
+
+        collector = EvidenceCollector(USER_AGENT)
+        for item, record in pending:
+            record["article_evidence"] = collector.capture(item)
+    elif evaluation_defer_article_content:
+        # Persist original feed fields without optional retrieval/parsing. A later
+        # isolated step enriches these exact candidates after the baseline exists.
+        for item, record in pending:
+            record["evidence_input"] = {
+                key: getattr(item, key)
+                for key in (
+                    "summary",
+                    "content",
+                    "content_format",
+                    "content_provenance",
+                )
+            }
     editorial_config = load_config()
     features = [] if evaluation_excerpts else None
     relevance = assess(
@@ -826,6 +854,24 @@ def collect_items(
                 "matched_terms": list(assessment.terms),
                 "proposed_rank_bonus": round(assessment.proposed_rank_bonus, 6),
             }
+        if comparison_capture:
+            # Freeze baseline features from the original feed fields, including
+            # rejects. A copy keeps observation from mutating production Items.
+            replay = copy.deepcopy(item)
+            estimate_reading_time(replay)
+            score_item(replay, now)
+            record["comparison_candidate"] = {
+                "canonical_url": item.canonical_url,
+                "source_priority": item.source_priority,
+                "coverage": item.coverage,
+                "baseline_admit": is_ai_related(item),
+                "event_listing": assessment.event_listing,
+                "rank_score": replay.rank_score,
+                "stars": replay.stars,
+                "word_count": replay.word_count,
+                "read_minutes": replay.read_minutes,
+                "content_provenance": replay.content_provenance,
+            }
         if is_ai_related(item):
             estimate_reading_time(item)
             score_item(item, now)
@@ -838,6 +884,16 @@ def collect_items(
             )
     candidates = group_stories(dedupe_items(items))
     if evaluation is not None:
+        if comparison_capture:
+            evaluation["model_comparison"] = {
+                "schema_version": 1,
+                "published_urls": dict(published_urls or {}),
+                "collection_diagnostics": copy.deepcopy(unavailable),
+                "selection_parameters": {
+                    "report_limit": MAX_ITEMS,
+                    "publisher_limit": MAX_PER_PUBLISHER,
+                },
+            }
         evaluation["editorial_config"] = editorial_config
         evaluation["scoring_parameters"] = {
             "base": 1.0,
@@ -1004,6 +1060,7 @@ def filter_accessible_items(
     publisher_limit: int | None = MAX_PER_PUBLISHER,
     *,
     link_outcomes: dict | None = None,
+    access_checker=None,
 ) -> tuple[list[Item], list[tuple[str, str]]]:
     accessible: list[Item] = []
     if publisher_limit is not None and publisher_limit <= 0:
@@ -1025,7 +1082,7 @@ def filter_accessible_items(
             continue
         verified = []
         for member in [item, *item.related_coverage]:
-            ok, reason = check_url_accessible(member.url)
+            ok, reason = (access_checker or check_url_accessible)(member.url)
             if link_outcomes is not None:
                 link_outcomes[member.url] = {"accessible": ok, "reason": reason}
             if ok:
@@ -1177,6 +1234,9 @@ def render_report(
     legacy_release_count: int = 0,
     previously_included: list[tuple[Item, str]] | None = None,
     previous_report_dates: list[str] | None = None,
+    selection_disclosure: str | None = None,
+    source_policy: str | None = None,
+    reading_time_disclosure: str | None = None,
 ) -> str:
     generated = now.astimezone(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     if previously_included is not None:
@@ -1419,7 +1479,11 @@ def render_report(
             "",
             "Ratings range from 1 to 5 stars and indicate heuristic rank, not article quality.",
             (
-                "Reading times estimate available text at 225 words per minute with a 100-word minimum. Feed content and extracted bodies may be incomplete; "
+                reading_time_disclosure
+                if reading_time_disclosure is not None
+                else "Frozen replay reading times use available feed text at 225 words per minute with a 100-word minimum; no selected-body retrieval is performed. Estimates may be incomplete. Publication dates are UTC."
+                if selection_disclosure is not None
+                else "Reading times estimate available text at 225 words per minute with a 100-word minimum. Feed content and extracted bodies may be incomplete; "
                 "full articles may take longer. Selected stories with insufficient feed text receive bounded HTML body retrieval; estimates are labeled extracted body when successful, and failures remain unknown. Publication dates are shown in UTC."
             ),
             "",
@@ -1430,12 +1494,18 @@ def render_report(
                 else "A story may recur across consecutive reports within the window; publication history is disabled."
             ),
             "",
-            "Selection uses a continuous score before mapping to stars. Source bonuses are 1.25 for priority 5, 1 for priorities 3–4 and zero for priorities 1–2; qualifying frontier-lab research/model announcements add 0.75. Stable topic/context rules use headlines and feed summaries; known model families accept future version numbers. Experimental topic similarity scores are recorded only in optional evaluation captures and do not change selection order. Matching is lexical, not content understanding; event-directory listings without technical context are excluded. Headline classification is heuristic; corporate posts receive no lab bonus. At most four story headlines per representative publisher are selected, with shared lab channels grouped together. Detailed identical titles within 24 hours are grouped, preferring research/lab representatives when available; other accessible source links appear as alternate coverage. This is a conservative title rule, not semantic story matching. No older articles fill excluded slots.",
+            selection_disclosure
+            if selection_disclosure is not None
+            else "Selection uses a continuous score before mapping to stars. Source bonuses are 1.25 for priority 5, 1 for priorities 3–4 and zero for priorities 1–2; qualifying frontier-lab research/model announcements add 0.75. Stable topic/context rules use headlines and feed summaries; known model families accept future version numbers. Experimental topic similarity scores are recorded only in optional evaluation captures and do not change selection order. Matching is lexical, not content understanding; event-directory listings without technical context are excluded. Headline classification is heuristic; corporate posts receive no lab bonus. At most four story headlines per representative publisher are selected, with shared lab channels grouped together. Detailed identical titles within 24 hours are grouped, preferring research/lab representatives when available; other accessible source links appear as alternate coverage. This is a conservative title rule, not semantic story matching. No older articles fill excluded slots.",
             "",
             "## Source policy",
             "",
             textwrap.fill(
-                "This report is generated from trusted public feeds. Links are deduplicated by "
+                source_policy
+                if source_policy is not None
+                else "This unpublished comparison replays frozen public-feed candidates. Admission and ordering follow the selection policy described above; stars remain heuristic buckets. Attribution, grouping and publisher limits are preserved."
+                if selection_disclosure is not None
+                else "This report is generated from trusted public feeds. Links are deduplicated by "
                 "canonical URL, filtered for AI relevance, and scored with a transparent heuristic "
                 "based on source priority, recency, and title or summary relevance.",
                 width=100,
@@ -1469,9 +1539,19 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         help="Include bounded feed-summary excerpts and normalized scoring inputs in the evaluation snapshot.",
     )
     parser.add_argument(
+        "--evaluation-article-content",
+        action="store_true",
+        help="Opt in to bounded pre-admission article text in the evaluation snapshot; does not change selection.",
+    )
+    parser.add_argument(
+        "--evaluation-defer-article-content",
+        action="store_true",
+        help="Freeze original feed fields and model-comparison metadata without supplemental evidence retrieval; enrich the saved snapshot separately.",
+    )
+    parser.add_argument(
         "--evaluation-output",
         type=Path,
-        help="Optional metadata-only review snapshot including pre-ranking rejects.",
+        help="Optional review snapshot including pre-ranking rejects; text requires explicit capture flags.",
     )
     parser.add_argument(
         "--lookback-hours",
@@ -1487,6 +1567,14 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     args = parser.parse_args(argv)
     if args.lookback_hours <= 0:
         parser.error("--lookback-hours must be positive")
+    if args.evaluation_article_content and args.evaluation_output is None:
+        parser.error("--evaluation-article-content requires --evaluation-output")
+    if args.evaluation_defer_article_content and args.evaluation_output is None:
+        parser.error("--evaluation-defer-article-content requires --evaluation-output")
+    if args.evaluation_defer_article_content and args.evaluation_article_content:
+        parser.error("Choose immediate or deferred article evidence, not both")
+    if args.evaluation_article_content and args.no_article_bodies:
+        parser.error("--evaluation-article-content conflicts with --no-article-bodies")
     if args.evaluation_excerpts and args.evaluation_output is None:
         parser.error("--evaluation-excerpts requires --evaluation-output")
     if (
@@ -1532,6 +1620,8 @@ def main(argv: list[str] | None = None) -> int:
         args.lookback_hours,
         evaluation=evaluation,
         evaluation_excerpts=args.evaluation_excerpts,
+        evaluation_article_content=args.evaluation_article_content,
+        evaluation_defer_article_content=args.evaluation_defer_article_content,
         published_urls=published_urls,
         previously_included=previously_included,
     )

@@ -31,7 +31,9 @@ python3 scripts/generate_report.py --lookback-hours 48 --output /tmp/daily-ai-ne
 
 ## Automation
 
-The GitHub Actions workflow runs every day at `06:15 UTC` and can also be started manually from the Actions tab. It creates or updates a release named `Daily AI News - YYYY-MM-DD` with the tag `daily-YYYY-MM-DD`.
+The GitHub Actions workflow is scheduled every day at `06:15 UTC` and can also be started manually from the Actions tab. GitHub may delay scheduled starts. It creates or updates a release named `Daily AI News - YYYY-MM-DD` with the tag `daily-YYYY-MM-DD`.
+
+Daily automation defaults to Cloudflare Clef-flash decisions on best-effort article evidence. It can recover relevant stories missed by title/summary rules; engineering detail breaks equal-score ties, while the existing heuristic scores and publisher limits remain. If model selection fails, the entire daily report uses the original rules with a visible fallback notice. Set repository variable `REPORT_SELECTION_MODE=rules` for rules-only rollback without inference. Local generator commands above remain rules-only. Model-selected reading times use captured feed text rather than supplemental model evidence. See [production selection, limits, usage and rollback](docs/model-assisted-production.md). The separate model-comparison workflow is now manual-only; existing trial releases are retained.
 
 Merging a freshness change does not rerun a deployment or edit historical releases. The next scheduled or manual run uses the new selection policy; a manual run on the same UTC date updates that day’s release.
 
