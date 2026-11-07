@@ -76,11 +76,13 @@ jobs:
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          REPORT_ASSESSMENT_MODEL: ${{ vars.REPORT_ASSESSMENT_MODEL || 'clef' }}
         run: |
           python -m scripts.production_model_report \
             --baseline-report "$RUNNER_TEMP/rules-baseline.md" \
             --snapshot "$RUNNER_TEMP/model-capture.json" \
             --mode "$REPORT_SELECTION_MODE" \
+            --model "$REPORT_ASSESSMENT_MODEL" \
             --output "$RUNNER_TEMP/daily-ai-news.md" \
             --status-output "$RUNNER_TEMP/model-status/status.json"
 

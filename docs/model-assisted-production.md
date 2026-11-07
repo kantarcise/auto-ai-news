@@ -1,10 +1,18 @@
 # Model-assisted daily reports
 
-The daily workflow defaults to Cloudflare Clef-flash selection using the same `content-shadow-v1` policy and three questions used in the October 12–14 comparisons. The owner chose to adopt it before the planned October 18 trial end after preferring the content additions. The [October 13 feedback](evaluation/feedback-2026-10-13.md) and [October 14 feedback](evaluation/feedback-2026-10-14.md) preserve the actual judgments and their limitations; repeated articles are not independent evidence. This is an owner-approved editorial decision, not a claim of general benchmark superiority.
+The daily workflow defaults to regular Cloudflare Clef for an owner-approved one-week production trial, replacing Clef-flash. It keeps the same `content-shadow-v1` policy and three questions used in the October 12–14 comparisons. Clef-flash was adopted in October after the owner preferred the content additions; that feedback does not establish regular Clef's quality. The [October 13 feedback](evaluation/feedback-2026-10-13.md) and [October 14 feedback](evaluation/feedback-2026-10-14.md) preserve the actual judgments and their limitations; repeated articles are not independent evidence.
+
+## Regular Clef trial
+
+Review the first seven daily releases after this change is merged, including any fallback days. There is no automatic promotion, scheduled review job, or automatic reversion after seven days: the owner decides whether to keep Clef, return to flash, or gather more evidence. We are evaluating whether the briefing is useful, not claiming a controlled improvement over flash on different days' articles.
+
+Check the first run's selected model, failure status, selection runtime, and account neuron usage. Over the week, record useful discoveries, unwanted inclusions, noticeable misses, and reliability. Existing sanitized daily status artifacts retain model identity, normalized answers, counts and runtime; Cloudflare account analytics remain the source of actual neuron usage. An early rollback is appropriate if the trial causes problems.
+
+Regular Clef is priced at $0.240 per million input tokens versus $0.038 for flash, roughly 6.3 times the published input cost for the same token count. Both are input-only priced; their reported token counts can differ. Spare account allowance is a reason the trial is affordable, not evidence of better decisions. See [Cloudflare pricing](https://developers.cloudflare.com/workers-ai/platform/pricing/). Existing request/byte/time limits remain unchanged and are not a neuron guarantee. This trial does not add importance questions, change ranking, increase evidence length, or fix missing sources.
 
 ## What changes
 
-The workflow first saves the existing rules report and a frozen snapshot of original feed inputs, including relevance rejects. Only after that baseline is saved does a separate optional stage retrieve best-effort article evidence from those exact candidates; it never refetches feeds or changes the pool, clock, scores or history. It then asks Clef-flash about substantive AI subject matter, concrete AI-related engineering detail and article type. A positive AI-subject answer can recover a story rejected by the existing title/summary rules. Insufficient evidence and negatives from explicitly limited evidence retain the baseline decision. Other negative answers can remove a baseline story.
+The workflow first saves the existing rules report and a frozen snapshot of original feed inputs, including relevance rejects. Only after that baseline is saved does a separate optional stage retrieve best-effort article evidence from those exact candidates; it never refetches feeds or changes the pool, clock, scores or history. It then asks Clef about substantive AI subject matter, concrete AI-related engineering detail and article type. A positive AI-subject answer can recover a story rejected by the existing title/summary rules. Insufficient evidence and negatives from explicitly limited evidence retain the baseline decision. Other negative answers can remove a baseline story.
 
 Original feed-derived scores, star buckets and selection limits are retained. Engineering detail only breaks equal-score ties under the existing conservative all-member group rule. This does not implement learned importance, semantic duplicate detection or additional questions. Dates, history, explicit event/quiet-day exclusions, canonical deduplication, attribution, link checks, grouping and publisher caps remain application checks. See the [exact policy](evaluation/model-assisted-policy.md).
 
@@ -18,9 +26,29 @@ The existing repository variable `CLOUDFLARE_ACCOUNT_ID` and secret `CLOUDFLARE_
 
 `REPORT_SELECTION_MODE` is a repository variable:
 
-- Unset or `model-assisted`: capture evidence and use bounded Clef-flash selection.
+- Unset or `model-assisted`: capture evidence and use bounded Clef selection.
 - `rules`: use the ordinary generator without evidence capture or any inference calls. The original rules code remains supported.
 - Any other value: stop with a configuration error before generation/publication.
+
+`REPORT_ASSESSMENT_MODEL` is a separate repository variable used by the selection step:
+
+- Unset or `clef`: regular `@cf/cloudflare/clef` (trial default).
+- `clef-flash`: the previously used `@cf/cloudflare/clef-flash`.
+- Other values are rejected by the production CLI; the optional-step recovery publishes the labeled rules baseline.
+
+To return to flash for the next run, without changing the policy or code:
+
+```bash
+gh variable set REPORT_ASSESSMENT_MODEL --body clef-flash
+```
+
+To select regular Clef again:
+
+```bash
+gh variable set REPORT_ASSESSMENT_MODEL --body clef
+```
+
+Both model paths use the selected ID consistently in the endpoint, request selector, response validation, assessment records, cache identity and report disclosure. Cached assessments from one model are not reused for the other. The unpublished comparison tools default to regular Clef too; historical results and releases are not rewritten. Direct Python callers can pass either supported full model ID via `model=` to the provider and comparison.
 
 To roll back the next run:
 
@@ -34,7 +62,7 @@ To restore model-assisted selection:
 gh variable set REPORT_SELECTION_MODE --body model-assisted
 ```
 
-Changing the variable does not edit an existing release or trigger a run. No workflow dispatch, secret changes, setting changes or publication are performed by this PR. After merge, the next scheduled/default-branch manual run uses the new default unless `REPORT_SELECTION_MODE=rules` is set. Account credentials already configured for the trial are reused; successful live production integration remains unverified until that run.
+Changing a variable does not edit an existing release or trigger a run. This change performs no workflow dispatch, secret changes, repository-variable changes or publication. After merge, the next scheduled/default-branch manual run uses regular Clef unless an override is set. Existing credentials are reused; regular Clef's live integration and runtime remain unverified until that run.
 
 ## Failure behavior and usage
 
@@ -65,6 +93,7 @@ python3 -m scripts.enrich_model_snapshot /tmp/model-candidates.json \
 python3 -m scripts.production_model_report \
   --baseline-report /tmp/rules-baseline.md --snapshot /tmp/model-capture.json \
   --output /tmp/model-daily.md --status-output /tmp/model-status.json
+# Add --model clef-flash to explicitly select the previous model.
 ```
 
 Use a publication-history capture when verifying cross-day receipts. Run normal offline tests plus Ruff lint/format checks. Tests cover recovered and removed URLs, alternate receipts, same-day history union, missing and partial provider failure, unexpected exceptions, empty reports, truncated HTTP reads, optional-stage process timeouts, frozen-candidate enrichment and offline rules rollback. No live inference is required by the tests.

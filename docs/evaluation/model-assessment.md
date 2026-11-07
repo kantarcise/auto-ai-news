@@ -1,17 +1,20 @@
 # Article assessment adapter
 
-Issue #38 now has a standard-library assessment layer for the
+Issue #38 introduced the standard-library assessment layer for the
 [candidate shadow policy](model-assisted-policy.md). This layer characterizes
-articles; it does not implement admission, ranking, paired reports, persistent
-caching or report-level fallback. The normal generator and daily workflow do
-not import or call the adapter. No model credentials or GPU are needed to run
-rules mode or the offline tests.
+articles; the comparison and production runners implement admission, constrained
+tie breaking, caching and report-level fallback. Daily automation calls this
+adapter; the local rules generator does not. No model credentials or GPU are
+needed to run rules mode or the offline tests.
 
 `scripts/model_assessment.py` defines immutable input/answer/result objects and
 an `AssessmentProvider` protocol. The versioned three-question definition is
 shared with future providers. `scripts/cloudflare_assessment.py` implements the
-protocol for `@cf/cloudflare/clef-flash` through the
-[documented typed-question REST endpoint](https://developers.cloudflare.com/workers-ai/models/clef-flash/).
+protocol for `@cf/cloudflare/clef` (default) and `@cf/cloudflare/clef-flash` through the
+[documented typed-question REST endpoint](https://developers.cloudflare.com/workers-ai/models/clef/).
+Pass `model="@cf/cloudflare/clef-flash"` to the provider to select flash; when
+using a comparison runner, pass the same model there for cache validation and
+disclosure. See [production configuration and trial](../model-assisted-production.md).
 All questions use choice answers, so insufficient evidence is an explicit
 answer rather than a guessed threshold on a yes/no probability.
 
