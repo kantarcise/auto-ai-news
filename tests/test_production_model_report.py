@@ -37,7 +37,7 @@ class ProductionTests(unittest.TestCase):
         )
         self.assertEqual(status["selection"], "model-assisted")
         self.assertNotIn("Unpublished", text)
-        self.assertIn("Cloudflare Clef-flash", text)
+        self.assertIn("Cloudflare Clef", text)
         self.assertIn("Supplemental article evidence", text)
         self.assertIn("AI topic 1", text)
         self.assertNotIn("AI topic 0", text)
@@ -163,16 +163,16 @@ class ProductionTests(unittest.TestCase):
                         str(status),
                     ]
                 )
-            factory.assert_called_once_with(100, 1_000_000)
+            factory.assert_called_once_with(100, 1_000_000, model="@cf/cloudflare/clef")
             self.assertIn("AI topic 1", output.read_text())
-            self.assertIn("Cloudflare Clef-flash", output.read_text())
+            self.assertIn("Cloudflare Clef", output.read_text())
             self.assertEqual(
                 json.loads(status.read_text())["selection"], "model-assisted"
             )
             self.assertNotIn("Synthetic AI measurements", status.read_text())
             audit = json.loads(status.read_text())
             self.assertIn("question_version", audit)
-            self.assertEqual(audit["model"], "@cf/cloudflare/clef-flash")
+            self.assertEqual(audit["model"], "@cf/cloudflare/clef")
             self.assertEqual(len(audit["decisions"]), 2)
             self.assertEqual(audit["decisions"][1]["reason"], "model_ai_subject_yes")
             self.assertEqual(
@@ -187,6 +187,66 @@ class ProductionTests(unittest.TestCase):
         self.assertEqual(text, self.baseline())
         self.assertEqual(status["selection"], "rules")
 
+    def test_flash_cli_rollback_selects_flash_and_discloses_it(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            baseline, capture = root / "baseline.md", root / "capture.json"
+            output, status = root / "report.md", root / "status.json"
+            baseline.write_text(self.baseline())
+            capture.write_text(json.dumps(snapshot([row(0), row(1, admit=False)])))
+            with patch.object(
+                production.comparison,
+                "LazyCloudflare",
+                return_value=Provider(model="@cf/cloudflare/clef-flash"),
+            ) as factory:
+                production.main(
+                    [
+                        "--baseline-report",
+                        str(baseline),
+                        "--snapshot",
+                        str(capture),
+                        "--output",
+                        str(output),
+                        "--status-output",
+                        str(status),
+                        "--model",
+                        "clef-flash",
+                    ]
+                )
+            factory.assert_called_once_with(
+                100, 1_000_000, model="@cf/cloudflare/clef-flash"
+            )
+            audit = json.loads(status.read_text())
+            self.assertEqual(audit["selection"], "model-assisted")
+            self.assertEqual(audit["model"], "@cf/cloudflare/clef-flash")
+            self.assertIn("Selection uses Cloudflare Clef-flash", output.read_text())
+            self.assertIn("AI topic 1", output.read_text())
+
+    def test_models_do_not_share_cached_assessments(self):
+        value = snapshot([row(0)])
+        first = production.comparison.compare(
+            value, mode="shadow", provider=Provider(), assessment_now=NOW
+        )
+        flash = Provider(model="@cf/cloudflare/clef-flash")
+        second = production.comparison.compare(
+            value,
+            mode="shadow",
+            provider=flash,
+            cache=first["cache"],
+            model="@cf/cloudflare/clef-flash",
+            assessment_now=NOW,
+        )
+        self.assertEqual(second["status"], "complete")
+        self.assertEqual(len(flash.calls), 1)
+        self.assertFalse(set(first["cache"]) & set(second["cache"]))
+        article = flash.calls[0]
+        clef_record = next(iter(first["cache"].values()))
+        self.assertIsNone(
+            production.comparison.cached_result(
+                clef_record, article, NOW, model="@cf/cloudflare/clef-flash"
+            )
+        )
+
     def test_empty_model_report_keeps_history_and_disclosure(self):
         value = snapshot([])
         day = NOW.date().isoformat()
@@ -197,7 +257,7 @@ class ProductionTests(unittest.TestCase):
         self.assertEqual(status["selection"], "model-assisted")
         self.assertEqual(status["model_selected"], 0)
         self.assertEqual(json.loads(RECEIPT.findall(text)[0])["urls"], [])
-        self.assertIn("Cloudflare Clef-flash", text)
+        self.assertIn("Cloudflare Clef", text)
 
     def test_cli_missing_capture_and_step_failure_publish_labeled_baseline(self):
         with tempfile.TemporaryDirectory() as directory:

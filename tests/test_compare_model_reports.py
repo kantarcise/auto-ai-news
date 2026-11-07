@@ -117,10 +117,11 @@ def snapshot(rows, *, inaccessible=(), publisher_limit=4, report_limit=30):
 
 
 class Provider:
-    def __init__(self, answers=None, *, fail_after=None):
+    def __init__(self, answers=None, *, fail_after=None, model=MODEL):
         self.answers = answers or {}
         self.calls = []
         self.fail_after = fail_after
+        self.model = model
 
     def assess(self, article):
         self.calls.append(article)
@@ -129,7 +130,7 @@ class Provider:
         return AssessmentResult(
             answers=self.answers.get(article.title, ANSWERS),
             provider="cloudflare",
-            model=MODEL,
+            model=self.model,
             question_version=QUESTION_VERSION,
             question_sha256=QUESTION_SHA256,
             input_sha256=article.input_sha256,

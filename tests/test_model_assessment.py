@@ -36,11 +36,11 @@ ARTICLE = AssessmentInput(
 )
 
 
-def response_body():
+def response_body(model="clef"):
     return {
         "success": True,
         "result": {
-            "model": "clef-flash",
+            "model": model,
             "answers": {
                 field: {
                     "type": "choice",
@@ -238,7 +238,7 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(request.get_method(), "POST")
         self.assertEqual(request.get_header("Authorization"), f"Bearer {TOKEN}")
         payload = json.loads(request.data)
-        self.assertEqual(payload["model"], "clef-flash")
+        self.assertEqual(payload["model"], "clef")
         self.assertEqual(payload["state"]["text"], ARTICLE.text)
         self.assertEqual(payload["questions"], question_schema())
         self.assertLessEqual(len(request.data), MAX_REQUEST_BYTES)
@@ -277,8 +277,26 @@ class AdapterTests(unittest.TestCase):
             provider = CloudflareAssessmentProvider.from_environment()
         self.assertNotIn(TOKEN, repr(provider))
 
+    def test_flash_rollback_endpoint_payload_and_model_validation(self):
+        provider = CloudflareAssessmentProvider(
+            ACCOUNT, TOKEN, model="@cf/cloudflare/clef-flash"
+        )
+        provider._opener = self.opener
+        self.response.read.return_value = json.dumps(
+            response_body("clef-flash")
+        ).encode()
+        result = provider.assess(ARTICLE)
+        request = self.opener.open.call_args.args[0]
+        self.assertTrue(request.full_url.endswith("/@cf/cloudflare/clef-flash"))
+        self.assertEqual(json.loads(request.data)["model"], "clef-flash")
+        self.assertEqual(result.model, "@cf/cloudflare/clef-flash")
+        self.response.read.return_value = json.dumps(response_body("clef")).encode()
+        with self.assertRaisesRegex(AssessmentError, "invalid_response"):
+            provider.assess(ARTICLE)
+
     def test_configuration_bounds(self):
         for changes in (
+            {"model": "@cf/cloudflare/unknown"},
             {"timeout": float("inf")},
             {"timeout": 10**400},
             {"timeout": True},

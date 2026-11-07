@@ -1,4 +1,4 @@
-"""Explicit, bounded Workers AI Clef-flash adapter using the standard library."""
+"""Explicit, bounded Workers AI Clef adapter using the standard library."""
 
 import http.client
 import json
@@ -22,7 +22,8 @@ from scripts.model_assessment import (
     question_schema,
 )
 
-MODEL = "@cf/cloudflare/clef-flash"
+MODEL = "@cf/cloudflare/clef"
+MODELS = {"clef": MODEL, "clef-flash": "@cf/cloudflare/clef-flash"}
 MAX_RESPONSE_BYTES = 64_000
 # AssessmentInput permits 1,000 title and 12,000 evidence characters. A
 # character can require four UTF-8 bytes or six JSON-escaped bytes. Allow
@@ -49,12 +50,12 @@ def probability(value):
     return type(value) in (int, float) and 0 <= value <= 1 and math.isfinite(value)
 
 
-def normalize_response(body):
+def normalize_response(body, *, model=MODEL):
     """Validate provider-specific answers before constructing the common contract."""
     if not isinstance(body, dict) or body.get("success") is not True:
         raise AssessmentError("provider_failure")
     result = body.get("result")
-    if not isinstance(result, dict) or result.get("model") != "clef-flash":
+    if not isinstance(result, dict) or result.get("model") != model.rsplit("/", 1)[-1]:
         raise AssessmentError("invalid_response")
     answers = result.get("answers")
     if not isinstance(answers, dict) or set(answers) != {
@@ -102,6 +103,7 @@ class CloudflareAssessmentProvider:
         account_id,
         api_token,
         *,
+        model=MODEL,
         timeout=30,
         request_limit=20,
         input_byte_limit=300_000,
@@ -115,7 +117,8 @@ class CloudflareAssessmentProvider:
         ):
             raise AssessmentError("missing_or_invalid_credentials")
         if (
-            type(timeout) not in (int, float)
+            model not in MODELS.values()
+            or type(timeout) not in (int, float)
             or not 0 < timeout <= 120
             or not math.isfinite(timeout)
             or type(request_limit) is not int
@@ -127,8 +130,9 @@ class CloudflareAssessmentProvider:
         ):
             raise AssessmentError("invalid_configuration")
         self._url = (
-            f"https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/{MODEL}"
+            f"https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/{model}"
         )
+        self.model = model
         self._token = api_token
         self._opener = urllib.request.build_opener(NoRedirect())
         self.timeout = timeout
@@ -151,7 +155,7 @@ class CloudflareAssessmentProvider:
             raise AssessmentError("invalid_input")
         payload = json.dumps(
             {
-                "model": "clef-flash",
+                "model": self.model.rsplit("/", 1)[-1],
                 "state": asdict(article),
                 "questions": question_schema(),
             },
@@ -201,12 +205,14 @@ class CloudflareAssessmentProvider:
             body = json.loads(raw, object_pairs_hook=json_object)
         except (ValueError, UnicodeError, RecursionError):
             raise AssessmentError("invalid_response") from None
-        answers, (input_tokens, output_tokens) = normalize_response(body)
+        answers, (input_tokens, output_tokens) = normalize_response(
+            body, model=self.model
+        )
         assessed_at = datetime.now(UTC)
         return AssessmentResult(
             answers=answers,
             provider="cloudflare",
-            model=MODEL,
+            model=self.model,
             question_version=QUESTION_VERSION,
             question_sha256=QUESTION_SHA256,
             input_sha256=article.input_sha256,

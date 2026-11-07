@@ -6,7 +6,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from scripts import compare_model_reports as comparison
-from scripts.cloudflare_assessment import MODEL
+from scripts.cloudflare_assessment import MODEL, MODELS
 from scripts.generate_report import canonicalize_url
 from scripts.model_assessment import QUESTION_SHA256, QUESTION_VERSION, AssessmentError
 from scripts.publication_history import receipt_comment
@@ -23,7 +23,9 @@ def rules_fallback(text):
     )
 
 
-def select_report(baseline, snapshot=None, *, mode="model-assisted", provider=None):
+def select_report(
+    baseline, snapshot=None, *, mode="model-assisted", provider=None, model=MODEL
+):
     if mode not in {"rules", "model-assisted"}:
         raise ValueError("Unknown selection mode")
     if mode == "rules":
@@ -36,11 +38,12 @@ def select_report(baseline, snapshot=None, *, mode="model-assisted", provider=No
             fetch_missing_links=True,
             link_request_limit=100,
             production=True,
+            model=model,
         )
         status = {
             "selection": "model-assisted",
             "policy": comparison.POLICY_VERSION,
-            "model": MODEL,
+            "model": model,
             "question_version": QUESTION_VERSION,
             "question_sha256": QUESTION_SHA256,
             "failure": result["failure"],
@@ -111,6 +114,7 @@ def main(argv=None):
         "--mode", choices=("rules", "model-assisted"), default="model-assisted"
     )
     parser.add_argument("--force-fallback", action="store_true")
+    parser.add_argument("--model", choices=tuple(MODELS), default="clef")
     args = parser.parse_args(argv)
     inputs = {args.baseline_report.resolve()}
     if args.snapshot:
@@ -139,8 +143,9 @@ def main(argv=None):
             baseline,
             snapshot,
             mode=args.mode,
+            model=MODELS[args.model],
             provider=(
-                comparison.LazyCloudflare(100, 1_000_000)
+                comparison.LazyCloudflare(100, 1_000_000, model=MODELS[args.model])
                 if args.mode == "model-assisted"
                 else None
             ),

@@ -142,10 +142,10 @@ def technical(answers):
     )
 
 
-def cache_key(article):
+def cache_key(article, *, model=MODEL):
     identity = [
         "cloudflare",
-        MODEL,
+        model,
         QUESTION_VERSION,
         QUESTION_SHA256,
         article.input_sha256,
@@ -153,7 +153,7 @@ def cache_key(article):
     return hashlib.sha256(json.dumps(identity).encode()).hexdigest()
 
 
-def cached_result(record, article, now):
+def cached_result(record, article, now, *, model=MODEL):
     """Untrusted cache metadata must match the actual request and current clock."""
     try:
         values = dict(record)
@@ -161,7 +161,7 @@ def cached_result(record, article, now):
         result = AssessmentResult(**values)
         expected = {
             "provider": "cloudflare",
-            "model": MODEL,
+            "model": model,
             "question_version": QUESTION_VERSION,
             "question_sha256": QUESTION_SHA256,
             "input_sha256": article.input_sha256,
@@ -276,7 +276,14 @@ def alternate_coverage(items):
 
 
 def report_text(
-    items, diagnostics, snapshot, *, candidate=False, fallback=False, production=False
+    items,
+    diagnostics,
+    snapshot,
+    *,
+    candidate=False,
+    fallback=False,
+    production=False,
+    model=MODEL,
 ):
     disclosure = (
         "Unpublished content-shadow-v1 comparison. Model AI-subject answers determine admission, with baseline fallback for insufficient or limited negative evidence. Original feed-derived scores and star buckets remain unchanged. Engineering detail breaks equal-score ties only when all possible group representatives qualify. The existing grouping, publisher caps and report limit apply."
@@ -288,7 +295,7 @@ def report_text(
     if production:
         disclosure = disclosure.replace(
             "Unpublished content-shadow-v1 comparison.",
-            "Selection uses Cloudflare Clef-flash with the content-shadow-v1 policy.",
+            f"Selection uses Cloudflare {model.rsplit('/', 1)[-1].capitalize()} with the content-shadow-v1 policy.",
         ).replace("Unpublished frozen rules replay.", "Selection uses baseline rules.")
     history = snapshot.get("publication_history")
     previous = [
@@ -344,6 +351,7 @@ def compare(
     evidence_arm="content",
     frozen_links=None,
     production=False,
+    model=MODEL,
 ):
     if mode not in {"rules", "shadow"} or evidence_arm not in {"content", "title"}:
         raise ValueError("Invalid comparison mode or evidence arm")
@@ -423,12 +431,13 @@ def compare(
                     article = AssessmentInput.from_capture(
                         item.title, row["article_evidence"]
                     )
-                identity = cache_key(article)
+                identity = cache_key(article, model=model)
                 cache_now = now + timedelta(seconds=time.monotonic() - started)
                 result = cached_result(
                     records.get(identity) or input_cache.get(identity),
                     article,
                     cache_now,
+                    model=model,
                 )
                 reused = result is not None
                 if result is None:
@@ -442,6 +451,7 @@ def compare(
                             result.to_record(),
                             article,
                             max(cache_now, datetime.now(UTC)),
+                            model=model,
                         )
                         is None
                     ):
@@ -579,6 +589,7 @@ def compare(
             candidate=mode == "shadow",
             fallback=failure is not None,
             production=production,
+            model=model,
         ),
     }
 
@@ -618,15 +629,18 @@ def render_comparison(result):
 
 
 class LazyCloudflare:
-    def __init__(self, request_limit, input_byte_limit):
+    def __init__(self, request_limit, input_byte_limit, *, model=MODEL):
         self.client = None
         self.request_limit = request_limit
         self.input_byte_limit = input_byte_limit
+        self.model = model
 
     def assess(self, article):
         if self.client is None:
             self.client = CloudflareAssessmentProvider.from_environment(
-                request_limit=self.request_limit, input_byte_limit=self.input_byte_limit
+                request_limit=self.request_limit,
+                input_byte_limit=self.input_byte_limit,
+                model=self.model,
             )
         return self.client.assess(article)
 
