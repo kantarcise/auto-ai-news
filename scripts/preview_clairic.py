@@ -119,13 +119,13 @@ def read_response(body, state):
     return usage, accepted, "partial_response" if result.get("truncated") else None
 
 
-def request_clairic(opener, account, token, state):
+def request_clairic(opener, account, token, state, *, fields=FIELDS):
     payload = {
         "model": "clairic",
         "state": state,
         "fields": {
             name: {"type": "text", "instructions": instruction}
-            for name, instruction in FIELDS.items()
+            for name, instruction in fields.items()
         },
     }
     request = urllib.request.Request(

@@ -104,6 +104,19 @@ jobs:
           retention-days: 30
           if-no-files-found: error
 
+      - name: Add source excerpts with Clairic
+        if: env.REPORT_SELECTION_MODE == 'model-assisted' && steps.selection.outcome == 'success' && vars.REPORT_CLAIRIC != 'off'
+        timeout-minutes: 3
+        continue-on-error: true
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          python -m scripts.enrich_daily_clairic \
+            --report "$RUNNER_TEMP/daily-ai-news.md" \
+            --snapshot "$RUNNER_TEMP/model-capture.json" \
+            --selection-status "$RUNNER_TEMP/model-status/status.json"
+
       - name: Publish daily release
         env:
           GH_TOKEN: ${{ github.token }}
