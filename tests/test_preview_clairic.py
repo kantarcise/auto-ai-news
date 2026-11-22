@@ -1,3 +1,4 @@
+import http.client
 import unittest
 import urllib.error
 from unittest.mock import Mock
@@ -62,3 +63,19 @@ class ClairicPreviewTest(unittest.TestCase):
 
     def test_input_byte_limit_preserves_unicode(self):
         self.assertEqual(source_state({"text": "⚡" * 3000}), "⚡" * 2666)
+
+    def test_interrupted_response_preserves_previous_results_and_stops_spending(self):
+        article = ("https://example.com/a", {"title": "Example article"})
+        state = "12 GB per GPU"
+        collect = Mock(return_value={"text": state, "provenance": "rss_content"})
+        extract = Mock(
+            side_effect=[
+                ({"input_tokens": 700, "passes": 3}, {"detail": (state, state)}, None),
+                http.client.IncompleteRead(b"partial"),
+            ]
+        )
+        markdown = preview("2026-11-21", [article] * 3, extract, collect)
+        self.assertEqual(extract.call_count, 2)
+        self.assertIn("12 GB per GPU", markdown)
+        self.assertIn("2 requests · 700 reported input tokens", markdown)
+        self.assertIn("Skipped after reaching the usage stop condition", markdown)

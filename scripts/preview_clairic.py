@@ -1,6 +1,7 @@
 """Preview source-backed Clairic details for selected articles in a local report."""
 
 import argparse
+import http.client
 import json
 import os
 import re
@@ -159,9 +160,13 @@ def preview(date, articles, extract, collect):
         if tokens >= TOKEN_STOP or unknown:
             lines.extend(["Skipped after reaching the usage stop condition.", ""])
             continue
-        evidence = collect(row)
-        state = source_state(evidence)
-        provenance = markdown_escape(evidence["provenance"])
+        try:
+            evidence = collect(row)
+            state = source_state(evidence)
+            provenance = markdown_escape(evidence["provenance"])
+        except (ValueError, KeyError, TypeError, OSError, http.client.HTTPException):
+            lines.extend(["Could not read evidence for this article.", ""])
+            continue
         if not state.strip() or evidence["provenance"] == "title_only":
             lines.extend([f"No usable article text ({provenance}).", ""])
             continue
@@ -173,7 +178,7 @@ def preview(date, articles, extract, collect):
             unknown += 1
             lines.extend([f"Clairic request failed (HTTP {exc.code}).", ""])
             continue
-        except (ValueError, KeyError, TypeError, OSError):
+        except (ValueError, KeyError, TypeError, OSError, http.client.HTTPException):
             unknown += 1
             lines.extend(["Clairic request did not return usable usage data.", ""])
             continue
