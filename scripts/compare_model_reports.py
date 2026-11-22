@@ -540,6 +540,7 @@ def compare(
         "assessment_at": now.isoformat(),
         "baseline_selected": [report.evaluation_metadata(item) for item in baseline],
         "candidate_selected": [report.evaluation_metadata(item) for item in selected],
+        "candidate_selected_ids": [id_key(item) for item in selected],
         "alternate_coverage": {
             "baseline": baseline_alternates,
             "candidate": alternate_coverage(selected),

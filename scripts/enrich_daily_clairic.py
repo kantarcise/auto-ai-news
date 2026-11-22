@@ -25,10 +25,8 @@ def enrich(report, snapshot, selection, extract):
     status = {"attempts": 0, "shown": 0, "input_tokens": 0, "passes": 0, "stop": None}
     if selection["selection"] != "model-assisted":
         return report, status
-    decisions = {
-        (decision["url"], snapshot["collection"][decision["id"]]["title"]): decision[
-            "id"
-        ]
+    eligible_ids = {
+        decision["id"]
         for decision in selection["decisions"]
         if decision["applied"]
         and decision["candidate_admit"] is True
@@ -40,8 +38,8 @@ def enrich(report, snapshot, selection, extract):
         if status["attempts"] >= MAX_ARTICLES or status["input_tokens"] >= TOKEN_STOP:
             status["stop"] = "budget"
             break
-        index = decisions.get((article["url"], article["title"]))
-        if index is None:
+        index = article["id"]
+        if index not in eligible_ids:
             continue
         headline = f"{rank}. **{markdown_link(article['title'], article['url'])}**  \n"
         if headline not in lines:
