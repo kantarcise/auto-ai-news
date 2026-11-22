@@ -1,0 +1,42 @@
+[
+  {
+    "id": "amd-glm",
+    "url": "https://rocm.blogs.amd.com/artificial-intelligence/glm53flash-mi300x-vllm/README.html",
+    "text": "GLM-5.3-Flash on MI300X\nMI300X server node | 8× MI300X GPUs, with 192 GB of HBM each",
+    "metric": "Memory capacity per individual accelerator in GB, excluding aggregate node memory and checkpoint size.",
+    "expected": {"model_name": "GLM-5.3-Flash", "hardware": "MI300X", "metric_value": 192},
+    "unit": "GB per GPU"
+  },
+  {
+    "id": "amd-qwen",
+    "url": "https://rocm.blogs.amd.com/artificial-intelligence/quark-qwen-ple/README.html",
+    "text": "Qwen3.8-Flash-Next on Ryzen AI Halo\nCheckpoint storage drops from ~130 GB to ~80 GB.",
+    "metric": "Checkpoint storage in GB after the reduction.",
+    "expected": {"model_name": "Qwen3.8-Flash-Next", "hardware": "Ryzen AI Halo", "metric_value": 80},
+    "unit": "GB, reduced checkpoint"
+  },
+  {
+    "id": "pytorch-helion",
+    "url": "https://pytorch.org/blog/fast-by-default-compile-time-heuristics-for-helion-kernels/",
+    "text": "Fast by Default: Compile-Time Heuristics for Helion Kernels\nParaphrase: On H100, the computed configuration reached 1.27x the speed of the handwritten vLLM CUDA/C++ reduction operators and 2.2x the previous Helion default.",
+    "metric": "Speed ratio versus handwritten vLLM CUDA/C++ reduction operators, in multiples.",
+    "expected": {"model_name": null, "hardware": "H100", "metric_value": 1.27},
+    "unit": "× vs. vLLM CUDA/C++"
+  },
+  {
+    "id": "cloudflare-clef",
+    "url": "https://developers.cloudflare.com/workers-ai/models/clef/",
+    "text": "Clef\nParaphrase: Cloudflare's 27B multimodal decision model has a context window of 65,536 tokens. It accepts images and has zero data retention.",
+    "metric": "Model context window in tokens.",
+    "expected": {"model_name": "Clef", "hardware": null, "metric_value": 65536},
+    "unit": "tokens"
+  },
+  {
+    "id": "llama-cpp",
+    "url": "https://huggingface.co/blog/ggml-org/llama-cpp-v1",
+    "text": "llama.cpp v1.0.0\nParaphrase: ggml-org released version 1.0.0 of llama.cpp and ggml. Future changes that break the public interface will trigger a major version bump.",
+    "metric": "Model context window in tokens, if explicitly specified.",
+    "expected": {"model_name": null, "hardware": null, "metric_value": null},
+    "unit": "tokens"
+  }
+]
