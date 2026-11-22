@@ -51,6 +51,14 @@ def select_report(
             "runtime_seconds": result["runtime_seconds"],
             "rules_selected": len(result["baseline_selected"]),
             "model_selected": len(result["candidate_selected"]),
+            "selected_articles": [
+                {"id": index, "title": row["title"], "url": row["url"]}
+                for index, row in zip(
+                    result["candidate_selected_ids"],
+                    result["candidate_selected"],
+                    strict=True,
+                )
+            ],
             "decisions": [
                 {
                     **{

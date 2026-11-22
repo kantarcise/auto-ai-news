@@ -22,7 +22,7 @@ Production publication receipts contain the actually displayed model-selected UR
 
 ## Configuration and rollback
 
-The existing repository variable `CLOUDFLARE_ACCOUNT_ID` and secret `CLOUDFLARE_API_TOKEN` supply the account-scoped Workers AI credentials. Only the selection step receives the token. The daily job runs only on the default branch, checkout does not persist Git credentials, and there is no untrusted pull-request trigger. No GPU packages or new Python runtime dependencies are added.
+The existing repository variable `CLOUDFLARE_ACCOUNT_ID` and secret `CLOUDFLARE_API_TOKEN` supply the account-scoped Workers AI credentials. The Clef selection and Clairic enrichment steps receive the token. The daily job runs only on the default branch, checkout does not persist Git credentials, and there is no untrusted pull-request trigger. No GPU packages or new Python runtime dependencies are added.
 
 `REPORT_SELECTION_MODE` is a repository variable:
 
@@ -97,3 +97,13 @@ python3 -m scripts.production_model_report \
 ```
 
 Use a publication-history capture when verifying cross-day receipts. Run normal offline tests plus Ruff lint/format checks. Tests cover recovered and removed URLs, alternate receipts, same-day history union, missing and partial provider failure, unexpected exceptions, empty reports, truncated HTTP reads, optional-stage process timeouts, frozen-candidate enrichment and offline rules rollback. No live inference is required by the tests.
+
+## Daily Clairic excerpts
+
+The daily workflow uses Clairic after successful Clef selection. It walks the chosen stories in report order and asks for one short numeric engineering excerpt from the evidence Clef already saw, for up to five articles where Clef found concrete engineering detail. Each displayed excerpt must match the captured text and is labeled “Source detail (Clairic)”. Selection, ranking and publication receipts come from the original report. A matching quote still needs the article for full context.
+
+Each request sends up to 8,000 bytes of article evidence. The step stops after five attempts, when reported usage reaches 30,000 input tokens, or after a request with unknown usage. The token check happens after each response. The step has a three-minute timeout and uses an atomic replacement so the report is available even if enrichment crashes. A failure after earlier successful requests can leave those excerpts in the report.
+
+The step logs attempts, excerpts shown, input tokens, passes and the stop reason. For the first week, compare the details with linked articles and record helpful facts, misleading excerpts, and missing context. Use Cloudflare analytics for billed neurons. The five-story preview used three fields, so its usage is a reference point. Production asks for one field and actual consumption will depend on the articles.
+
+For a local Clef-only comparison, run the existing `scripts.production_model_report` command with the same captured evidence and history. It produces the report before the separate Clairic step. To turn daily enrichment off while keeping Clef, set the repository variable `REPORT_CLAIRIC` to `off`. Clear that value to restore enrichment.
