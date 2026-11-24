@@ -71,8 +71,8 @@ class DailyClairicTest(unittest.TestCase):
         self.assertEqual(status["shown"], 2)
         self.assertEqual(extract.call_count, 2)
 
-    def test_decorates_up_to_five_ranked_stories_and_preserves_receipt(self):
-        report, snapshot, selection, receipt = report_inputs(7)
+    def test_decorates_up_to_fifteen_ranked_stories_and_preserves_receipt(self):
+        report, snapshot, selection, receipt = report_inputs(17)
         extract = Mock(
             return_value=(
                 {"input_tokens": 100, "passes": 1},
@@ -81,23 +81,32 @@ class DailyClairicTest(unittest.TestCase):
             )
         )
         updated, status = enrich(report, snapshot, selection, extract)
-        self.assertEqual(extract.call_count, 5)
+        self.assertEqual(extract.call_count, 15)
         self.assertEqual(
             status,
             {
-                "attempts": 5,
-                "shown": 5,
-                "input_tokens": 500,
-                "passes": 5,
+                "attempts": 15,
+                "shown": 15,
+                "input_tokens": 1500,
+                "passes": 15,
                 "stop": "budget",
             },
         )
-        self.assertEqual(updated.count("Source detail (Clairic)"), 5)
+        self.assertEqual(updated.count("Source detail (Clairic)"), 15)
         self.assertIn(
             "Metadata  \n   Source detail (Clairic) · “32 GB per GPU &lt;example&gt;”",
             updated,
         )
         self.assertTrue(updated.endswith(receipt))
+
+    def test_reported_token_budget_can_stop_before_request_cap(self):
+        report, snapshot, selection, _ = report_inputs(17)
+        extract = Mock(return_value=({"input_tokens": 8000, "passes": 1}, {}, None))
+        updated, status = enrich(report, snapshot, selection, extract)
+        self.assertEqual(updated, report)
+        self.assertEqual(extract.call_count, 4)
+        self.assertEqual(status["input_tokens"], 32_000)
+        self.assertEqual(status["stop"], "budget")
 
     def test_skips_ineligible_and_stops_on_unknown_usage(self):
         report, snapshot, selection, _ = report_inputs(4)
