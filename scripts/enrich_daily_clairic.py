@@ -14,11 +14,12 @@ from scripts.cloudflare_assessment import NoRedirect
 from scripts.generate_report import markdown_escape, markdown_link
 from scripts.preview_clairic import (
     FIELDS,
-    MAX_ARTICLES,
     TOKEN_STOP,
     request_clairic,
     source_state,
 )
+
+MAX_DAILY_REQUESTS = 15
 
 
 def enrich(report, snapshot, selection, extract):
@@ -35,7 +36,10 @@ def enrich(report, snapshot, selection, extract):
     lines = report.splitlines(keepends=True)
     insertions = []
     for rank, article in enumerate(selection["selected_articles"], 1):
-        if status["attempts"] >= MAX_ARTICLES or status["input_tokens"] >= TOKEN_STOP:
+        if (
+            status["attempts"] >= MAX_DAILY_REQUESTS
+            or status["input_tokens"] >= TOKEN_STOP
+        ):
             status["stop"] = "budget"
             break
         index = article["id"]
