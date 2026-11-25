@@ -4,7 +4,7 @@ import urllib.error
 from unittest.mock import MagicMock, Mock
 
 from scripts import production_model_report
-from scripts.enrich_daily_clairic import enrich, request_english
+from scripts.enrich_daily_clairic import enrich, request_english, validated_english
 from scripts.generate_report import markdown_link
 from scripts.publication_history import receipt_comment
 from tests.test_compare_model_reports import NOW, Provider, row, snapshot
@@ -12,6 +12,10 @@ from tests.test_compare_model_reports import NOW, Provider, row, snapshot
 
 def unchanged(excerpt):
     return excerpt
+
+
+def approved(source, candidate):
+    return True
 
 
 def report_inputs(count):
@@ -92,7 +96,7 @@ class DailyClairicTest(unittest.TestCase):
             )
         )
         updated, status = enrich(
-            report, captured, selection, extract, translate=unchanged
+            report, captured, selection, extract, translate=unchanged, verify=approved
         )
         self.assertIn("## New articles", updated)
         self.assertIn("Source detail (Clairic)", updated)
@@ -109,7 +113,7 @@ class DailyClairicTest(unittest.TestCase):
             )
         )
         updated, status = enrich(
-            report, snapshot, selection, extract, translate=unchanged
+            report, snapshot, selection, extract, translate=unchanged, verify=approved
         )
         self.assertEqual(extract.call_count, 15)
         self.assertEqual(
@@ -121,6 +125,7 @@ class DailyClairicTest(unittest.TestCase):
                 "passes": 15,
                 "stop": "budget",
                 "english_attempts": 15,
+                "english_checks": 15,
                 "english_rendered": 0,
                 "english_skipped": 0,
             },
@@ -136,7 +141,7 @@ class DailyClairicTest(unittest.TestCase):
         report, snapshot, selection, _ = report_inputs(17)
         extract = Mock(return_value=({"input_tokens": 8000, "passes": 1}, {}, None))
         updated, status = enrich(
-            report, snapshot, selection, extract, translate=unchanged
+            report, snapshot, selection, extract, translate=unchanged, verify=approved
         )
         self.assertEqual(updated, report)
         self.assertEqual(extract.call_count, 4)
@@ -153,7 +158,7 @@ class DailyClairicTest(unittest.TestCase):
             ]
         )
         updated, status = enrich(
-            report, snapshot, selection, extract, translate=unchanged
+            report, snapshot, selection, extract, translate=unchanged, verify=approved
         )
         self.assertEqual(updated, report)
         self.assertEqual(status["attempts"], 2)
@@ -165,7 +170,15 @@ class DailyClairicTest(unittest.TestCase):
         selection["selection"] = "rules-fallback"
         extract = Mock()
         self.assertEqual(
-            enrich(report, snapshot, selection, extract, translate=unchanged)[0], report
+            enrich(
+                report,
+                snapshot,
+                selection,
+                extract,
+                translate=unchanged,
+                verify=approved,
+            )[0],
+            report,
         )
         extract.assert_not_called()
 
@@ -183,12 +196,16 @@ class DailyClairicTest(unittest.TestCase):
         )
         selection["decisions"].append({**selection["decisions"][0], "id": 1})
         extract = Mock(return_value=({"input_tokens": 20, "passes": 1}, {}, None))
-        enrich(report, captured, selection, extract, translate=unchanged)
+        enrich(
+            report, captured, selection, extract, translate=unchanged, verify=approved
+        )
         extract.assert_called_once_with("Measured 32 GB per GPU.")
 
         extract.reset_mock()
         selection["decisions"][0]["answers"] = {"engineering_detail": "no"}
-        enrich(report, captured, selection, extract, translate=unchanged)
+        enrich(
+            report, captured, selection, extract, translate=unchanged, verify=approved
+        )
         extract.assert_not_called()
 
     def test_translates_and_labels_korean_but_skips_invalid_renderings(self):
@@ -210,7 +227,12 @@ class DailyClairicTest(unittest.TestCase):
             ]
         )
         updated, status = enrich(
-            report, snapshot, selection, extract, translate=translate
+            report,
+            snapshot,
+            selection,
+            extract,
+            translate=translate,
+            verify=Mock(side_effect=[True, False]),
         )
         self.assertIn(
             "Source detail (Clairic, English rendering) · The median time", updated
@@ -221,3 +243,44 @@ class DailyClairicTest(unittest.TestCase):
         self.assertEqual(status["english_attempts"], 4)
         self.assertEqual(status["english_skipped"], 3)
         self.assertTrue(updated.endswith(receipt))
+
+    def test_checks_order_sign_units_and_renderable_unicode(self):
+        pairs = [
+            ("47 ms to 12 ms", "12 ms to 47 ms"),
+            ("−2.5% difference", "+2.5% difference"),
+            ("32 GB per GPU", "32 MB per GPU"),
+            ("latency 12 µs", "latency 12 µs\ud800"),
+            ("latency 12 µs", "latency 12 µs\x00"),
+        ]
+        for source, candidate in pairs:
+            with self.subTest(candidate=repr(candidate)):
+                self.assertIsNone(validated_english(source, candidate))
+        self.assertEqual(
+            validated_english("latency 12 µs", "latency 12 µs"), "latency 12 µs"
+        )
+
+    def test_verifies_latin_script_and_keeps_good_detail_when_response_is_malformed(
+        self,
+    ):
+        report, snapshot, selection, _ = report_inputs(4)
+        sources = [
+            "Latency was 12 µs",
+            "La latencia fue de 47 segundos",
+            "La durée était de 47 secondes",
+            "Used 32 GB",
+        ]
+        extract = Mock(
+            side_effect=[
+                ({"input_tokens": 100, "passes": 1}, {"detail": (source, source)}, None)
+                for source in sources
+            ]
+        )
+        translate = Mock(side_effect=[*sources[:3], "Used 32 GB\ud800"])
+        verify = Mock(side_effect=[True, False, False])
+        updated, status = enrich(
+            report, snapshot, selection, extract, translate=translate, verify=verify
+        )
+        self.assertEqual(verify.call_count, 3)
+        self.assertIn("Latency was 12 µs", updated)
+        self.assertNotIn("47", updated)
+        self.assertEqual(status["english_skipped"], 3)
