@@ -66,7 +66,7 @@ def source_state(evidence):
     return evidence["text"].encode("utf-8")[:MAX_STATE_BYTES].decode("utf-8", "ignore")
 
 
-def read_response(body, state):
+def read_response(body, state, *, max_detail_chars=MAX_DETAIL_CHARS):
     if not isinstance(body, dict) or body.get("success") is not True:
         raise ValueError("invalid provider envelope")
     result = body["result"]
@@ -94,7 +94,7 @@ def read_response(body, state):
         if (
             not isinstance(value, str)
             or not value.strip()
-            or len(value) > MAX_DETAIL_CHARS
+            or len(value) > (max_detail_chars if name == "detail" else MAX_DETAIL_CHARS)
         ):
             continue
         if name == "detail" and (not re.search(r"\d", value) or len(value.split()) < 3):
@@ -119,7 +119,9 @@ def read_response(body, state):
     return usage, accepted, "partial_response" if result.get("truncated") else None
 
 
-def request_clairic(opener, account, token, state, *, fields=FIELDS):
+def request_clairic(
+    opener, account, token, state, *, fields=FIELDS, max_detail_chars=MAX_DETAIL_CHARS
+):
     payload = {
         "model": "clairic",
         "state": state,
@@ -140,7 +142,7 @@ def request_clairic(opener, account, token, state, *, fields=FIELDS):
         data = response.read(64_001)
     if len(data) > 64_000:
         raise ValueError("provider response exceeds byte limit")
-    return read_response(json.loads(data), state)
+    return read_response(json.loads(data), state, max_detail_chars=max_detail_chars)
 
 
 def preview(date, articles, extract, collect):

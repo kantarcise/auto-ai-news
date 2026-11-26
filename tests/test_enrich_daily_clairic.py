@@ -6,6 +6,7 @@ from unittest.mock import MagicMock, Mock
 from scripts import production_model_report
 from scripts.enrich_daily_clairic import enrich, request_english, validated_english
 from scripts.generate_report import markdown_link
+from scripts.preview_clairic import read_response
 from scripts.publication_history import receipt_comment
 from tests.test_compare_model_reports import NOW, Provider, row, snapshot
 
@@ -14,7 +15,7 @@ def unchanged(excerpt):
     return excerpt
 
 
-def approved(source, candidate):
+def approved(headline, source, candidate):
     return True
 
 
@@ -91,7 +92,7 @@ class DailyClairicTest(unittest.TestCase):
         extract = Mock(
             return_value=(
                 {"input_tokens": 100, "passes": 1},
-                {"detail": ("32 GB per GPU", "source context")},
+                {"detail": ("The board has 32 GB per GPU.", "source context")},
                 None,
             )
         )
@@ -108,7 +109,12 @@ class DailyClairicTest(unittest.TestCase):
         extract = Mock(
             return_value=(
                 {"input_tokens": 100, "passes": 1},
-                {"detail": ("32 GB per GPU <example>", "source context")},
+                {
+                    "detail": (
+                        "The board has 32 GB per GPU <example>.",
+                        "source context",
+                    )
+                },
                 None,
             )
         )
@@ -132,7 +138,7 @@ class DailyClairicTest(unittest.TestCase):
         )
         self.assertEqual(updated.count("Source detail (Clairic)"), 15)
         self.assertIn(
-            "Metadata  \n   Source detail (Clairic) · “32 GB per GPU &lt;example&gt;”",
+            "Metadata  \n   Source detail (Clairic) · “The board has 32 GB per GPU &lt;example&gt;\\.”",
             updated,
         )
         self.assertTrue(updated.endswith(receipt))
@@ -222,7 +228,7 @@ class DailyClairicTest(unittest.TestCase):
             side_effect=[
                 "The median time to first response was 47 seconds.",
                 "The median time to first response was 74 seconds.",
-                source,
+                source + ".",
                 TimeoutError(),
             ]
         )
@@ -246,9 +252,9 @@ class DailyClairicTest(unittest.TestCase):
 
     def test_checks_order_sign_units_and_renderable_unicode(self):
         pairs = [
-            ("47 ms to 12 ms", "12 ms to 47 ms"),
-            ("−2.5% difference", "+2.5% difference"),
-            ("32 GB per GPU", "32 MB per GPU"),
+            ("47 ms to 12 ms", "12 ms to 47 ms."),
+            ("−2.5% difference", "+2.5% difference."),
+            ("32 GB per GPU", "32 MB per GPU."),
             ("latency 12 µs", "latency 12 µs\ud800"),
             ("latency 12 µs", "latency 12 µs\x00"),
         ]
@@ -256,7 +262,8 @@ class DailyClairicTest(unittest.TestCase):
             with self.subTest(candidate=repr(candidate)):
                 self.assertIsNone(validated_english(source, candidate))
         self.assertEqual(
-            validated_english("latency 12 µs", "latency 12 µs"), "latency 12 µs"
+            validated_english("latency 12 µs", "Latency was 12 µs."),
+            "Latency was 12 µs.",
         )
 
     def test_verifies_latin_script_and_keeps_good_detail_when_response_is_malformed(
@@ -264,9 +271,9 @@ class DailyClairicTest(unittest.TestCase):
     ):
         report, snapshot, selection, _ = report_inputs(4)
         sources = [
-            "Latency was 12 µs",
-            "La latencia fue de 47 segundos",
-            "La durée était de 47 secondes",
+            "Latency was 12 µs.",
+            "La latencia fue de 47 segundos.",
+            "La durée était de 47 secondes.",
             "Used 32 GB",
         ]
         extract = Mock(
@@ -284,3 +291,45 @@ class DailyClairicTest(unittest.TestCase):
         self.assertIn("Latency was 12 µs", updated)
         self.assertNotIn("47", updated)
         self.assertEqual(status["english_skipped"], 3)
+
+    def test_skips_fragments_and_tangential_details(self):
+        report, snapshot, selection, receipt = report_inputs(2)
+        sources = [
+            "1.37× the max throughput",
+            "Octen returns results in approximately 0.17s.",
+        ]
+        extract = Mock(
+            side_effect=[
+                ({"input_tokens": 100, "passes": 1}, {"detail": (source, source)}, None)
+                for source in sources
+            ]
+        )
+        verify = Mock(return_value=False)
+        updated, status = enrich(
+            report, snapshot, selection, extract, translate=unchanged, verify=verify
+        )
+        verify.assert_called_once_with("GPU (test) 1", sources[1], sources[1])
+        self.assertEqual(status["english_skipped"], 2)
+        self.assertEqual(updated, report)
+        self.assertTrue(updated.endswith(receipt))
+
+    def test_long_source_sentence_is_bounded_and_must_be_verbatim(self):
+        sentence = (
+            "On two GPUs, the study measured up to 1.37× peak prefill throughput "
+            "with pipeline parallelism under the tested workload, compared with "
+            "the baseline using expert and sequence parallelism."
+        )
+        state = f"Intro. {sentence} Next."
+        body = {
+            "success": True,
+            "result": {
+                "answers": {"detail": {"value": sentence}},
+                "usage": {"input_tokens": 200, "passes": 1},
+            },
+        }
+        self.assertEqual(read_response(body, state)[1], {})
+        self.assertEqual(
+            read_response(body, state, max_detail_chars=320)[1]["detail"][0], sentence
+        )
+        body["result"]["answers"]["detail"]["value"] = sentence.replace("1.37", "1.38")
+        self.assertEqual(read_response(body, state, max_detail_chars=320)[1], {})
