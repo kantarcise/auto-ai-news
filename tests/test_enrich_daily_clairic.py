@@ -11,11 +11,11 @@ from scripts.publication_history import receipt_comment
 from tests.test_compare_model_reports import NOW, Provider, row, snapshot
 
 
-def unchanged(excerpt):
+def unchanged(excerpt, context):
     return excerpt
 
 
-def approved(headline, source, candidate):
+def approved(headline, source, context, candidate):
     return True
 
 
@@ -308,7 +308,9 @@ class DailyClairicTest(unittest.TestCase):
         updated, status = enrich(
             report, snapshot, selection, extract, translate=unchanged, verify=verify
         )
-        verify.assert_called_once_with("GPU (test) 1", sources[1], sources[1])
+        verify.assert_called_once_with(
+            "GPU (test) 1", sources[1], sources[1], sources[1]
+        )
         self.assertEqual(status["english_skipped"], 2)
         self.assertEqual(updated, report)
         self.assertTrue(updated.endswith(receipt))
@@ -333,3 +335,47 @@ class DailyClairicTest(unittest.TestCase):
         )
         body["result"]["answers"]["detail"]["value"] = sentence.replace("1.37", "1.38")
         self.assertEqual(read_response(body, state, max_detail_chars=320)[1], {})
+
+    def test_verifier_can_reject_a_missing_scope_qualifier(self):
+        report, snapshot, selection, _ = report_inputs(1)
+        excerpt = "Model A achieved 42 tokens/s on H100."
+        context = f"In simulation only, {excerpt}"
+        extract = Mock(
+            return_value=(
+                {"input_tokens": 100, "passes": 1},
+                {"detail": (excerpt, context)},
+                None,
+            )
+        )
+        translate = Mock(return_value=excerpt)
+        verify = Mock(return_value=False)
+        updated, status = enrich(
+            report, snapshot, selection, extract, translate=translate, verify=verify
+        )
+        translate.assert_called_once_with(excerpt, context)
+        verify.assert_called_once_with("GPU (test) 0", excerpt, context, excerpt)
+        self.assertEqual(updated, report)
+        self.assertEqual(status["english_skipped"], 1)
+
+    def test_quote_limit_survives_punctuation_changes(self):
+        report, snapshot, selection, _ = report_inputs(1)
+        excerpt = (
+            "The team measured 42 tokens per second on the test system, using the"
+            " same prompts as the earlier experiment on a separate cluster during a"
+            " controlled dry run."
+        )
+        extract = Mock(
+            return_value=(
+                {"input_tokens": 100, "passes": 1},
+                {"detail": (excerpt, excerpt)},
+                None,
+            )
+        )
+        translate = Mock(return_value=excerpt.replace(",", ""))
+        verify = Mock()
+        updated, status = enrich(
+            report, snapshot, selection, extract, translate=translate, verify=verify
+        )
+        verify.assert_not_called()
+        self.assertEqual(updated, report)
+        self.assertEqual(status["english_skipped"], 1)
